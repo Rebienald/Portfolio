@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="erm">
+        <div id="text">
+ <p>Who I Am and What I Do</p> 
+ <h1>My name is Rebienald Khei Carpio.</h1>
+ <p id="pota">I am currently a student at STI, pursuing a </br> course in Information and </br> Communication Technology (ICT). I aspire to </br>  become a web developer and plan to </br> continue my studies in Information </br>  Technology in the near future.</p>
+ <button onclick="redirectToPage(event)"> My Certificates </button>
+</div>
+</div>
+</body>
+<style>
+    .erm{
+ background-image: url("About.jpg");
+    height: 100vh;
+    background-size: cover;
+    background-position: center;
+  
+    
+}
+
+#text{
+    margin-left: 30px;
+    
+}
+body{
+    background-color: rgb(48, 47, 47);
+}
+h1{
+    color: aliceblue;
+    font-size: 80px;
+    margin-bottom: 0px;
+    font-style: Sans-Serif;
+    margin-top: 160px;
+
+}
+p{
+    margin-top: 30px;
+    
+    color: aliceblue;
+    font-size: 30px;
+}
+#pota{
+    color:aliceblue;
+    font-size: 50px;
+   margin-top: 0px;
+}
+button{
+    height: 50px;
+    width: 400px;
+    background-color: rgb(167, 164, 167);
+    margin-top: 60px;
+    margin-left: 1300px;
+    border-radius: 50px;
+    font-size: 30px;
+    color:white ;
+}
+button:hover{
+    transform: scale(1.5);
+    transition: transform 0.5s ease-in-out;
+}
+</style>
+<script>
+    function redirectToPage(event) {
+          event.preventDefault(); // Prevent the form from submitting
+          window.location.href = 'Certs.html'; // Replace with the name of your HTML file
+      }
+</script>
+</body>
+
+</html>

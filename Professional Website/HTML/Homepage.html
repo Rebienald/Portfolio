@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+    <body>
+<head>
+
+    <title>Home Page</title>
+    <div class="home">
+    <div id="aboutme">
+        <h1>Hello, I'm </br> Rebienald</h1>
+  <p> future web developer</p>
+  <button onclick="redirectToPage(event)">See my portfolio -> </button>
+    </div>
+</div>
+</head>
+</body>
+<STYLE>
+ #aboutme{
+    
+    background-image: url("home.png");
+    height: 100vh;
+    background-size: cover;
+    border-radius: 20px;
+    height: 850px;
+ }
+ h1{
+    font-size: 90px;
+    font-style: bold;
+     margin-bottom: 0%;
+    margin-left: 100px;
+ }
+ p{
+    font-size: 40px;
+    margin-left: 110px;
+    color: aliceblue;
+    margin-top: 0%;
+    }
+body{
+  background-color: gray;
+}
+button{
+    height: 70px;
+    width: 500px;
+    border-radius: 50px;
+    margin-top: 400px;
+    margin-left: 50px;
+    background-color: rgb(161, 156, 159);
+}
+button:hover{
+    transform: scale(1.5);
+    transition: transform 0.5s ease-in-out;
+}
+
+</STYLE>
+<script>
+    function redirectToPage(event) {
+          event.preventDefault(); // Prevent the form from submitting
+          window.location.href = 'aboutme.html'; // Replace with the name of your HTML file
+      }
+</script>
