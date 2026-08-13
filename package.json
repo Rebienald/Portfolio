@@ -1,5 +1,5 @@
 {
-  "name": "portfolio",
+  "name": "rebkhei",
   "version": "1.0.0",
   "description": "Portfolio Website with AI Chatbot",
   "main": "server.js",
@@ -7,3 +7,4 @@
     "start": "node server.js"
   }
 }
+
