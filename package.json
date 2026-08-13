@@ -2,9 +2,7 @@
   "name": "rebkhei",
   "version": "1.0.0",
   "description": "Portfolio Website with AI Chatbot",
-  "main": "server.js",
-  "scripts": {
-    "start": "node server.js"
-  }
+  "main": "index.html"
 }
+
 

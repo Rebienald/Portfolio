@@ -1,6 +1,10 @@
 {
-  "name": "rebkhei",
-  "version": 2,
-  "cleanUrls": true
+  "cleanUrls": true,
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/$1"
+    }
+  ]
 }
 
