@@ -206,12 +206,12 @@
                 transition: border-color 0.25s ease;
             }
             .contact-grid {
-                display: grid;
-                grid-template-columns: 1fr 1.5fr;
-                gap: 2rem;
                 width: 100%;
-                max-width: 1000px;
+                max-width: 620px;
                 margin: 0 auto;
+            }
+            .contact-form {
+                width: 100%;
             }
             .glass-card h2 {
                 font-family: 'Cinzel', serif;
@@ -390,8 +390,7 @@
                     padding-top: 6rem;
                 }
                 .contact-grid {
-                    grid-template-columns: 1fr;
-                    gap: 1.5rem;
+                    width: 100%;
                 }
                 .form-row {
                     grid-template-columns: 1fr;
@@ -416,10 +415,6 @@
                     <a href="../index.html#certifications"> Certificates </a>
                 </li>
             </ul>
-            <a class="nav-cta" href="contact.html">
-                Let's Talk
-                <span class="nav-cta-arrow"> ↗ </span>
-            </a>
             <div class="hamburger" onclick="toggleMobileMenu()">
                 <i class="fas fa-bars"> </i>
             </div>
@@ -437,49 +432,8 @@
         <main class="main-content">
             <div class="container">
                 <div class="contact-grid">
-                    <div class="glass-card">
-                        <h2>Contact Info</h2>
-                        <ul class="contact-details">
-                            <li>
-                                <div class="contact-icon">
-                                    <i class="fas fa-envelope"> </i>
-                                </div>
-                                <div class="contact-text">
-                                    <h3>Email</h3>
-                                    <a href="mailto:Rebienaldev@gmail.com"> Rebienaldev@gmail.com </a>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="contact-icon">
-                                    <i class="fab fa-github"> </i>
-                                </div>
-                                <div class="contact-text">
-                                    <h3>GitHub</h3>
-                                    <a href="https://github.com/rebienalddev" target="_blank"> rebienalddev </a>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="contact-icon">
-                                    <i class="fab fa-discord"> </i>
-                                </div>
-                                <div class="contact-text">
-                                    <h3>Discord</h3>
-                                    <p>rebkhei</p>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="contact-icon">
-                                    <i class="fab fa-whatsapp"> </i>
-                                </div>
-                                <div class="contact-text">
-                                    <h3>WhatsApp</h3>
-                                    <a href="https://wa.me/639945324891" target="_blank"> +63 994 532 4891 </a>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="glass-card">
-                        <h2>Send a Message</h2>
+                    <section class="contact-form" aria-labelledby="send-message-title">
+                        <h2 id="send-message-title">Send a Message</h2>
                         <div id="formStatus" style="margin-bottom: 0.5rem"></div>
                         <form id="contactForm">
                             <div class="form-row">
@@ -519,13 +473,7 @@
                             </div>
                             <button class="submit-btn" id="submitBtn" type="submit">Send Message</button>
                         </form>
-                    </div>
-                </div>
-                <div class="back-home">
-                    <a class="back-link" href="../index.html">
-                        <i class="fas fa-arrow-left"> </i>
-                        Back to Home
-                    </a>
+                    </section>
                 </div>
             </div>
         </main>
