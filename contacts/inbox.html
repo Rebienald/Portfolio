@@ -16,40 +16,55 @@
 
         <style>
             :root {
-                --bg: #ffffff;
-                --text: #111827;
-                --muted: #6b7280;
-                --border: #e5e7eb;
-                --orange: #ff7a00;
+                --bg: #060608;
+                --surface: #0d0e12;
+                --card-bg: #121319;
+                --text: #F8FAFC;
+                --text-secondary: #CBD5E1;
+                --muted: #8A99AD;
+                --border: rgba(212, 175, 55, 0.22);
+                --gold: #D4AF37;
+                --gold-light: #F3E5AB;
             }
             * {
                 margin: 0;
                 padding: 0;
                 box-sizing: border-box;
             }
+            ::-webkit-scrollbar {
+                width: 6px;
+                height: 6px;
+            }
+            ::-webkit-scrollbar-track {
+                background: #060608;
+            }
+            ::-webkit-scrollbar-thumb {
+                background: rgba(212, 175, 55, 0.3);
+                border-radius: 4px;
+            }
             body {
-                background-color: #fafafa;
-                color: var(--text);
+                background-color: var(--bg);
+                color: var(--text-secondary);
                 font-family:
-                    "Inter",
+                    "Plus Jakarta Sans", "Inter",
                     -apple-system,
                     sans-serif;
-                line-height: 1.4;
+                line-height: 1.5;
                 min-height: 100vh;
                 display: flex;
                 flex-direction: column;
                 -webkit-font-smoothing: antialiased;
             }
             .navbar {
-                background: #ffffff;
+                background: rgba(13, 14, 18, 0.95);
                 border-bottom: 1px solid var(--border);
-                padding: 0.5rem 1rem;
+                padding: 0.75rem 1.25rem;
                 position: sticky;
                 top: 0;
                 z-index: 100;
             }
             .nav-container {
-                max-width: 900px;
+                max-width: 1000px;
                 margin: 0 auto;
                 display: flex;
                 justify-content: space-between;
@@ -57,177 +72,195 @@
                 gap: 0.5rem;
             }
             .brand {
+                font-family: 'Cinzel', serif;
                 font-weight: 800;
-                font-size: 0.9rem;
-                color: var(--text);
-                letter-spacing: -0.02em;
+                font-size: 1rem;
+                color: var(--gold);
+                letter-spacing: 0.05em;
                 display: flex;
                 align-items: center;
-                gap: 0.4rem;
+                gap: 0.5rem;
                 white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
             .nav-right {
                 display: flex;
-                gap: 0.4rem;
+                gap: 0.5rem;
             }
             .btn-sharp {
                 display: inline-flex;
                 align-items: center;
                 justify-content: center;
-                gap: 0.3rem;
-                padding: 0.3rem 0.65rem;
-                font-size: 0.78rem;
+                gap: 0.35rem;
+                padding: 0.4rem 0.85rem;
+                font-size: 0.8rem;
                 font-weight: 600;
                 text-decoration: none;
-                color: var(--text);
-                background: #ffffff;
-                border: 1px solid #111827;
+                color: var(--gold-light);
+                background: var(--card-bg);
+                border: 1px solid var(--border);
                 cursor: pointer;
-                border-radius: 4px;
-                transition: all 0.15s ease;
+                border-radius: 6px;
+                transition: all 0.2s ease;
                 white-space: nowrap;
-                height: 28px;
             }
             .btn-sharp:hover {
-                background: #111827;
-                color: #ffffff;
+                background: var(--gold);
+                color: #060608;
+                border-color: var(--gold);
             }
             .btn-danger {
-                border-color: #dc2626;
-                color: #dc2626;
+                border-color: rgba(239, 68, 68, 0.4);
+                color: #f87171;
             }
             .btn-danger:hover {
-                background: #dc2626;
+                background: #ef4444;
                 color: #ffffff;
+                border-color: #ef4444;
             }
             .main-wrapper {
-                max-width: 900px;
+                max-width: 1000px;
                 margin: 0 auto;
-                padding: 0.85rem 0.85rem;
+                padding: 1.5rem 1rem;
                 width: 100%;
                 flex: 1;
             }
             .page-header {
-                margin-bottom: 0.65rem;
+                margin-bottom: 1.25rem;
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                border-bottom: 1px solid #111827;
-                padding-bottom: 0.4rem;
+                border-bottom: 1px solid var(--border);
+                padding-bottom: 0.75rem;
                 gap: 0.5rem;
             }
             .page-header h1 {
-                font-size: 1.15rem;
-                font-weight: 800;
-                letter-spacing: -0.02em;
-            }
-            .stats-summary {
-                font-size: 0.75rem;
+                font-family: 'Cinzel', serif;
+                font-size: 1.4rem;
                 font-weight: 700;
                 color: var(--text);
-                background: #e5e7eb;
-                padding: 0.15rem 0.5rem;
-                border-radius: 4px;
+                letter-spacing: 0.02em;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            .stats-summary {
+                font-size: 0.78rem;
+                font-weight: 700;
+                color: #060608;
+                background: #D4AF37;
+                padding: 0.25rem 0.65rem;
+                border-radius: 100px;
                 white-space: nowrap;
             }
             .toolbar {
                 display: flex;
-                gap: 0.4rem;
-                margin-bottom: 0.75rem;
+                gap: 0.5rem;
+                margin-bottom: 1.25rem;
                 align-items: center;
                 flex-wrap: wrap;
             }
             .search-box {
                 display: flex;
                 align-items: center;
-                background: #f3f4f6;
-                border: 1px solid #d1d5db;
-                padding: 0 0.5rem;
-                flex: 1 1 150px;
-                border-radius: 16px;
-                height: 28px;
+                background: var(--card-bg);
+                border: 1px solid var(--border);
+                padding: 0 0.75rem;
+                flex: 1 1 200px;
+                border-radius: 100px;
+                height: 34px;
+            }
+            .search-box i {
+                color: var(--gold);
+                margin-right: 0.4rem;
             }
             .search-box input {
                 width: 100%;
                 padding: 0;
                 border: none;
                 outline: none;
-                font-size: 0.75rem;
+                font-size: 0.8rem;
                 color: var(--text);
                 background: transparent;
             }
             .filter-group {
                 display: flex;
-                gap: 0.25rem;
+                gap: 0.35rem;
             }
             .filter-btn {
-                font-size: 0.75rem;
+                font-size: 0.8rem;
                 font-weight: 600;
-                padding: 0 0.55rem;
-                height: 28px;
-                background: #ffffff;
-                color: var(--muted);
+                padding: 0 0.8rem;
+                height: 34px;
+                background: var(--card-bg);
+                color: var(--text-secondary);
                 border: 1px solid var(--border);
-                border-radius: 16px;
+                border-radius: 100px;
                 cursor: pointer;
-                transition: all 0.15s ease;
+                transition: all 0.2s ease;
                 white-space: nowrap;
             }
-            .filter-btn.active {
-                background: #111827;
-                color: #ffffff;
-                border-color: #111827;
+            .filter-btn.active, .filter-btn:hover {
+                background: #D4AF37;
+                color: #060608;
+                border-color: transparent;
             }
             .action-group {
                 display: flex;
-                gap: 0.3rem;
+                gap: 0.4rem;
                 margin-left: auto;
             }
             .action-group .btn-sharp {
-                border-radius: 16px;
-                height: 28px;
-                padding: 0 0.55rem;
-                font-size: 0.75rem;
+                border-radius: 100px;
+                height: 34px;
+                padding: 0 0.85rem;
+                font-size: 0.8rem;
             }
             .messages-list {
                 display: flex;
                 flex-direction: column;
-                gap: 0.65rem;
+                gap: 1rem;
             }
             .msg-card {
-                background: #ffffff;
+                background: var(--card-bg);
                 border: 1px solid var(--border);
-                border-radius: 6px;
-                padding: 0.75rem 0.85rem;
-                transition: all 0.15s ease;
-                box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+                border-radius: 12px;
+                padding: 1.1rem 1.25rem;
+                transition: all 0.2s ease;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
                 word-break: break-word;
                 overflow-wrap: anywhere;
             }
+            .msg-card:hover {
+                border-color: rgba(212, 175, 55, 0.5);
+                box-shadow: 0 8px 25px rgba(0, 0, 0, 0.8), 0 0 15px rgba(212, 175, 55, 0.1);
+            }
             .msg-card.unread {
-                border-left: 4px solid var(--orange);
-                background: #fffdfb;
+                border-left: 4px solid var(--gold);
+                background: #161720;
             }
             .msg-header {
                 display: flex;
                 justify-content: space-between;
                 align-items: flex-start;
-                margin-bottom: 0.4rem;
-                gap: 0.4rem;
+                margin-bottom: 0.6rem;
+                gap: 0.5rem;
             }
             .msg-sender-info {
                 display: flex;
                 flex-direction: column;
-                gap: 0.1rem;
+                gap: 0.15rem;
             }
             .msg-sender {
-                font-size: 0.88rem;
+                font-family: 'Cinzel', serif;
+                font-size: 0.95rem;
                 font-weight: 700;
                 color: var(--text);
             }
             .msg-email {
-                font-size: 0.78rem;
-                color: var(--muted);
+                font-size: 0.8rem;
+                color: var(--gold-light);
                 font-weight: 500;
                 text-decoration: none;
                 word-break: break-all;
@@ -235,65 +268,65 @@
             .msg-meta-info {
                 display: flex;
                 align-items: center;
-                gap: 0.35rem;
+                gap: 0.5rem;
             }
             .msg-time {
-                font-size: 0.72rem;
+                font-size: 0.75rem;
                 color: var(--muted);
                 white-space: nowrap;
             }
             .msg-badge {
-                font-size: 0.65rem;
+                font-size: 0.68rem;
                 font-weight: 800;
-                padding: 0.1rem 0.4rem;
-                border-radius: 3px;
+                padding: 0.15rem 0.5rem;
+                border-radius: 4px;
                 letter-spacing: 0.03em;
                 text-transform: uppercase;
             }
             .msg-badge.badge-unread {
-                background: #111827;
-                color: #ffffff;
+                background: var(--gold);
+                color: #060608;
             }
             .msg-badge.badge-read {
-                background: #f3f4f6;
-                color: #4b5563;
-                border: 1px solid #d1d5db;
+                background: #181922;
+                color: var(--muted);
+                border: 1px solid var(--border);
             }
             .msg-subject {
-                font-size: 0.88rem;
+                font-size: 0.92rem;
                 font-weight: 700;
-                margin-bottom: 0.35rem;
-                color: var(--text);
+                margin-bottom: 0.5rem;
+                color: var(--gold-light);
                 word-break: break-word;
             }
             .msg-body {
-                font-size: 0.82rem;
-                color: #374151;
+                font-size: 0.88rem;
+                color: var(--text-secondary);
                 white-space: pre-wrap;
-                margin-bottom: 0.5rem;
-                line-height: 1.5;
+                margin-bottom: 0.75rem;
+                line-height: 1.6;
                 word-break: break-word;
             }
             .msg-footer {
                 display: flex;
                 justify-content: flex-end;
-                gap: 0.35rem;
-                border-top: 1px solid #f3f4f6;
-                padding-top: 0.45rem;
+                gap: 0.5rem;
+                border-top: 1px solid rgba(212, 175, 55, 0.12);
+                padding-top: 0.6rem;
             }
             .msg-footer .btn-sharp {
-                height: 26px;
-                font-size: 0.72rem;
-                padding: 0 0.5rem;
+                height: 30px;
+                font-size: 0.75rem;
+                padding: 0 0.65rem;
             }
             .empty-state {
-                background: #ffffff;
+                background: var(--card-bg);
                 border: 1px dashed var(--border);
-                border-radius: 6px;
-                padding: 2.5rem 1rem;
+                border-radius: 12px;
+                padding: 3rem 1.5rem;
                 text-align: center;
                 color: var(--muted);
-                font-size: 0.85rem;
+                font-size: 0.9rem;
                 font-weight: 600;
             }
             @media (max-width: 640px) {
