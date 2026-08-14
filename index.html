@@ -2089,7 +2089,7 @@
                     top: 50% !important;
                     left: 50% !important;
                     transform: translate(-50%, -50%) !important;
-                    width: 440px !important;
+                    width: 510px !important;
                     height: auto !important;
                     margin: 0 !important;
                     z-index: 2 !important;
@@ -2390,6 +2390,82 @@
                 }
                 .intro-splash-overlay {
                     transition-duration: 0.2s;
+                }
+            }
+
+            /* Monochrome interface: gold is reserved for headings only. */
+            :root {
+                --accent: #FFFFFF;
+                --accent-hover: #FFFFFF;
+                --accent-glow: rgba(255, 255, 255, 0.18);
+                --gold-dark: #FFFFFF;
+                --gold-bright: #FFFFFF;
+                --gold-border: rgba(255, 255, 255, 0.28);
+                --gold-border-hover: rgba(255, 255, 255, 0.7);
+                --text-primary: #FFFFFF;
+                --text-secondary: #FFFFFF;
+                --text-tertiary: #FFFFFF;
+                --glass-border: rgba(255, 255, 255, 0.25);
+            }
+            body, body p, body a, body li, body button, body span, body .logo,
+            body .nav-links a, body .nav-cta, body .verse-ref, body .section-eyebrow {
+                color: #FFFFFF !important;
+            }
+            body .glass-card, body .cert-card, body .project-card, body nav,
+            body .skill-logo-btn, body .btn-primary, body .btn-secondary,
+            body .social-link, body .snap-toggle-btn {
+                border-color: rgba(255, 255, 255, 0.55) !important;
+            }
+            body .skill-logo-btn,
+            body .nav-cta,
+            body .btn-primary {
+                background: transparent !important;
+                color: #FFFFFF !important;
+            }
+            body h1, body h2, body h3, body h4, body h5,
+            body .section-header h2, body .text-gradient, body .text-gradient-accent {
+                color: #D4AF37 !important;
+            }
+            @media (max-width: 768px) {
+                body .glass-card,
+                body .project-card,
+                body .cert-card,
+                body .timeline-item,
+                body .sphere-card-node,
+                body .sphere-hud-projection {
+                    background: #060608 !important;
+                    border-color: #FFFFFF !important;
+                    box-shadow: none !important;
+                }
+                body .skill-logo-btn,
+                body .skill-logo-btn:hover,
+                body .skill-logo-btn:active,
+                body .skill-logo-btn.active-btn {
+                    border-color: #FFFFFF !important;
+                    border-bottom-color: #FFFFFF !important;
+                    background: transparent !important;
+                    box-shadow: none !important;
+                }
+                body .service-icon,
+                body .social-link,
+                body .timeline-dot,
+                body .tech-icon-wrapper {
+                    background: #060608 !important;
+                    color: #FFFFFF !important;
+                    border-color: #FFFFFF !important;
+                    box-shadow: none !important;
+                }
+                body .skill-logo-btn i,
+                body .skill-logo-btn svg,
+                body .skill-logo-btn svg * {
+                    color: #FFFFFF !important;
+                    fill: #FFFFFF !important;
+                    stroke: #FFFFFF !important;
+                }
+                body .orbit-svg circle,
+                body .timeline-dot {
+                    stroke: rgba(255, 255, 255, 0.45) !important;
+                    border-color: #FFFFFF !important;
                 }
             }
         </style>
