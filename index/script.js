@@ -454,8 +454,26 @@ document.addEventListener('DOMContentLoaded', () => {
                             if (e && e.clientX && e.clientY && window.innerWidth > 768) {
                                 positionTooltip(e);
                             }
-                            tooltip.classList.add('visible');
+                            if (tooltip) tooltip.classList.add('visible');
                         };
+
+                        el.addEventListener('mouseenter', (e) => {
+                            if (window.innerWidth > 768) {
+                                activateTech(e);
+                            }
+                        });
+
+                        el.addEventListener('mousemove', (e) => {
+                            if (window.innerWidth > 768 && tooltip && tooltip.classList.contains('visible')) {
+                                positionTooltip(e);
+                            }
+                        });
+
+                        el.addEventListener('mouseleave', () => {
+                            if (window.innerWidth > 768) {
+                                if (tooltip) tooltip.classList.remove('visible');
+                            }
+                        });
 
                         el.addEventListener('click', (e) => {
                             e.stopPropagation();
