@@ -2819,11 +2819,43 @@
     box-shadow: 0 6px 25px rgba(255, 255, 255, 0.3) !important;
     transform: translateY(-2px) !important;
 }
-.guestbook-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 1.25rem;
+.guestbook-marquee {
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
     width: 100%;
+    cursor: grab;
+    user-select: none;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    position: relative;
+    padding: 1rem 0 2rem 0;
+}
+.guestbook-marquee::-webkit-scrollbar {
+    display: none;
+}
+.guestbook-marquee:active {
+    cursor: grabbing;
+}
+.guestbook-marquee-track {
+    display: flex;
+    width: max-content;
+}
+.guestbook-marquee-group {
+    display: flex;
+    gap: 1.25rem;
+    padding: 0 0.65rem;
+}
+.guestbook-marquee-group .guestbook-card {
+    flex: 0 0 auto;
+    width: 340px;
+    white-space: normal;
+}
+@media (max-width: 768px) {
+    .guestbook-marquee-group .guestbook-card {
+        width: 290px !important;
+    }
 }
 .guestbook-card {
     background: #0d0e12;

@@ -482,11 +482,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
                 });
                 document.addEventListener('DOMContentLoaded', () => {
-                    const marquees = document.querySelectorAll('.projects-marquee, .certs-marquee');
+                    const marquees = document.querySelectorAll('.projects-marquee, .certs-marquee, .guestbook-marquee');
                     marquees.forEach(marquee => {
-                        const track = marquee.querySelector('.projects-marquee-track, .certs-marquee-track');
+                        const track = marquee.querySelector('.projects-marquee-track, .certs-marquee-track, .guestbook-marquee-track');
                         if (!track) return;
-                        const group = track.querySelector('.projects-marquee-group, .certs-marquee-group');
+                        const group = track.querySelector('.projects-marquee-group, .certs-marquee-group, .guestbook-marquee-group');
                         if (!group) return;
                         const clone = group.cloneNode(true);
                         clone.setAttribute('aria-hidden', 'true');
@@ -1326,6 +1326,16 @@ document.addEventListener('DOMContentLoaded', () => {
                                 </div>
                             `;
                         }).join('');
+
+                        const track = grid.parentElement;
+                        if (track && track.classList.contains('guestbook-marquee-track')) {
+                            const existingClones = track.querySelectorAll('[aria-hidden="true"]');
+                            existingClones.forEach(c => c.remove());
+                            const clone = grid.cloneNode(true);
+                            clone.setAttribute('aria-hidden', 'true');
+                            clone.querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
+                            track.appendChild(clone);
+                        }
                     }
 
                     async function fetchGuestbookData() {
