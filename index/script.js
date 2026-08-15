@@ -391,11 +391,15 @@ document.addEventListener('DOMContentLoaded', () => {
                         tooltip.style.top = `${y}px`;
                     }
 
+                    document.addEventListener('click', (e) => {
+                        if (!e.target.closest('.skill-logo-btn, .tech-float-card, [data-tech], #techTooltip')) {
+                            if (tooltip) tooltip.classList.remove('visible');
+                        }
+                    });
+
                     document.addEventListener('touchstart', (e) => {
-                        if (window.innerWidth <= 768) {
-                            if (!e.target.closest('.skill-logo-btn, .tech-float-card, [data-tech], #techTooltip')) {
-                                if (tooltip) tooltip.classList.remove('visible');
-                            }
+                        if (!e.target.closest('.skill-logo-btn, .tech-float-card, [data-tech], #techTooltip')) {
+                            if (tooltip) tooltip.classList.remove('visible');
                         }
                     }, { passive: true });
 
@@ -420,27 +424,14 @@ document.addEventListener('DOMContentLoaded', () => {
                                 tooltipIcon.innerHTML = iconHtml;
                             }
 
-                            if (e && e.clientX && e.clientY) {
+                            if (e && e.clientX && e.clientY && window.innerWidth > 768) {
                                 positionTooltip(e);
                             }
                             tooltip.classList.add('visible');
                         };
 
-                        el.addEventListener('mouseenter', (e) => {
-                            if (window.innerWidth <= 768) return;
-                            activateTech(e);
-                        });
-
-                        el.addEventListener('mousemove', (e) => {
-                            if (window.innerWidth <= 768) return;
-                            positionTooltip(e);
-                        });
-
-                        el.addEventListener('mouseleave', () => {
-                            if (tooltip && window.innerWidth > 768) tooltip.classList.remove('visible');
-                        });
-
                         el.addEventListener('click', (e) => {
+                            e.stopPropagation();
                             activateTech(e);
                         });
                     });
