@@ -869,26 +869,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         requestAnimationFrame(animateSphere);
                     }
                     animateSphere();
-
-                    let lastSectionScrollY = window.scrollY;
-                    window.addEventListener('scroll', () => {
-                        const workSec = document.getElementById('work');
-                        const eduSec = document.getElementById('education');
-                        const certSec = document.getElementById('certifications');
-
-                        const inView = (el) => {
-                            if (!el) return false;
-                            const rect = el.getBoundingClientRect();
-                            return rect.top < window.innerHeight && rect.bottom > 0;
-                        };
-
-                        if (inView(workSec) || inView(eduSec) || inView(certSec)) {
-                            if (Math.abs(window.scrollY - lastSectionScrollY) > 22) {
-                                lastSectionScrollY = window.scrollY;
-                                playSelectionTickSound();
-                            }
-                        }
-                    }, { passive: true });
                 });
 
                 // STRICT SECTION-BY-SECTION SNAP SWITCHER ENGINE (DESKTOP ONLY / TOGGLEABLE)
