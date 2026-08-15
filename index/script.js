@@ -1352,6 +1352,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                     }
 
+                    const SB_GB_URL = "https://uwboeqkiwncdtarqvxbo.supabase.co/rest/v1/guestbook";
+                    const SB_GB_KEY = "sb_publishable_a5_YHH1N5U0goK4rRks_OA_Lr-JBSjH";
+
                     async function fetchGuestbookData() {
                         try {
                             const res = await fetch('/api/guestbook');
@@ -1360,8 +1363,36 @@ document.addEventListener('DOMContentLoaded', () => {
                                 if (data.entries && data.entries.length) {
                                     guestbookEntries = data.entries;
                                 }
+                            } else {
+                                const sbRes = await fetch(`${SB_GB_URL}?select=*&order=id.desc`, {
+                                    headers: {
+                                        "apikey": SB_GB_KEY,
+                                        "Authorization": `Bearer ${SB_GB_KEY}`
+                                    }
+                                });
+                                if (sbRes.ok) {
+                                    const sbEntries = await sbRes.json();
+                                    if (Array.isArray(sbEntries) && sbEntries.length) {
+                                        guestbookEntries = sbEntries;
+                                    }
+                                }
                             }
-                        } catch (err) {}
+                        } catch (err) {
+                            try {
+                                const sbRes = await fetch(`${SB_GB_URL}?select=*&order=id.desc`, {
+                                    headers: {
+                                        "apikey": SB_GB_KEY,
+                                        "Authorization": `Bearer ${SB_GB_KEY}`
+                                    }
+                                });
+                                if (sbRes.ok) {
+                                    const sbEntries = await sbRes.json();
+                                    if (Array.isArray(sbEntries) && sbEntries.length) {
+                                        guestbookEntries = sbEntries;
+                                    }
+                                }
+                            } catch (e) {}
+                        }
                         renderGuestbook(guestbookEntries);
                     }
 
@@ -1376,8 +1407,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
                         if (typeof playSelectionTickSound === 'function') playSelectionTickSound();
                         const countSpan = btn.querySelector('span');
+                        let newCount = 1;
                         if (countSpan) {
-                            countSpan.innerText = parseInt(countSpan.innerText || '0') + 1;
+                            newCount = parseInt(countSpan.innerText || '0') + 1;
+                            countSpan.innerText = newCount;
                         }
 
                         try {
@@ -1387,6 +1420,18 @@ document.addEventListener('DOMContentLoaded', () => {
                                 body: JSON.stringify({ id })
                             });
                         } catch (err) {}
+
+                        try {
+                            await fetch(`${SB_GB_URL}?id=eq.${id}`, {
+                                method: 'PATCH',
+                                headers: {
+                                    "apikey": SB_GB_KEY,
+                                    "Authorization": `Bearer ${SB_GB_KEY}`,
+                                    "Content-Type": "application/json"
+                                },
+                                body: JSON.stringify({ likes: newCount })
+                            });
+                        } catch (e) {}
                     };
 
                     document.addEventListener('DOMContentLoaded', () => {
@@ -1452,6 +1497,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
                                 const payload = { name, role, rating: selectedRating, message };
 
+                                const newCard = {
+                                    id: "gb_" + Date.now(),
+                                    name,
+                                    role: role || "Visitor",
+                                    rating: selectedRating,
+                                    message,
+                                    date: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
+                                    likes: 0
+                                };
+
+                                try {
+                                    await fetch(SB_GB_URL, {
+                                        method: 'POST',
+                                        headers: {
+                                            "apikey": SB_GB_KEY,
+                                            "Authorization": `Bearer ${SB_GB_KEY}`,
+                                            "Content-Type": "application/json"
+                                        },
+                                        body: JSON.stringify(newCard)
+                                    });
+                                } catch (e) {}
+
                                 try {
                                     const res = await fetch('/api/guestbook', {
                                         method: 'POST',
@@ -1462,32 +1529,17 @@ document.addEventListener('DOMContentLoaded', () => {
                                         const data = await res.json();
                                         if (data.entries) {
                                             guestbookEntries = data.entries;
-                                            renderGuestbook(guestbookEntries);
+                                        } else {
+                                            guestbookEntries.unshift(newCard);
                                         }
                                     } else {
-                                        guestbookEntries.unshift({
-                                            id: "gb_" + Date.now(),
-                                            name,
-                                            role: role || "Visitor",
-                                            rating: selectedRating,
-                                            message,
-                                            date: "Just now",
-                                            likes: 0
-                                        });
-                                        renderGuestbook(guestbookEntries);
+                                        guestbookEntries.unshift(newCard);
                                     }
                                 } catch (err) {
-                                    guestbookEntries.unshift({
-                                        id: "gb_" + Date.now(),
-                                        name,
-                                        role: role || "Visitor",
-                                        rating: selectedRating,
-                                        message,
-                                        date: "Just now",
-                                        likes: 0
-                                    });
-                                    renderGuestbook(guestbookEntries);
+                                    guestbookEntries.unshift(newCard);
                                 }
+
+                                renderGuestbook(guestbookEntries);
 
                                 if (submitBtn) submitBtn.disabled = false;
                                 if (modal) modal.classList.remove('active');

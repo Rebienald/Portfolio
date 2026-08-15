@@ -239,9 +239,11 @@ http.createServer(async (req, res) => {
         return res.end();
     }
 
-    // GUESTBOOK STORAGE & API ENDPOINTS
+    // GUESTBOOK STORAGE & SUPABASE CLOUD DB ENDPOINTS
     const GUESTBOOK_DIR = path.join(__dirname, "data");
     const GUESTBOOK_FILE = path.join(GUESTBOOK_DIR, "guestbook.json");
+    const SUPABASE_GB_URL = "https://uwboeqkiwncdtarqvxbo.supabase.co/rest/v1/guestbook";
+    const SUPABASE_GB_KEY = "sb_publishable_a5_YHH1N5U0goK4rRks_OA_Lr-JBSjH";
 
     const DEFAULT_GUESTBOOK = [
         {
@@ -296,9 +298,39 @@ http.createServer(async (req, res) => {
     }
 
     if (req.url === "/api/guestbook" && req.method === "GET") {
-        const entries = getGuestbookData();
-        res.writeHead(200, { "Content-Type": "application/json" });
-        return res.end(JSON.stringify({ status: "success", entries }));
+        try {
+            const reqClient = https.get(`${SUPABASE_GB_URL}?select=*&order=id.desc`, {
+                headers: {
+                    "apikey": SUPABASE_GB_KEY,
+                    "Authorization": `Bearer ${SUPABASE_GB_KEY}`
+                }
+            }, (sbRes) => {
+                let sbData = "";
+                sbRes.on("data", (chunk) => sbData += chunk);
+                sbRes.on("end", () => {
+                    try {
+                        const parsed = JSON.parse(sbData);
+                        if (Array.isArray(parsed) && parsed.length > 0) {
+                            res.writeHead(200, { "Content-Type": "application/json" });
+                            return res.end(JSON.stringify({ status: "success", entries: parsed, source: "supabase" }));
+                        }
+                    } catch (e) {}
+                    const entries = getGuestbookData();
+                    res.writeHead(200, { "Content-Type": "application/json" });
+                    return res.end(JSON.stringify({ status: "success", entries, source: "local" }));
+                });
+            });
+            reqClient.on("error", () => {
+                const entries = getGuestbookData();
+                res.writeHead(200, { "Content-Type": "application/json" });
+                return res.end(JSON.stringify({ status: "success", entries, source: "local" }));
+            });
+        } catch (err) {
+            const entries = getGuestbookData();
+            res.writeHead(200, { "Content-Type": "application/json" });
+            return res.end(JSON.stringify({ status: "success", entries, source: "local" }));
+        }
+        return;
     }
 
     if (req.url === "/api/guestbook" && req.method === "POST") {
@@ -317,7 +349,6 @@ http.createServer(async (req, res) => {
                     return res.end(JSON.stringify({ error: "Name and message are required." }));
                 }
 
-                const entries = getGuestbookData();
                 const newEntry = {
                     id: "gb_" + Date.now(),
                     name,
@@ -328,8 +359,29 @@ http.createServer(async (req, res) => {
                     likes: 0
                 };
 
+                const entries = getGuestbookData();
                 entries.unshift(newEntry);
                 saveGuestbookData(entries);
+
+                // Post to Supabase Cloud DB
+                try {
+                    const sbReqData = JSON.stringify(newEntry);
+                    const parsedUrl = new URL(SUPABASE_GB_URL);
+                    const sbReq = https.request({
+                        hostname: parsedUrl.hostname,
+                        path: parsedUrl.pathname,
+                        method: "POST",
+                        headers: {
+                            "apikey": SUPABASE_GB_KEY,
+                            "Authorization": `Bearer ${SUPABASE_GB_KEY}`,
+                            "Content-Type": "application/json",
+                            "Content-Length": Buffer.byteLength(sbReqData)
+                        }
+                    });
+                    sbReq.on("error", () => {});
+                    sbReq.write(sbReqData);
+                    sbReq.end();
+                } catch (e) {}
 
                 res.writeHead(200, { "Content-Type": "application/json" });
                 res.end(JSON.stringify({ status: "success", entry: newEntry, entries }));
@@ -353,6 +405,26 @@ http.createServer(async (req, res) => {
                 if (target) {
                     target.likes = (target.likes || 0) + 1;
                     saveGuestbookData(entries);
+
+                    // Update Supabase Cloud DB
+                    try {
+                        const sbReqData = JSON.stringify({ likes: target.likes });
+                        const parsedUrl = new URL(`${SUPABASE_GB_URL}?id=eq.${id}`);
+                        const sbReq = https.request({
+                            hostname: parsedUrl.hostname,
+                            path: parsedUrl.pathname + parsedUrl.search,
+                            method: "PATCH",
+                            headers: {
+                                "apikey": SUPABASE_GB_KEY,
+                                "Authorization": `Bearer ${SUPABASE_GB_KEY}`,
+                                "Content-Type": "application/json",
+                                "Content-Length": Buffer.byteLength(sbReqData)
+                            }
+                        });
+                        sbReq.on("error", () => {});
+                        sbReq.write(sbReqData);
+                        sbReq.end();
+                    } catch (e) {}
                 }
                 res.writeHead(200, { "Content-Type": "application/json" });
                 res.end(JSON.stringify({ status: "success", entries }));
