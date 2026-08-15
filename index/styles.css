@@ -471,15 +471,15 @@
             }
             .tech-float-card {
                 position: absolute;
-                background: rgba(18, 18, 26, 0.88) !important;
+                background: rgba(18, 18, 26, 0.9) !important;
                 backdrop-filter: blur(14px) !important;
                 -webkit-backdrop-filter: blur(14px) !important;
-                border: 1px solid rgba(255, 255, 255, 0.35) !important;
-                box-shadow: 0 14px 32px rgba(0, 0, 0, 0.85), 0 0 20px rgba(255, 255, 255, 0.18) !important;
+                border: 1px solid rgba(255, 255, 255, 0.38) !important;
+                box-shadow: 0 16px 36px rgba(0, 0, 0, 0.9), 0 0 24px rgba(255, 255, 255, 0.22) !important;
                 border-radius: 50% !important;
                 padding: 0 !important;
-                width: 60px !important;
-                height: 60px !important;
+                width: 72px !important;
+                height: 72px !important;
                 display: flex !important;
                 align-items: center !important;
                 justify-content: center !important;
@@ -490,7 +490,7 @@
             .tech-float-card:hover {
                 border-color: #FFFFFF !important;
                 background: rgba(30, 30, 45, 0.95) !important;
-                box-shadow: 0 20px 45px rgba(0, 0, 0, 0.98), 0 0 30px rgba(255, 255, 255, 0.4) !important;
+                box-shadow: 0 24px 50px rgba(0, 0, 0, 0.98), 0 0 35px rgba(255, 255, 255, 0.5) !important;
                 transform: scale(1.25) !important;
             }
             .tech-icon-wrapper {
@@ -501,20 +501,20 @@
                 display: flex !important;
                 align-items: center !important;
                 justify-content: center !important;
-                font-size: 2.2rem !important;
+                font-size: 2.8rem !important;
                 color: var(--text-primary);
                 transition: all 0.3s;
             }
             .tech-icon-wrapper i,
             .tech-icon-wrapper svg,
             .tech-icon-wrapper img {
-                font-size: 2.2rem !important;
-                width: 38px !important;
-                height: 38px !important;
+                font-size: 2.8rem !important;
+                width: 46px !important;
+                height: 46px !important;
                 display: block !important;
                 margin: auto !important;
                 object-fit: contain !important;
-                filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.7));
+                filter: drop-shadow(0 5px 12px rgba(0, 0, 0, 0.75));
             }
             .tech-float-card:hover .tech-icon-wrapper {
                 background: transparent;
