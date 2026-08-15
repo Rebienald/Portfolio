@@ -34,7 +34,7 @@ Projects:
 - Technologies: Node.js, Discord.js, MongoDB.
 5. TechnoBytes Photobooth:
 - Description: Custom photobooth application developed for student organizations during the STI College Bacoor Foundation Week.
-- Technologies: C#, .NET WPF / Desktop.
+- Technologies: JavaScript, HTML5, CSS3.
 6. Cup Of Story:
 - Description: Sophisticated digital storefront demonstrating modern frontend paradigms, micro-animations, and optimized asset delivery.
 - Technologies: HTML5, CSS3, JavaScript.
