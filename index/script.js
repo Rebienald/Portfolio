@@ -497,6 +497,13 @@ document.addEventListener('DOMContentLoaded', () => {
                             }
                             requestAnimationFrame(step);
                         }
+                        let lastMarqueeScroll = marquee.scrollLeft;
+                        marquee.addEventListener('scroll', () => {
+                            if (Math.abs(marquee.scrollLeft - lastMarqueeScroll) > 35) {
+                                lastMarqueeScroll = marquee.scrollLeft;
+                                playSelectionTickSound();
+                            }
+                        }, { passive: true });
                         requestAnimationFrame(step);
                         function stopInertia() {
                             if (inertiaFrame) {
@@ -863,16 +870,22 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                     animateSphere();
 
-                    let lastEduScrollY = window.scrollY;
+                    let lastSectionScrollY = window.scrollY;
                     window.addEventListener('scroll', () => {
-                        const eduSection = document.getElementById('education');
-                        if (eduSection) {
-                            const rect = eduSection.getBoundingClientRect();
-                            if (rect.top < window.innerHeight && rect.bottom > 0) {
-                                if (Math.abs(window.scrollY - lastEduScrollY) > 22) {
-                                    lastEduScrollY = window.scrollY;
-                                    playSelectionTickSound();
-                                }
+                        const workSec = document.getElementById('work');
+                        const eduSec = document.getElementById('education');
+                        const certSec = document.getElementById('certifications');
+
+                        const inView = (el) => {
+                            if (!el) return false;
+                            const rect = el.getBoundingClientRect();
+                            return rect.top < window.innerHeight && rect.bottom > 0;
+                        };
+
+                        if (inView(workSec) || inView(eduSec) || inView(certSec)) {
+                            if (Math.abs(window.scrollY - lastSectionScrollY) > 22) {
+                                lastSectionScrollY = window.scrollY;
+                                playSelectionTickSound();
                             }
                         }
                     }, { passive: true });
