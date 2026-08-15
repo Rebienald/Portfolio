@@ -242,7 +242,7 @@ http.createServer(async (req, res) => {
     // GUESTBOOK STORAGE & SUPABASE CLOUD DB ENDPOINTS
     const GUESTBOOK_DIR = path.join(__dirname, "data");
     const GUESTBOOK_FILE = path.join(GUESTBOOK_DIR, "guestbook.json");
-    const SUPABASE_GB_URL = "https://uwboeqkiwncdtarqvxbo.supabase.co/rest/v1/guestbook";
+    const SUPABASE_GB_URL = "https://uwboeqkiwncdtarqvxbo.supabase.co/rest/v1/comments";
     const SUPABASE_GB_KEY = "sb_publishable_a5_YHH1N5U0goK4rRks_OA_Lr-JBSjH";
 
     const DEFAULT_GUESTBOOK = [

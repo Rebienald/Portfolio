@@ -1352,7 +1352,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                     }
 
-                    const SB_GB_URL = "https://uwboeqkiwncdtarqvxbo.supabase.co/rest/v1/guestbook";
+                    const SB_GB_URL = "https://uwboeqkiwncdtarqvxbo.supabase.co/rest/v1/comments";
                     const SB_GB_KEY = "sb_publishable_a5_YHH1N5U0goK4rRks_OA_Lr-JBSjH";
 
                     async function fetchGuestbookData() {
