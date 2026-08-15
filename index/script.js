@@ -59,17 +59,27 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (mobileMenu) mobileMenu.classList.toggle('active');
                 };
 
-                // TACTILE UI CLICK & HOVER SOUND ENGINE (WEB AUDIO API)
                 let audioCtx = null;
+                let audioUnlocked = false;
                 let lastHoverSoundTime = 0;
 
                 function initAudioContext() {
-                    if (!audioCtx) {
-                        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                    }
-                    if (audioCtx.state === 'suspended') {
-                        audioCtx.resume();
-                    }
+                    try {
+                        if (!audioCtx) {
+                            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                        }
+                        if (audioCtx.state === 'suspended') {
+                            audioCtx.resume();
+                        }
+                        if (!audioUnlocked && audioCtx.state === 'running') {
+                            audioUnlocked = true;
+                            const buffer = audioCtx.createBuffer(1, 1, 22050);
+                            const source = audioCtx.createBufferSource();
+                            source.buffer = buffer;
+                            source.connect(audioCtx.destination);
+                            source.start(0);
+                        }
+                    } catch (e) {}
                 }
 
                 // CRASH-PROOF & ACCURATE CLICKY UI SOUND ENGINE
@@ -885,11 +895,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
                 })();
 
-                // PURE BLACK FULL-SCREEN CURSIVE HANDWRITING PRE-LOADER ENGINE
-                document.body.style.overflow = 'hidden';
-                window.scrollTo(0, 0);
-
                 const loadingName = document.querySelector('.loading-name');
+                const introSplash = document.getElementById('introSplash');
+
+                if (introSplash) {
+                    const unlockSplashAudio = () => {
+                        initAudioContext();
+                    };
+                    introSplash.addEventListener('touchstart', unlockSplashAudio, { passive: true });
+                    introSplash.addEventListener('pointerdown', unlockSplashAudio, { passive: true });
+                    introSplash.addEventListener('click', unlockSplashAudio, { passive: true });
+                }
+
                 if (loadingName) {
                     const name = loadingName.dataset.name || '';
                     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
