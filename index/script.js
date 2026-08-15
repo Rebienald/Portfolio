@@ -1382,10 +1382,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         btn.classList.add('liked');
 
                         if (typeof playSelectionTickSound === 'function') playSelectionTickSound();
+                        
+                        const entry = guestbookEntries.find(e => e.id === id);
+                        let newCount = (entry ? (entry.likes || 0) + 1 : 1);
+                        if (entry) entry.likes = newCount;
+
                         const countSpan = btn.querySelector('span');
-                        let newCount = 1;
                         if (countSpan) {
-                            newCount = parseInt(countSpan.innerText || '0') + 1;
                             countSpan.innerText = newCount;
                         }
 
