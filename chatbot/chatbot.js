@@ -251,6 +251,39 @@
         if (indicator) indicator.remove();
     }
 
+    const LOCAL_KNOWLEDGE = {
+        best: `Rebienald's **most challenging and best projects** are **InfoWhiz** and **SamAI**!
+
+🏆 **InfoWhiz**: An AI-powered educational gaming platform for computer programming. Won **Best in Capstone Development** and **Best in System Development** among all SHS ICT students at STI College Bacoor!
+
+🚀 **SamAI**: Developed in **July 2026**. A Hello Kitty-themed AI study companion powered by RAG (Retrieval-Augmented Generation), intelligent load balancing, data caching, and multi-LLM processing for PDF tutoring and quiz generation.`,
+
+        samai: `**SamAI** was developed in **July 2026** and is one of Rebienald's **most challenging and best projects**!
+
+It is a Hello Kitty-themed AI study companion powered by Retrieval-Augmented Generation (RAG), intelligent load balancing, data caching, and multi-LLM processing. It extracts text from PDF handouts, generates smart quizzes, and provides interactive AI tutoring.`,
+
+        infowhiz: `**InfoWhiz** is one of Rebienald's **most challenging and best projects**!
+
+It is an AI-powered gamified learning platform for computer programming that won **Best in Capstone Development** and **Best in System Development** among all SHS ICT students at STI College Bacoor. It features real-time coding assistance, interactive AI feedback, and simulation-based learning.`
+    };
+
+    function getSmartLocalAnswer(query) {
+        if (!query) return null;
+        const q = query.toLowerCase();
+
+        if (q.includes('hardest') || q.includes('most challenging') || q.includes('best project') || q.includes('top project') || q.includes('best and hardest') || q.includes('hardest project')) {
+            return LOCAL_KNOWLEDGE.best;
+        }
+        if (q.includes('samai') || (q.includes('sam') && q.includes('ai')) || q.includes('july 2026')) {
+            return LOCAL_KNOWLEDGE.samai;
+        }
+        if (q.includes('infowhiz') || q.includes('info whiz') || q.includes('capstone')) {
+            return LOCAL_KNOWLEDGE.infowhiz;
+        }
+
+        return null;
+    }
+
     async function handleSendMessage(messageText) {
         const input = document.getElementById('chatInput');
         const sendBtn = document.getElementById('chatSendBtn');
@@ -278,6 +311,16 @@
                 removeTypingIndicator();
                 appendMessage('bot', "I am designed exclusively to assist with questions regarding Carpio Rebienald Khei's portfolio, skills, projects, and background.");
             }, 400);
+            return;
+        }
+
+        const localAnswer = getSmartLocalAnswer(query);
+        if (localAnswer) {
+            showTypingIndicator();
+            setTimeout(() => {
+                removeTypingIndicator();
+                appendMessage('bot', localAnswer);
+            }, 350);
             return;
         }
 
