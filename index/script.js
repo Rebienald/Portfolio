@@ -215,6 +215,36 @@ document.addEventListener('DOMContentLoaded', () => {
                     } catch (err) {}
                 }
 
+                let lastSelectionTickTime = 0;
+                function playSelectionTickSound() {
+                    const now = Date.now();
+                    if (now - lastSelectionTickTime < 35) return;
+                    lastSelectionTickTime = now;
+
+                    try {
+                        initAudioContext();
+                        if (!audioCtx) return;
+
+                        const t = audioCtx.currentTime;
+
+                        const osc = audioCtx.createOscillator();
+                        const gain = audioCtx.createGain();
+
+                        osc.type = 'sine';
+                        osc.frequency.setValueAtTime(2800, t);
+                        osc.frequency.exponentialRampToValueAtTime(800, t + 0.009);
+
+                        gain.gain.setValueAtTime(0.25, t);
+                        gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.009);
+
+                        osc.connect(gain);
+                        gain.connect(audioCtx.destination);
+
+                        osc.start(t);
+                        osc.stop(t + 0.009);
+                    } catch (err) {}
+                }
+
                 // TOP-LEVEL AUDIO UNLOCK LISTENER (Unlocks AudioContext instantly on load)
                 (function() {
                     const unlock = () => {
@@ -705,6 +735,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                         card.addEventListener('click', (e) => {
                             e.stopPropagation();
+                            playSelectionTickSound();
                             document.querySelectorAll('.sphere-card-node').forEach(c => c.classList.remove('active-sphere-node'));
                             card.classList.add('active-sphere-node');
 
@@ -763,6 +794,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     window.addEventListener('touchmove', onMove, { passive: true });
                     window.addEventListener('touchend', onEnd, { passive: true });
 
+                    let lastTickRotY = 0;
+                    let lastFocusedNodeIndex = -1;
+
                     function animateSphere() {
                         const isMobile = window.innerWidth <= 768;
                         const radius = isMobile ? 140 : Math.min(310, Math.max(250, window.innerWidth * 0.21));
@@ -783,16 +817,31 @@ document.addEventListener('DOMContentLoaded', () => {
                             rotX = Math.max(-40, Math.min(40, rotX));
                         }
 
+                        if (isDragging || Math.abs(velY) > 0.05) {
+                            if (Math.abs(rotY - lastTickRotY) >= 20) {
+                                lastTickRotY = rotY;
+                                playSelectionTickSound();
+                            }
+                        }
+
                         const radY = rotY * Math.PI / 180;
                         const radX = rotX * Math.PI / 180;
 
-                        cardElements.forEach((item) => {
+                        let maxZ = -9999;
+                        let closestIdx = -1;
+
+                        cardElements.forEach((item, idx) => {
                             const angleY = item.theta + radY;
                             const posX = Math.cos(angleY) * item.r * radius;
                             const posY = isMobile 
                                 ? item.y * (radius * 0.78) 
                                 : item.y * (radius * 0.82) + (Math.sin(radX) * 35);
                             const posZ = Math.sin(angleY) * item.r * radius;
+
+                            if (posZ > maxZ) {
+                                maxZ = posZ;
+                                closestIdx = idx;
+                            }
 
                             const normalizedZ = (posZ + radius) / (2 * radius);
                             const scale = isMobile ? (0.72 + (normalizedZ * 0.38)) : (0.74 + (normalizedZ * 0.38));
@@ -805,9 +854,28 @@ document.addEventListener('DOMContentLoaded', () => {
                             item.el.style.pointerEvents = isMobile ? (posZ > 0 ? 'auto' : 'none') : (posZ > 10 ? 'auto' : 'none');
                         });
 
+                        if (closestIdx !== -1 && closestIdx !== lastFocusedNodeIndex) {
+                            lastFocusedNodeIndex = closestIdx;
+                            playSelectionTickSound();
+                        }
+
                         requestAnimationFrame(animateSphere);
                     }
                     animateSphere();
+
+                    let lastEduScrollY = window.scrollY;
+                    window.addEventListener('scroll', () => {
+                        const eduSection = document.getElementById('education');
+                        if (eduSection) {
+                            const rect = eduSection.getBoundingClientRect();
+                            if (rect.top < window.innerHeight && rect.bottom > 0) {
+                                if (Math.abs(window.scrollY - lastEduScrollY) > 22) {
+                                    lastEduScrollY = window.scrollY;
+                                    playSelectionTickSound();
+                                }
+                            }
+                        }
+                    }, { passive: true });
                 });
 
                 // STRICT SECTION-BY-SECTION SNAP SWITCHER ENGINE (DESKTOP ONLY / TOGGLEABLE)
