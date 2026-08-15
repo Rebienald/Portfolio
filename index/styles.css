@@ -2781,6 +2781,8 @@
 .guestbook-section {
     padding: 3rem 0;
     position: relative;
+    max-width: 900px;
+    margin: 0 auto;
 }
 .guestbook-header-row {
     display: flex;
@@ -2825,6 +2827,8 @@
     overflow-y: hidden;
     white-space: nowrap;
     width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
     cursor: grab;
     user-select: none;
     -webkit-overflow-scrolling: touch;
@@ -2841,16 +2845,19 @@
 }
 .guestbook-marquee-track {
     display: flex;
-    width: max-content;
+    width: 100%;
+    justify-content: center;
 }
 .guestbook-marquee-group {
     display: flex;
     gap: 1.25rem;
     padding: 0 0.65rem;
+    justify-content: center;
 }
 .guestbook-marquee-group .guestbook-card {
     flex: 0 0 auto;
-    width: 340px;
+    width: 320px;
+    max-width: 360px;
     white-space: normal;
 }
 @media (max-width: 768px) {

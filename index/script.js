@@ -487,12 +487,15 @@ document.addEventListener('DOMContentLoaded', () => {
                         const track = marquee.querySelector('.projects-marquee-track, .certs-marquee-track, .guestbook-marquee-track');
                         if (!track) return;
                         const group = track.querySelector('.projects-marquee-group, .certs-marquee-group, .guestbook-marquee-group');
-                        if (!group) return;
-                        const clone = group.cloneNode(true);
-                        clone.setAttribute('aria-hidden', 'true');
-                        clone.querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
-                        clone.querySelectorAll('.reveal').forEach(el => el.classList.remove('reveal'));
-                        track.appendChild(clone);
+                        if (marquee.classList.contains('guestbook-marquee') && group.children.length <= 3) {
+                            // Don't duplicate when cards <= 3
+                        } else {
+                            const clone = group.cloneNode(true);
+                            clone.setAttribute('aria-hidden', 'true');
+                            clone.querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
+                            clone.querySelectorAll('.reveal').forEach(el => el.classList.remove('reveal'));
+                            track.appendChild(clone);
+                        }
                         const isLTR = marquee.classList.contains('certs-marquee-ltr');
                         const speed = marquee.classList.contains('certs-marquee') ? 0.5 : 0.8;
                         let scrollPos = isLTR ? group.offsetWidth : 0;
@@ -1340,10 +1343,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (track && track.classList.contains('guestbook-marquee-track')) {
                             const existingClones = track.querySelectorAll('[aria-hidden="true"]');
                             existingClones.forEach(c => c.remove());
-                            const clone = grid.cloneNode(true);
-                            clone.setAttribute('aria-hidden', 'true');
-                            clone.querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
-                            track.appendChild(clone);
+                            if (entries.length > 3) {
+                                const clone = grid.cloneNode(true);
+                                clone.setAttribute('aria-hidden', 'true');
+                                clone.querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
+                                track.appendChild(clone);
+                            }
                         }
                     }
 
