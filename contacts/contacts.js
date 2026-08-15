@@ -212,3 +212,8 @@ function escapeHtml(str) {
 }
 
 document.addEventListener('DOMContentLoaded', renderInbox);
+
+
+function toggleMobileMenu() {
+                document.getElementById("mobileMenu").classList.toggle("active");
+            }
