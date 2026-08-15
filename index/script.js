@@ -1106,23 +1106,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // TESTIMONIAL SPREAD CARD SHUFFLE ENGINE
                 (function() {
-                    let currentDeckOrder = [0, 1, 2, 3, 4];
+                    let currentDeckOrder = [0, 1, 2, 3, 4, 5];
                     let isShuffling = false;
 
                     const cardTransformsDesktop = [
-                        { rot: 0, x: 0, y: 0, scale: 1.04, opacity: 1, zIndex: 10 },
-                        { rot: 8, x: 190, y: 18, scale: 0.96, opacity: 0.92, zIndex: 8 },
-                        { rot: -8, x: -190, y: 18, scale: 0.96, opacity: 0.92, zIndex: 7 },
-                        { rot: 15, x: 350, y: 48, scale: 0.88, opacity: 0.82, zIndex: 5 },
-                        { rot: -15, x: -350, y: 48, scale: 0.88, opacity: 0.82, zIndex: 4 }
+                        { rot: 0, x: 0, y: 0, scale: 1.04, opacity: 1, zIndex: 12 },
+                        { rot: 7, x: 180, y: 15, scale: 0.96, opacity: 0.94, zIndex: 10 },
+                        { rot: -7, x: -180, y: 15, scale: 0.96, opacity: 0.94, zIndex: 9 },
+                        { rot: 13, x: 330, y: 40, scale: 0.90, opacity: 0.84, zIndex: 7 },
+                        { rot: -13, x: -330, y: 40, scale: 0.90, opacity: 0.84, zIndex: 6 },
+                        { rot: 18, x: 440, y: 65, scale: 0.84, opacity: 0.72, zIndex: 4 }
                     ];
 
                     const cardTransformsMobile = [
-                        { rot: 0, x: 0, y: 0, scale: 1, opacity: 1, zIndex: 10 },
-                        { rot: 3, x: 10, y: 32, scale: 0.96, opacity: 0.92, zIndex: 8 },
-                        { rot: -3, x: -10, y: 64, scale: 0.92, opacity: 0.85, zIndex: 6 },
-                        { rot: 5, x: 18, y: 96, scale: 0.88, opacity: 0.78, zIndex: 4 },
-                        { rot: -5, x: -18, y: 128, scale: 0.84, opacity: 0.7, zIndex: 2 }
+                        { rot: 0, x: 0, y: 0, scale: 1, opacity: 1, zIndex: 12 },
+                        { rot: 3, x: 8, y: 28, scale: 0.96, opacity: 0.92, zIndex: 10 },
+                        { rot: -3, x: -8, y: 56, scale: 0.92, opacity: 0.86, zIndex: 8 },
+                        { rot: 5, x: 14, y: 84, scale: 0.88, opacity: 0.80, zIndex: 6 },
+                        { rot: -5, x: -14, y: 112, scale: 0.84, opacity: 0.72, zIndex: 4 },
+                        { rot: 7, x: 20, y: 140, scale: 0.80, opacity: 0.64, zIndex: 2 }
                     ];
 
                     function applyDeckTransforms() {
