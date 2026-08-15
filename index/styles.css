@@ -2955,20 +2955,7 @@
     display: flex;
     align-items: center;
     gap: 0.45rem;
-    transition: all 0.25s ease;
     user-select: none;
-}
-.btn-gb-like i {
-    transition: color 0.25s ease, transform 0.25s ease;
-}
-.btn-gb-like:hover:not(.liked):not(:disabled) {
-    background: rgba(255, 71, 87, 0.15) !important;
-    border-color: #ff4757 !important;
-    color: #ff4757 !important;
-}
-.btn-gb-like:hover:not(.liked):not(:disabled) i {
-    color: #ff4757 !important;
-    transform: scale(1.15);
 }
 .btn-gb-like.liked, 
 .btn-gb-like.liked i, 
