@@ -844,8 +844,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <div class="sphere-card-sub">${item.sub}</div>
                         `;
 
-                        card.addEventListener('click', (e) => {
-                            e.stopPropagation();
+                        const selectNode = (item, card, theta) => {
                             playSelectionTickSound();
                             document.querySelectorAll('.sphere-card-node').forEach(c => c.classList.remove('active-sphere-node'));
                             card.classList.add('active-sphere-node');
@@ -854,7 +853,23 @@ document.addEventListener('DOMContentLoaded', () => {
                             if (detailsSub) detailsSub.innerText = item.sub;
                             if (detailsTag) detailsTag.innerText = item.tag;
                             if (detailsYear) detailsYear.innerText = item.year;
+
+                            // Smoothly rotate the selected card to front center
+                            const targetRotY = ((Math.PI / 2 - theta) * 180 / Math.PI);
+                            rotY = targetRotY;
+                            velY = 0;
+                            velX = 0;
+                        };
+
+                        card.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            selectNode(item, card, theta);
                         });
+
+                        card.addEventListener('touchend', (e) => {
+                            e.stopPropagation();
+                            selectNode(item, card, theta);
+                        }, { passive: true });
 
                         ball.appendChild(card);
                         cardElements.push({ el: card, y, r, theta });
@@ -962,7 +977,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             item.el.style.transform = `translate3d(${posX.toFixed(2)}px, ${posY.toFixed(2)}px, ${posZ.toFixed(2)}px) scale(${scale.toFixed(3)})`;
                             item.el.style.opacity = opacity.toFixed(2);
                             item.el.style.zIndex = zIndex;
-                            item.el.style.pointerEvents = isMobile ? (posZ > 0 ? 'auto' : 'none') : (posZ > 10 ? 'auto' : 'none');
+                            item.el.style.pointerEvents = posZ > -radius * 0.5 ? 'auto' : 'none';
                         });
 
                         if (isDragging && closestIdx !== -1 && closestIdx !== lastFocusedNodeIndex) {
