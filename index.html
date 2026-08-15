@@ -281,25 +281,6 @@
             </div>
         </section>
 
-        <!-- LIVE VISITOR GUESTBOOK SECTION -->
-        <section id="guestbook" class="guestbook-section">
-            <div class="container">
-                <div class="section-header reveal" style="margin-bottom: 1.5rem;">
-                    <span class="section-eyebrow">COMMUNITY & RECRUITER FEEDBACK</span>
-                    <div class="guestbook-header-row">
-                        <h2 class="text-gradient">Live Visitor Guestbook</h2>
-                        <button class="btn-guestbook-action" id="openGuestbookModalBtn">
-                            <i class="fas fa-pen"></i> Leave an Endorsement
-                        </button>
-                    </div>
-                </div>
-
-                <div class="guestbook-grid reveal" id="guestbookGrid">
-                    <!-- Dynamically loaded from /api/guestbook -->
-                </div>
-            </div>
-        </section>
-
         <!-- GUESTBOOK ENDORSEMENT MODAL -->
         <div class="guestbook-modal-overlay" id="guestbookModal">
             <div class="guestbook-modal-card">
@@ -744,6 +725,27 @@
                         </div>
                     </div>
                 </div>
+            </section>
+
+        <!-- LIVE VISITOR GUESTBOOK SECTION -->
+        <section id="guestbook" class="guestbook-section">
+            <div class="container">
+                <div class="section-header reveal" style="margin-bottom: 1.5rem;">
+                    <span class="section-eyebrow">COMMUNITY & RECRUITER FEEDBACK</span>
+                    <div class="guestbook-header-row">
+                        <h2 class="text-gradient">Live Visitor Guestbook</h2>
+                        <button class="btn-guestbook-action" id="openGuestbookModalBtn">
+                            <i class="fas fa-pen"></i> Leave an Endorsement
+                        </button>
+                    </div>
+                </div>
+
+                <div class="guestbook-grid reveal" id="guestbookGrid">
+                    <!-- Dynamically loaded from /api/guestbook -->
+                </div>
+            </div>
+        </section>
+
             <button id="snapToggleBtn" class="snap-toggle-btn" title="Toggle Scroll Constraint Mode">
                 <i class="fas fa-lock"></i> <span id="snapToggleLabel">Snap Scroll: ON</span>
             </button>
