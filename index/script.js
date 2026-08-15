@@ -1119,10 +1119,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     const cardTransformsMobile = [
                         { rot: 0, x: 0, y: 0, scale: 1, opacity: 1, zIndex: 10 },
-                        { rot: 4, x: 16, y: 52, scale: 0.96, opacity: 0.92, zIndex: 8 },
-                        { rot: -4, x: -16, y: 104, scale: 0.92, opacity: 0.85, zIndex: 6 },
-                        { rot: 7, x: 28, y: 156, scale: 0.88, opacity: 0.78, zIndex: 4 },
-                        { rot: -7, x: -28, y: 208, scale: 0.84, opacity: 0.7, zIndex: 2 }
+                        { rot: 3, x: 10, y: 32, scale: 0.96, opacity: 0.92, zIndex: 8 },
+                        { rot: -3, x: -10, y: 64, scale: 0.92, opacity: 0.85, zIndex: 6 },
+                        { rot: 5, x: 18, y: 96, scale: 0.88, opacity: 0.78, zIndex: 4 },
+                        { rot: -5, x: -18, y: 128, scale: 0.84, opacity: 0.7, zIndex: 2 }
                     ];
 
                     function applyDeckTransforms() {

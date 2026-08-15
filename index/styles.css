@@ -2702,13 +2702,21 @@
 }
 
 @media (max-width: 768px) {
+    .testimonials-section {
+        padding: 3.5rem 0 2rem 0 !important;
+    }
+    .testimonials-section .section-header {
+        margin-bottom: 0.75rem !important;
+    }
     .testimonial-deck-viewport {
-        height: 520px;
+        height: 420px !important;
+        margin-top: 0.25rem !important;
+        align-items: flex-start !important;
     }
     .testimonial-deck-card {
-        padding: 1.5rem 1.5rem;
-        min-height: 210px;
-        width: 90%;
+        padding: 1.35rem 1.4rem;
+        min-height: 190px;
+        width: 92%;
         max-width: 340px;
     }
     .testi-card-body p {
