@@ -245,6 +245,33 @@ document.addEventListener('DOMContentLoaded', () => {
                     } catch (err) {}
                 }
 
+                function playCardShuffleSound() {
+                    try {
+                        initAudioContext();
+                        if (!audioCtx) return;
+
+                        const now = audioCtx.currentTime;
+                        [0, 0.035, 0.075].forEach((offset, idx) => {
+                            const t = now + offset;
+                            const osc = audioCtx.createOscillator();
+                            const gain = audioCtx.createGain();
+
+                            osc.type = 'triangle';
+                            osc.frequency.setValueAtTime(1800 - idx * 250, t);
+                            osc.frequency.exponentialRampToValueAtTime(600 - idx * 100, t + 0.025);
+
+                            gain.gain.setValueAtTime(0.35 - idx * 0.08, t);
+                            gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.025);
+
+                            osc.connect(gain);
+                            gain.connect(audioCtx.destination);
+
+                            osc.start(t);
+                            osc.stop(t + 0.025);
+                        });
+                    } catch (err) {}
+                }
+
                 // TOP-LEVEL AUDIO UNLOCK LISTENER (Unlocks AudioContext instantly on load)
                 (function() {
                     const unlock = () => {
@@ -266,7 +293,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 document.addEventListener('DOMContentLoaded', () => {
 
-                    const interactiveSelector = 'a, button, .hamburger, .close-menu, .mobile-menu a, .skill-logo-btn, .tech-float-card, .project-card, .cert-card, .glass-card, .sphere-card-node, [data-tech]';
+                    const interactiveSelector = 'a, button, .hamburger, .close-menu, .mobile-menu a, .skill-logo-btn, .tech-float-card, .project-card, .cert-card, .glass-card, .testimonial-deck-card, .sphere-card-node, [data-tech]';
 
                     let currentHoveredContainer = null;
 
@@ -1150,8 +1177,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (isShuffling) return;
                         isShuffling = true;
 
-                        if (typeof playSelectionTickSound === 'function') {
-                            playSelectionTickSound();
+                        if (typeof playCardShuffleSound === 'function') {
+                            playCardShuffleSound();
                         }
 
                         const cards = document.querySelectorAll('.testimonial-deck-card');
@@ -1186,11 +1213,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         const cards = document.querySelectorAll('.testimonial-deck-card');
                         cards.forEach((card, idx) => {
                             card.addEventListener('click', () => {
+                                if (typeof playCardShuffleSound === 'function') {
+                                    playCardShuffleSound();
+                                }
                                 const posInDeck = currentDeckOrder.indexOf(idx);
                                 if (posInDeck > 0) {
-                                    if (typeof playSelectionTickSound === 'function') {
-                                        playSelectionTickSound();
-                                    }
                                     const removed = currentDeckOrder.splice(posInDeck, 1);
                                     currentDeckOrder.unshift(removed[0]);
                                     applyDeckTransforms();
