@@ -471,33 +471,37 @@
             }
             .tech-float-card {
                 position: absolute;
-                background: var(--bg-base);
-                border: 1px solid rgba(255, 255, 255, 0.4);
-                box-shadow: none !important;
-                filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.8));
-                border-radius: 16px;
-                padding: 0.65rem 0.95rem;
-                display: flex;
-                align-items: center;
-                gap: 0.75rem;
+                background: rgba(18, 18, 26, 0.85) !important;
+                backdrop-filter: blur(14px) !important;
+                -webkit-backdrop-filter: blur(14px) !important;
+                border: 1px solid rgba(255, 255, 255, 0.3) !important;
+                box-shadow: 0 12px 28px rgba(0, 0, 0, 0.8), 0 0 18px rgba(255, 255, 255, 0.15) !important;
+                border-radius: 50% !important;
+                padding: 0.6rem !important;
+                width: 52px !important;
+                height: 52px !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
                 z-index: 10;
-                transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+                transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
                 cursor: pointer;
             }
             .tech-float-card:hover {
-                border-color: rgba(255, 255, 255, 0.95);
-                box-shadow: none !important;
-                filter: drop-shadow(0 14px 25px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 10px rgba(255, 255, 255, 0.25));
+                border-color: #FFFFFF !important;
+                background: rgba(30, 30, 45, 0.95) !important;
+                box-shadow: 0 18px 40px rgba(0, 0, 0, 0.95), 0 0 24px rgba(255, 255, 255, 0.35) !important;
+                transform: scale(1.25) !important;
             }
             .tech-icon-wrapper {
-                width: 32px;
-                height: 32px;
-                border-radius: 8px;
+                width: 100% !important;
+                height: 100% !important;
+                border-radius: 50% !important;
                 background: transparent;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 1.25rem;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                font-size: 1.6rem !important;
                 color: var(--text-primary);
                 transition: all 0.3s;
             }
@@ -505,9 +509,7 @@
                 background: transparent;
             }
             .tech-card-info {
-                display: flex;
-                flex-direction: column;
-                align-items: flex-start;
+                display: none !important;
             }
             .tech-name {
                 font-size: 0.85rem;
@@ -524,29 +526,37 @@
             }
             @media (min-width: 1025px) {
                 .tech-float-card {
-                    background: transparent !important;
-                    border: none !important;
-                    box-shadow: none !important;
-                    border-radius: 0 !important;
-                    width: auto !important;
-                    height: auto !important;
+                    background: rgba(18, 18, 26, 0.88) !important;
+                    border: 1px solid rgba(255, 255, 255, 0.32) !important;
+                    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.85), 0 0 20px rgba(255, 255, 255, 0.16) !important;
+                    border-radius: 50% !important;
+                    width: 60px !important;
+                    height: 60px !important;
                     padding: 0 !important;
+                    display: flex !important;
+                    align-items: center !important;
+                    justify-content: center !important;
                 }
                 .tech-float-card:hover {
-                    transform: scale(1.25);
+                    transform: scale(1.25) !important;
+                    border-color: #FFFFFF !important;
+                    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.98), 0 0 30px rgba(255, 255, 255, 0.4) !important;
                 }
                 .tech-icon-wrapper {
-                    width: auto !important;
-                    height: auto !important;
-                    font-size: 2.6rem !important;
-                    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.08));
+                    width: 100% !important;
+                    height: 100% !important;
+                    font-size: 1.85rem !important;
+                    display: flex !important;
+                    align-items: center !important;
+                    justify-content: center !important;
                 }
                 .tech-icon-wrapper i,
                 .tech-icon-wrapper svg,
                 .tech-icon-wrapper img {
-                    font-size: 2.6rem !important;
-                    width: 42px !important;
-                    height: 42px !important;
+                    font-size: 1.85rem !important;
+                    width: 34px !important;
+                    height: 34px !important;
+                    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.6));
                 }
                 .tech-card-info {
                     display: none !important;
@@ -2147,11 +2157,14 @@
                 }
                 .tech-float-card {
                     display: flex !important;
-                    width: auto !important;
-                    height: auto !important;
-                    background: transparent !important;
-                    border: none !important;
-                    box-shadow: none !important;
+                    width: 58px !important;
+                    height: 58px !important;
+                    background: rgba(18, 18, 26, 0.88) !important;
+                    backdrop-filter: blur(14px) !important;
+                    -webkit-backdrop-filter: blur(14px) !important;
+                    border: 1px solid rgba(255, 255, 255, 0.32) !important;
+                    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.85), 0 0 20px rgba(255, 255, 255, 0.16) !important;
+                    border-radius: 50% !important;
                     padding: 0 !important;
                     justify-content: center !important;
                     align-items: center !important;
@@ -2159,16 +2172,15 @@
                 .tech-card-info { display: none !important; }
                 .tech-icon-wrapper {
                     margin: 0 !important;
-                    font-size: 3.6rem !important;
-                    width: auto !important;
-                    height: auto !important;
+                    font-size: 1.85rem !important;
+                    width: 100% !important;
+                    height: 100% !important;
                     background: transparent !important;
-                    box-shadow: none !important;
                     border: none !important;
                     display: flex !important;
                     align-items: center !important;
                     justify-content: center !important;
-                    filter: drop-shadow(0 6px 14px rgba(150, 168, 196, 0.45));
+                    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.6));
                 }
 
                 .about-grid {
