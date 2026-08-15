@@ -1110,19 +1110,19 @@ document.addEventListener('DOMContentLoaded', () => {
                     let isShuffling = false;
 
                     const cardTransformsDesktop = [
-                        { rot: 0, x: 0, y: 0, scale: 1, opacity: 1, zIndex: 10 },
-                        { rot: 5, x: 28, y: 12, scale: 0.96, opacity: 0.9, zIndex: 8 },
-                        { rot: -6, x: -28, y: 22, scale: 0.92, opacity: 0.8, zIndex: 6 },
-                        { rot: 9, x: 50, y: 32, scale: 0.88, opacity: 0.68, zIndex: 4 },
-                        { rot: -10, x: -50, y: 40, scale: 0.84, opacity: 0.55, zIndex: 2 }
+                        { rot: 0, x: 0, y: 0, scale: 1.04, opacity: 1, zIndex: 10 },
+                        { rot: 8, x: 190, y: 18, scale: 0.96, opacity: 0.92, zIndex: 8 },
+                        { rot: -8, x: -190, y: 18, scale: 0.96, opacity: 0.92, zIndex: 7 },
+                        { rot: 15, x: 350, y: 48, scale: 0.88, opacity: 0.82, zIndex: 5 },
+                        { rot: -15, x: -350, y: 48, scale: 0.88, opacity: 0.82, zIndex: 4 }
                     ];
 
                     const cardTransformsMobile = [
                         { rot: 0, x: 0, y: 0, scale: 1, opacity: 1, zIndex: 10 },
-                        { rot: 3, x: 0, y: 16, scale: 0.95, opacity: 0.9, zIndex: 8 },
-                        { rot: -3, x: 0, y: 32, scale: 0.90, opacity: 0.8, zIndex: 6 },
-                        { rot: 5, x: 0, y: 48, scale: 0.85, opacity: 0.68, zIndex: 4 },
-                        { rot: -5, x: 0, y: 64, scale: 0.80, opacity: 0.55, zIndex: 2 }
+                        { rot: 4, x: 16, y: 52, scale: 0.96, opacity: 0.92, zIndex: 8 },
+                        { rot: -4, x: -16, y: 104, scale: 0.92, opacity: 0.85, zIndex: 6 },
+                        { rot: 7, x: 28, y: 156, scale: 0.88, opacity: 0.78, zIndex: 4 },
+                        { rot: -7, x: -28, y: 208, scale: 0.84, opacity: 0.7, zIndex: 2 }
                     ];
 
                     function applyDeckTransforms() {
@@ -1157,9 +1157,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         const topCard = cards[topCardIndex];
 
                         if (topCard) {
-                            topCard.style.transform = `translate3d(-180px, -90px, 0) rotate(-25deg) scale(1.08)`;
+                            topCard.style.transform = `translate3d(0, -140px, 0) rotate(-18deg) scale(1.1)`;
                             topCard.style.opacity = '0.9';
-                            topCard.style.zIndex = '20';
+                            topCard.style.zIndex = '30';
                         }
 
                         setTimeout(() => {
