@@ -1103,3 +1103,99 @@ document.addEventListener('DOMContentLoaded', () => {
                         }, 800);
                     }
                 }, 2200);
+
+                // TESTIMONIAL SPREAD CARD SHUFFLE ENGINE
+                (function() {
+                    let currentDeckOrder = [0, 1, 2, 3, 4];
+                    let isShuffling = false;
+
+                    const cardTransformsDesktop = [
+                        { rot: 0, x: 0, y: 0, scale: 1, opacity: 1, zIndex: 10 },
+                        { rot: 5, x: 28, y: 12, scale: 0.96, opacity: 0.9, zIndex: 8 },
+                        { rot: -6, x: -28, y: 22, scale: 0.92, opacity: 0.8, zIndex: 6 },
+                        { rot: 9, x: 50, y: 32, scale: 0.88, opacity: 0.68, zIndex: 4 },
+                        { rot: -10, x: -50, y: 40, scale: 0.84, opacity: 0.55, zIndex: 2 }
+                    ];
+
+                    const cardTransformsMobile = [
+                        { rot: 0, x: 0, y: 0, scale: 1, opacity: 1, zIndex: 10 },
+                        { rot: 3, x: 0, y: 16, scale: 0.95, opacity: 0.9, zIndex: 8 },
+                        { rot: -3, x: 0, y: 32, scale: 0.90, opacity: 0.8, zIndex: 6 },
+                        { rot: 5, x: 0, y: 48, scale: 0.85, opacity: 0.68, zIndex: 4 },
+                        { rot: -5, x: 0, y: 64, scale: 0.80, opacity: 0.55, zIndex: 2 }
+                    ];
+
+                    function applyDeckTransforms() {
+                        const cards = document.querySelectorAll('.testimonial-deck-card');
+                        if (!cards.length) return;
+
+                        const isMobile = window.innerWidth <= 768;
+                        const transforms = isMobile ? cardTransformsMobile : cardTransformsDesktop;
+
+                        currentDeckOrder.forEach((cardIndex, pos) => {
+                            const card = cards[cardIndex];
+                            if (!card) return;
+
+                            const t = transforms[pos] || transforms[transforms.length - 1];
+
+                            card.style.zIndex = t.zIndex;
+                            card.style.opacity = t.opacity;
+                            card.style.transform = `translate3d(${t.x}px, ${t.y}px, 0) rotate(${t.rot}deg) scale(${t.scale})`;
+                        });
+                    }
+
+                    window.shuffleTestimonialDeck = function() {
+                        if (isShuffling) return;
+                        isShuffling = true;
+
+                        if (typeof playSelectionTickSound === 'function') {
+                            playSelectionTickSound();
+                        }
+
+                        const cards = document.querySelectorAll('.testimonial-deck-card');
+                        const topCardIndex = currentDeckOrder[0];
+                        const topCard = cards[topCardIndex];
+
+                        if (topCard) {
+                            topCard.style.transform = `translate3d(-180px, -90px, 0) rotate(-25deg) scale(1.08)`;
+                            topCard.style.opacity = '0.9';
+                            topCard.style.zIndex = '20';
+                        }
+
+                        setTimeout(() => {
+                            const moved = currentDeckOrder.shift();
+                            currentDeckOrder.push(moved);
+
+                            applyDeckTransforms();
+
+                            setTimeout(() => {
+                                isShuffling = false;
+                            }, 300);
+                        }, 220);
+                    };
+
+                    document.addEventListener('DOMContentLoaded', () => {
+                        applyDeckTransforms();
+
+                        const cards = document.querySelectorAll('.testimonial-deck-card');
+                        cards.forEach((card, idx) => {
+                            card.addEventListener('click', () => {
+                                const posInDeck = currentDeckOrder.indexOf(idx);
+                                if (posInDeck > 0) {
+                                    if (typeof playSelectionTickSound === 'function') {
+                                        playSelectionTickSound();
+                                    }
+                                    const removed = currentDeckOrder.splice(posInDeck, 1);
+                                    currentDeckOrder.unshift(removed[0]);
+                                    applyDeckTransforms();
+                                } else {
+                                    window.shuffleTestimonialDeck();
+                                }
+                            });
+                        });
+
+                        window.addEventListener('resize', () => {
+                            applyDeckTransforms();
+                        });
+                    });
+                })();
