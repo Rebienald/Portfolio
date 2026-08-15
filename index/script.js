@@ -1279,15 +1279,6 @@ document.addEventListener('DOMContentLoaded', () => {
                             message: "Try leaving a note!",
                             date: "Aug 16, 2026",
                             likes: 0
-                        },
-                        {
-                            id: "gb_prince_1",
-                            name: "Prince",
-                            role: "Teammate & Collaborator",
-                            rating: 5,
-                            message: "Great work on the portfolio! Highly recommend Reb for any software development project.",
-                            date: "Aug 16, 2026",
-                            likes: 5
                         }
                     ];
 
