@@ -1,5 +1,5 @@
-const SUPABASE_URL_MSGS = "https://uwboeqkiwncdtarqvxbo.supabase.co/rest/v1/messages";
-            const SUPABASE_KEY = "sb_publishable_a5_YHH1N5U0goK4rRks_OA_Lr-JBSjH";
+const SUPABASE_URL_MSGS = "https://ngjckggjadtoevbnhjhi.supabase.co/rest/v1/messages";
+const SUPABASE_KEY = "sb_publishable_zFd8VxxbMxpu7wFblnC36w_8Np8JVVf";
             let currentFilter = "all";
             let messages = [];
             async function initData() {

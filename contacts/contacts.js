@@ -1,5 +1,5 @@
-const SUPABASE_URL = "https://uwboeqkiwncdtarqvxbo.supabase.co/rest/v1/messages";
-const SUPABASE_KEY = "sb_publishable_a5_YHH1N5U0goK4rRks_OA_Lr-JBSjH";
+const SUPABASE_URL = "https://ngjckggjadtoevbnhjhi.supabase.co/rest/v1/messages";
+const SUPABASE_KEY = "sb_publishable_zFd8VxxbMxpu7wFblnC36w_8Np8JVVf";
 
 const contactForm = document.getElementById('contactForm');
 const submitBtn = document.getElementById('submitBtn');
