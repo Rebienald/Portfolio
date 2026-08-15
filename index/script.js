@@ -1156,8 +1156,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         const topCardIndex = currentDeckOrder[0];
                         const topCard = cards[topCardIndex];
 
+                        const isMobile = window.innerWidth <= 768;
+
                         if (topCard) {
-                            topCard.style.transform = `translate3d(0, -140px, 0) rotate(-18deg) scale(1.1)`;
+                            topCard.style.transform = isMobile 
+                                ? `translate3d(0, -75px, 0) scale(1.04)`
+                                : `translate3d(0, -140px, 0) rotate(-18deg) scale(1.1)`;
                             topCard.style.opacity = '0.9';
                             topCard.style.zIndex = '30';
                         }
@@ -1170,8 +1174,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
                             setTimeout(() => {
                                 isShuffling = false;
-                            }, 300);
-                        }, 220);
+                            }, isMobile ? 180 : 280);
+                        }, isMobile ? 150 : 210);
                     };
 
                     document.addEventListener('DOMContentLoaded', () => {
