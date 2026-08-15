@@ -674,12 +674,18 @@ document.addEventListener('DOMContentLoaded', () => {
                             const tooltipDesc = document.getElementById('tooltipDesc');
                             const tooltipIcon = document.getElementById('tooltipIcon');
 
+                            let tooltipHideTimeout = null;
                             if (tooltip) {
                                 if (tooltipName) tooltipName.innerText = projectName;
                                 if (tooltipTag) tooltipTag.innerText = '💻 DESKTOP REQUIRED';
                                 if (tooltipDesc) tooltipDesc.innerText = `In order to view and experience ${projectName}, you need to be on a PC / Desktop computer.`;
                                 if (tooltipIcon) tooltipIcon.innerHTML = '<i class="fas fa-desktop" style="color:var(--accent);"></i>';
                                 tooltip.classList.add('visible');
+
+                                if (tooltipHideTimeout) clearTimeout(tooltipHideTimeout);
+                                tooltipHideTimeout = setTimeout(() => {
+                                    if (tooltip) tooltip.classList.remove('visible');
+                                }, 2500);
                             }
 
                             if (typeof window.openChatbotWithMessage === 'function') {

@@ -402,6 +402,9 @@ It is an AI-powered gamified learning platform for computer programming that won
     }
 
     window.openChatbotWithMessage = function(projectName) {
+        const tooltip = document.getElementById('techTooltip');
+        if (tooltip) tooltip.classList.remove('visible');
+
         const windowEl = document.getElementById('chatbotWindow');
         const trigger = document.getElementById('chatbotTrigger');
         if (windowEl) {
