@@ -135,7 +135,57 @@ document.addEventListener('DOMContentLoaded', () => {
                     } catch (err) {}
                 }
 
+                let clickWavUrl = null;
+                function getClickWavUrl() {
+                    if (clickWavUrl) return clickWavUrl;
+                    try {
+                        const sampleRate = 22050;
+                        const numSamples = Math.floor(sampleRate * 0.014);
+                        const dataSize = numSamples * 2;
+                        const fileSize = 44 + dataSize;
+                        const buffer = new ArrayBuffer(fileSize);
+                        const view = new DataView(buffer);
+
+                        const writeStr = (off, str) => {
+                            for (let i = 0; i < str.length; i++) view.setUint8(off + i, str.charCodeAt(i));
+                        };
+
+                        writeStr(0, 'RIFF');
+                        view.setUint32(4, fileSize - 8, true);
+                        writeStr(8, 'WAVE');
+                        writeStr(12, 'fmt ');
+                        view.setUint32(16, 16, true);
+                        view.setUint16(20, 1, true);
+                        view.setUint16(22, 1, true);
+                        view.setUint32(24, sampleRate, true);
+                        view.setUint32(28, sampleRate * 2, true);
+                        view.setUint16(32, 2, true);
+                        view.setUint16(34, 16, true);
+                        writeStr(36, 'data');
+                        view.setUint32(40, dataSize, true);
+
+                        for (let i = 0; i < numSamples; i++) {
+                            const t = i / sampleRate;
+                            const sample = Math.sin(2 * Math.PI * 2400 * t) * Math.exp(-t / 0.003) * 0.8;
+                            view.setInt16(44 + i * 2, Math.floor(sample * 32767), true);
+                        }
+
+                        const blob = new Blob([buffer], { type: 'audio/wav' });
+                        clickWavUrl = URL.createObjectURL(blob);
+                    } catch (e) {}
+                    return clickWavUrl;
+                }
+
                 function playTypingSound() {
+                    try {
+                        const url = getClickWavUrl();
+                        if (url) {
+                            const a = new Audio(url);
+                            a.volume = 0.5;
+                            a.play().catch(() => {});
+                        }
+                    } catch (e) {}
+
                     try {
                         initAudioContext();
                         if (!audioCtx) return;
