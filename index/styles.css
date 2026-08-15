@@ -2845,14 +2845,12 @@
 }
 .guestbook-marquee-track {
     display: flex;
-    width: 100%;
-    justify-content: center;
+    width: max-content;
 }
 .guestbook-marquee-group {
     display: flex;
     gap: 1.25rem;
     padding: 0 0.65rem;
-    justify-content: center;
 }
 .guestbook-marquee-group .guestbook-card {
     flex: 0 0 auto;

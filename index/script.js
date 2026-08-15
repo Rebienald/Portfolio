@@ -487,9 +487,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         const track = marquee.querySelector('.projects-marquee-track, .certs-marquee-track, .guestbook-marquee-track');
                         if (!track) return;
                         const group = track.querySelector('.projects-marquee-group, .certs-marquee-group, .guestbook-marquee-group');
-                        if (marquee.classList.contains('guestbook-marquee') && group.children.length <= 3) {
-                            // Don't duplicate when cards <= 3
-                        } else {
+                        const cloneCount = (group.children.length <= 2) ? 3 : 1;
+                        for (let i = 0; i < cloneCount; i++) {
                             const clone = group.cloneNode(true);
                             clone.setAttribute('aria-hidden', 'true');
                             clone.querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
@@ -1334,7 +1333,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (track && track.classList.contains('guestbook-marquee-track')) {
                             const existingClones = track.querySelectorAll('[aria-hidden="true"]');
                             existingClones.forEach(c => c.remove());
-                            if (entries.length > 3) {
+                            const cloneCount = (entries.length <= 2) ? 3 : 1;
+                            for (let i = 0; i < cloneCount; i++) {
                                 const clone = grid.cloneNode(true);
                                 clone.setAttribute('aria-hidden', 'true');
                                 clone.querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
