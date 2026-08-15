@@ -281,6 +281,72 @@
             </div>
         </section>
 
+        <!-- LIVE VISITOR GUESTBOOK SECTION -->
+        <section id="guestbook" class="guestbook-section">
+            <div class="container">
+                <div class="section-header reveal" style="margin-bottom: 1.5rem;">
+                    <span class="section-eyebrow">COMMUNITY & RECRUITER FEEDBACK</span>
+                    <div class="guestbook-header-row">
+                        <h2 class="text-gradient">Live Visitor Guestbook</h2>
+                        <button class="btn-guestbook-action" id="openGuestbookModalBtn">
+                            <i class="fas fa-pen"></i> Leave an Endorsement
+                        </button>
+                    </div>
+                </div>
+
+                <div class="guestbook-grid reveal" id="guestbookGrid">
+                    <!-- Dynamically loaded from /api/guestbook -->
+                </div>
+            </div>
+        </section>
+
+        <!-- GUESTBOOK ENDORSEMENT MODAL -->
+        <div class="guestbook-modal-overlay" id="guestbookModal">
+            <div class="guestbook-modal-card">
+                <button class="guestbook-modal-close" id="closeGuestbookModalBtn" aria-label="Close Modal">&times;</button>
+                <div class="gb-modal-header">
+                    <i class="fas fa-comment-dots gb-modal-icon"></i>
+                    <div>
+                        <h3>Leave an Endorsement</h3>
+                        <p>Share your feedback, recommendation, or note for Rebienald.</p>
+                    </div>
+                </div>
+
+                <form id="guestbookForm">
+                    <div class="gb-form-row">
+                        <div class="gb-form-group">
+                            <label for="gbName">Your Name *</label>
+                            <input type="text" id="gbName" placeholder="e.g. Alex Rivera or Hiring Manager" required maxlength="50">
+                        </div>
+                        <div class="gb-form-group">
+                            <label for="gbRole">Role / Affiliation</label>
+                            <input type="text" id="gbRole" placeholder="e.g. Recruiter, Teammate, Client" maxlength="50">
+                        </div>
+                    </div>
+
+                    <div class="gb-form-group">
+                        <label>Rating *</label>
+                        <div class="gb-star-rating" id="gbStarRating" data-rating="5">
+                            <i class="fas fa-star active" data-value="1"></i>
+                            <i class="fas fa-star active" data-value="2"></i>
+                            <i class="fas fa-star active" data-value="3"></i>
+                            <i class="fas fa-star active" data-value="4"></i>
+                            <i class="fas fa-star active" data-value="5"></i>
+                        </div>
+                    </div>
+
+                    <div class="gb-form-group">
+                        <label for="gbMessage">Your Message *</label>
+                        <textarea id="gbMessage" rows="3" placeholder="Write your feedback or recommendation..." required maxlength="300"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-guestbook-submit" id="gbSubmitBtn">
+                        <span>Post Endorsement</span> <i class="fas fa-paper-plane"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+
         <section id="work">
             <div class="container">
                 <div class="section-header reveal">

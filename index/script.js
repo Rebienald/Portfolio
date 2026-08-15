@@ -1265,3 +1265,213 @@ document.addEventListener('DOMContentLoaded', () => {
                         });
                     });
                 })();
+
+                // LIVE VISITOR GUESTBOOK ENGINE
+                (function() {
+                    let guestbookEntries = [
+                        {
+                            id: "gb_1",
+                            name: "Engr. Jay",
+                            role: "Teammate & Collaborator",
+                            rating: 5,
+                            message: "Contributes majority of the ideas",
+                            date: "Aug 16, 2026",
+                            likes: 12
+                        },
+                        {
+                            id: "gb_2",
+                            name: "Charles",
+                            role: "Back-End Developer",
+                            rating: 5,
+                            message: "Reb is a highly skilled back-end developer, a reliable teammate, and a great friend. He communicates clearly and always delivers quality work.",
+                            date: "Aug 15, 2026",
+                            likes: 9
+                        },
+                        {
+                            id: "gb_3",
+                            name: "John",
+                            role: "Client & Collaborator",
+                            rating: 5,
+                            message: "Super smooth ng transaction and very easy to talk to. Maayos and mabilis yung service, and very transparent from start to finish!",
+                            date: "Aug 14, 2026",
+                            likes: 7
+                        }
+                    ];
+
+                    function renderGuestbook(entries) {
+                        const grid = document.getElementById('guestbookGrid');
+                        if (!grid) return;
+
+                        if (!entries || !entries.length) {
+                            grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: #94A3B8; padding: 2rem;">No endorsements yet. Be the first to leave one!</div>`;
+                            return;
+                        }
+
+                        grid.innerHTML = entries.map(item => {
+                            const stars = Array.from({ length: 5 }, (_, i) => 
+                                `<i class="fas fa-star" style="color: ${i < item.rating ? '#D4AF37' : 'rgba(255,255,255,0.2)'}"></i>`
+                            ).join('');
+                            const initial = (item.name || 'V').charAt(0).toUpperCase();
+
+                            return `
+                                <div class="guestbook-card" data-id="${item.id}">
+                                    <div>
+                                        <div class="gb-card-top">
+                                            <div class="gb-avatar">${initial}</div>
+                                            <div class="gb-user-info">
+                                                <h4>${item.name}</h4>
+                                                <span>${item.role || 'Visitor'}</span>
+                                            </div>
+                                            <div class="gb-rating-stars">${stars}</div>
+                                        </div>
+                                        <p class="gb-card-msg">“${item.message}”</p>
+                                    </div>
+                                    <div class="gb-card-footer">
+                                        <span>${item.date}</span>
+                                        <button class="btn-gb-like" onclick="window.likeGuestbookEntry('${item.id}', this)">
+                                            <i class="fas fa-heart"></i> <span>${item.likes || 0}</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('');
+                    }
+
+                    async function fetchGuestbookData() {
+                        try {
+                            const res = await fetch('/api/guestbook');
+                            if (res.ok) {
+                                const data = await res.json();
+                                if (data.entries && data.entries.length) {
+                                    guestbookEntries = data.entries;
+                                }
+                            }
+                        } catch (err) {}
+                        renderGuestbook(guestbookEntries);
+                    }
+
+                    window.likeGuestbookEntry = async function(id, btn) {
+                        if (typeof playSelectionTickSound === 'function') playSelectionTickSound();
+                        btn.classList.add('liked');
+                        const countSpan = btn.querySelector('span');
+                        if (countSpan) {
+                            countSpan.innerText = parseInt(countSpan.innerText || '0') + 1;
+                        }
+
+                        try {
+                            await fetch('/api/guestbook/like', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ id })
+                            });
+                        } catch (err) {}
+                    };
+
+                    document.addEventListener('DOMContentLoaded', () => {
+                        fetchGuestbookData();
+
+                        const openBtn = document.getElementById('openGuestbookModalBtn');
+                        const closeBtn = document.getElementById('closeGuestbookModalBtn');
+                        const modal = document.getElementById('guestbookModal');
+                        const form = document.getElementById('guestbookForm');
+                        const starRating = document.getElementById('gbStarRating');
+                        let selectedRating = 5;
+
+                        if (openBtn && modal) {
+                            openBtn.addEventListener('click', () => {
+                                if (typeof playClickSound === 'function') playClickSound();
+                                modal.classList.add('active');
+                            });
+                        }
+
+                        if (closeBtn && modal) {
+                            closeBtn.addEventListener('click', () => {
+                                if (typeof playClickSound === 'function') playClickSound();
+                                modal.classList.remove('active');
+                            });
+                        }
+
+                        if (modal) {
+                            modal.addEventListener('click', (e) => {
+                                if (e.target === modal) modal.classList.remove('active');
+                            });
+                        }
+
+                        if (starRating) {
+                            const stars = starRating.querySelectorAll('i');
+                            stars.forEach(star => {
+                                star.addEventListener('click', () => {
+                                    if (typeof playSelectionTickSound === 'function') playSelectionTickSound();
+                                    selectedRating = parseInt(star.getAttribute('data-value') || '5');
+                                    starRating.setAttribute('data-rating', selectedRating);
+                                    stars.forEach((s, idx) => {
+                                        if (idx < selectedRating) s.classList.add('active');
+                                        else s.classList.remove('active');
+                                    });
+                                });
+                            });
+                        }
+
+                        if (form) {
+                            form.addEventListener('submit', async (e) => {
+                                e.preventDefault();
+                                const nameInput = document.getElementById('gbName');
+                                const roleInput = document.getElementById('gbRole');
+                                const msgInput = document.getElementById('gbMessage');
+                                const submitBtn = document.getElementById('gbSubmitBtn');
+
+                                const name = nameInput ? nameInput.value.trim() : '';
+                                const role = roleInput ? roleInput.value.trim() : '';
+                                const message = msgInput ? msgInput.value.trim() : '';
+
+                                if (!name || !message) return;
+
+                                if (submitBtn) submitBtn.disabled = true;
+
+                                const payload = { name, role, rating: selectedRating, message };
+
+                                try {
+                                    const res = await fetch('/api/guestbook', {
+                                        method: 'POST',
+                                        headers: { 'Content-Type': 'application/json' },
+                                        body: JSON.stringify(payload)
+                                    });
+                                    if (res.ok) {
+                                        const data = await res.json();
+                                        if (data.entries) {
+                                            guestbookEntries = data.entries;
+                                            renderGuestbook(guestbookEntries);
+                                        }
+                                    } else {
+                                        guestbookEntries.unshift({
+                                            id: "gb_" + Date.now(),
+                                            name,
+                                            role: role || "Visitor",
+                                            rating: selectedRating,
+                                            message,
+                                            date: "Just now",
+                                            likes: 0
+                                        });
+                                        renderGuestbook(guestbookEntries);
+                                    }
+                                } catch (err) {
+                                    guestbookEntries.unshift({
+                                        id: "gb_" + Date.now(),
+                                        name,
+                                        role: role || "Visitor",
+                                        rating: selectedRating,
+                                        message,
+                                        date: "Just now",
+                                        likes: 0
+                                    });
+                                    renderGuestbook(guestbookEntries);
+                                }
+
+                                if (submitBtn) submitBtn.disabled = false;
+                                if (modal) modal.classList.remove('active');
+                                form.reset();
+                                if (typeof playClickSound === 'function') playClickSound();
+                            });
+                        }
+                    });
+                })();

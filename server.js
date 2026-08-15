@@ -239,6 +239,140 @@ http.createServer(async (req, res) => {
         return res.end();
     }
 
+    // GUESTBOOK STORAGE & API ENDPOINTS
+    const GUESTBOOK_DIR = path.join(__dirname, "data");
+    const GUESTBOOK_FILE = path.join(GUESTBOOK_DIR, "guestbook.json");
+
+    const DEFAULT_GUESTBOOK = [
+        {
+            id: "gb_1",
+            name: "Engr. Jay",
+            role: "Teammate & Collaborator",
+            rating: 5,
+            message: "Contributes majority of the ideas",
+            date: "Aug 16, 2026",
+            likes: 12
+        },
+        {
+            id: "gb_2",
+            name: "Charles",
+            role: "Back-End Developer",
+            rating: 5,
+            message: "Reb is a highly skilled back-end developer, a reliable teammate, and a great friend. He communicates clearly and always delivers quality work.",
+            date: "Aug 15, 2026",
+            likes: 9
+        },
+        {
+            id: "gb_3",
+            name: "John",
+            role: "Client & Collaborator",
+            rating: 5,
+            message: "Super smooth ng transaction and very easy to talk to. Maayos and mabilis yung service, and very transparent from start to finish!",
+            date: "Aug 14, 2026",
+            likes: 7
+        }
+    ];
+
+    function getGuestbookData() {
+        try {
+            if (!fs.existsSync(GUESTBOOK_DIR)) fs.mkdirSync(GUESTBOOK_DIR, { recursive: true });
+            if (!fs.existsSync(GUESTBOOK_FILE)) {
+                fs.writeFileSync(GUESTBOOK_FILE, JSON.stringify(DEFAULT_GUESTBOOK, null, 2), "utf8");
+                return DEFAULT_GUESTBOOK;
+            }
+            const raw = fs.readFileSync(GUESTBOOK_FILE, "utf8");
+            return JSON.parse(raw || "[]");
+        } catch (err) {
+            return DEFAULT_GUESTBOOK;
+        }
+    }
+
+    function saveGuestbookData(data) {
+        try {
+            if (!fs.existsSync(GUESTBOOK_DIR)) fs.mkdirSync(GUESTBOOK_DIR, { recursive: true });
+            fs.writeFileSync(GUESTBOOK_FILE, JSON.stringify(data, null, 2), "utf8");
+        } catch (err) {}
+    }
+
+    function sanitizeInput(str) {
+        if (!str) return "";
+        return String(str)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
+    if (req.url === "/api/guestbook" && req.method === "GET") {
+        const entries = getGuestbookData();
+        res.writeHead(200, { "Content-Type": "application/json" });
+        return res.end(JSON.stringify({ status: "success", entries }));
+    }
+
+    if (req.url === "/api/guestbook" && req.method === "POST") {
+        let body = "";
+        req.on("data", (chunk) => (body += chunk));
+        req.on("end", () => {
+            try {
+                const parsed = JSON.parse(body || "{}");
+                const name = sanitizeInput((parsed.name || "").trim().slice(0, 50));
+                const role = sanitizeInput((parsed.role || "Visitor").trim().slice(0, 50));
+                const message = sanitizeInput((parsed.message || "").trim().slice(0, 300));
+                const rating = Math.min(5, Math.max(1, parseInt(parsed.rating) || 5));
+
+                if (!name || !message) {
+                    res.writeHead(400, { "Content-Type": "application/json" });
+                    return res.end(JSON.stringify({ error: "Name and message are required." }));
+                }
+
+                const entries = getGuestbookData();
+                const newEntry = {
+                    id: "gb_" + Date.now(),
+                    name,
+                    role: role || "Visitor",
+                    rating,
+                    message,
+                    date: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
+                    likes: 0
+                };
+
+                entries.unshift(newEntry);
+                saveGuestbookData(entries);
+
+                res.writeHead(200, { "Content-Type": "application/json" });
+                res.end(JSON.stringify({ status: "success", entry: newEntry, entries }));
+            } catch (err) {
+                res.writeHead(500, { "Content-Type": "application/json" });
+                res.end(JSON.stringify({ error: "Server Error" }));
+            }
+        });
+        return;
+    }
+
+    if (req.url === "/api/guestbook/like" && req.method === "POST") {
+        let body = "";
+        req.on("data", (chunk) => (body += chunk));
+        req.on("end", () => {
+            try {
+                const parsed = JSON.parse(body || "{}");
+                const id = parsed.id;
+                const entries = getGuestbookData();
+                const target = entries.find(e => e.id === id);
+                if (target) {
+                    target.likes = (target.likes || 0) + 1;
+                    saveGuestbookData(entries);
+                }
+                res.writeHead(200, { "Content-Type": "application/json" });
+                res.end(JSON.stringify({ status: "success", entries }));
+            } catch (err) {
+                res.writeHead(500, { "Content-Type": "application/json" });
+                res.end(JSON.stringify({ error: "Server Error" }));
+            }
+        });
+        return;
+    }
+
     if (req.url === "/api/chat" && req.method === "POST") {
         let body = "";
         req.on("data", (chunk) => (body += chunk));

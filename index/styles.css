@@ -2776,3 +2776,292 @@
         font-size: 0.88rem;
     }
 }
+
+/* LIVE VISITOR GUESTBOOK - CLEAN BLACK & WHITE DESIGN */
+.guestbook-section {
+    padding: 3rem 0;
+    position: relative;
+}
+.guestbook-header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    width: 100%;
+}
+.btn-guestbook-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.65rem 1.35rem;
+    border-radius: 100px;
+    background: #FFFFFF;
+    color: #060608;
+    font-weight: 700;
+    font-size: 0.88rem;
+    border: 1px solid #FFFFFF;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.15);
+}
+.btn-guestbook-action:hover {
+    background: #060608;
+    color: #FFFFFF;
+    border-color: #FFFFFF;
+    box-shadow: 0 6px 20px rgba(255, 255, 255, 0.25);
+    transform: translateY(-2px);
+}
+.guestbook-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.25rem;
+    width: 100%;
+}
+.guestbook-card {
+    background: #0d0e12;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 16px;
+    padding: 1.25rem 1.35rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+}
+.guestbook-card:hover {
+    border-color: #FFFFFF;
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.85), 0 0 15px rgba(255, 255, 255, 0.12);
+    transform: translateY(-3px);
+}
+.gb-card-top {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.85rem;
+}
+.gb-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: #181922;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #FFFFFF;
+    font-weight: 700;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+.gb-user-info {
+    flex: 1;
+    min-width: 0;
+}
+.gb-user-info h4 {
+    color: #FFFFFF;
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin: 0;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.gb-user-info span {
+    color: #94A3B8;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+.gb-rating-stars {
+    color: #D4AF37;
+    font-size: 0.85rem;
+    display: flex;
+    gap: 0.15rem;
+}
+.gb-card-msg {
+    color: #CBD5E1;
+    font-size: 0.88rem;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+    word-break: break-word;
+}
+.gb-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    color: #64748B;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding-top: 0.65rem;
+}
+.btn-gb-like {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #FFFFFF;
+    border-radius: 100px;
+    padding: 0.25rem 0.65rem;
+    font-size: 0.75rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    transition: all 0.25s ease;
+}
+.btn-gb-like:hover, .btn-gb-like.liked {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: #FFFFFF;
+    color: #FFFFFF;
+}
+
+/* GUESTBOOK MODAL */
+.guestbook-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(6, 6, 8, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    z-index: 999999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    padding: 1rem;
+}
+.guestbook-modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+.guestbook-modal-card {
+    background: #0d0e12;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 20px;
+    padding: 1.85rem;
+    width: 100%;
+    max-width: 480px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.95);
+    position: relative;
+    transform: scale(0.92);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.guestbook-modal-overlay.active .guestbook-modal-card {
+    transform: scale(1);
+}
+.guestbook-modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1.25rem;
+    background: transparent;
+    border: none;
+    color: #FFFFFF;
+    font-size: 1.75rem;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+}
+.guestbook-modal-close:hover {
+    opacity: 1;
+}
+.gb-modal-header {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    margin-bottom: 1.25rem;
+}
+.gb-modal-icon {
+    font-size: 1.5rem;
+    color: #FFFFFF;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    width: 46px;
+    height: 46px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.gb-modal-header h3 {
+    color: #FFFFFF;
+    font-size: 1.2rem;
+    margin: 0 0 0.2rem 0;
+}
+.gb-modal-header p {
+    color: #94A3B8;
+    font-size: 0.82rem;
+    margin: 0;
+}
+.gb-form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.85rem;
+}
+.gb-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-bottom: 1rem;
+}
+.gb-form-group label {
+    color: #E2E8F0;
+    font-size: 0.82rem;
+    font-weight: 600;
+}
+.gb-form-group input,
+.gb-form-group textarea {
+    background: #060608;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    padding: 0.65rem 0.85rem;
+    color: #FFFFFF;
+    font-size: 0.88rem;
+    outline: none;
+    transition: border-color 0.25s ease;
+}
+.gb-form-group input:focus,
+.gb-form-group textarea:focus {
+    border-color: #FFFFFF;
+}
+.gb-star-rating {
+    display: flex;
+    gap: 0.35rem;
+    font-size: 1.35rem;
+    color: rgba(255, 255, 255, 0.25);
+    cursor: pointer;
+}
+.gb-star-rating i.active {
+    color: #D4AF37;
+}
+.btn-guestbook-submit {
+    width: 100%;
+    padding: 0.85rem;
+    border-radius: 100px;
+    background: #FFFFFF;
+    color: #060608;
+    border: 1px solid #FFFFFF;
+    font-weight: 700;
+    font-size: 0.92rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+}
+.btn-guestbook-submit:hover {
+    background: #060608;
+    color: #FFFFFF;
+    border-color: #FFFFFF;
+}
+@media (max-width: 600px) {
+    .gb-form-row {
+        grid-template-columns: 1fr;
+    }
+    .guestbook-grid {
+        grid-template-columns: 1fr;
+    }
+}
