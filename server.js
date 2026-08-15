@@ -67,6 +67,10 @@ Technical Skills:
 Key Engagements & Awards:
 - Best in Capstone Project (June 29, 2026) - STI College Bacoor
 - Best in System Development (May 22, 2026) - STI College Bacoor
+- Digital Learning and E-Sports Excellence (2026) - STI College Bacoor
+- Organizational Service Award (2026) - STI College Bacoor
+- G12 Representative - TechnoBytes (2025 - 2026) - STI College Bacoor Student Organization
+- Science Quiz Bee Champion - First Place Academic Science Champion
 - Resource Speaker: TechTalk Ep. 2 (October 20, 2025) - Advanced Web Responsiveness & Deployment Pipelines
 - Resource Speaker: TechTalk Ep. 1 (November 25, 2025) - HTML/CSS Fundamentals & Semantic Structuring
 - 3rd Place Web Development & Design Competition (April 24, 2025) - STI College Bacoor (7-hour contest against college-level participants)

@@ -798,7 +798,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         { tag: 'TechTalk #2', year: 'Oct 20, 2025', title: 'Resource Speaker: TechTalk Ep. 2', sub: 'Directed intensive technical training on Advanced Web Responsiveness and scalable deployment pipelines.', icon: 'fas fa-chalkboard-teacher' },
                         { tag: 'TechTalk #1', year: 'Nov 25, 2025', title: 'Resource Speaker: TechTalk Ep. 1', sub: 'Delivered comprehensive seminars on HTML/CSS fundamentals, semantic structuring, and modern rendering standards.', icon: 'fas fa-bullhorn' },
                         { tag: 'Hackathon', year: 'April 24, 2025', title: 'Web Development & Design Competition', sub: 'Placed 3rd in a 7-hour Web Development & Design Competition, competing against college-level participants.', icon: 'fas fa-medal' },
-                        { tag: 'CodeFest', year: 'Feb 28, 2025', title: 'CodeFest - Tagisan ng Talino', sub: 'Competed against college-level participants in an intensive 8-hour Mobile Application Development Competition.', icon: 'fas fa-code' }
+                        { tag: 'CodeFest', year: 'Feb 28, 2025', title: 'CodeFest - Tagisan ng Talino', sub: 'Competed against college-level participants in an intensive 8-hour Mobile Application Development Competition.', icon: 'fas fa-code' },
+                        { tag: 'Excellence', year: '2026', title: 'Digital Learning & E-Sports Excellence', sub: 'Recognized for outstanding achievement in digital learning technologies, competitive strategy, and IT innovation.', icon: 'fas fa-gamepad' },
+                        { tag: 'Leadership', year: '2025 – 2026', title: 'G12 Representative - TechnoBytes', sub: 'Served as Grade 12 Student Organization Representative for TechnoBytes at STI College Bacoor.', icon: 'fas fa-user-shield' },
+                        { tag: 'Service', year: '2026', title: 'Organizational Service Award', sub: 'Awarded for dedicated service, leadership, and organization of technical workshops and student events.', icon: 'fas fa-hand-holding-heart' },
+                        { tag: 'Champion', year: 'Academics', title: 'Science Quiz Bee Champion', sub: 'First Place Champion in the Science Quiz Bee competition, demonstrating scientific analytics and problem-solving excellence.', icon: 'fas fa-flask' }
                     ];
 
                     const ball = document.getElementById('milestoneSphere');
