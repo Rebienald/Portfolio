@@ -2148,6 +2148,9 @@
                     width: 900px !important;
                     height: 900px !important;
                     margin: 0 !important;
+                    will-change: transform;
+                    -webkit-backface-visibility: hidden;
+                    backface-visibility: hidden;
                 }
                 .portrait-card {
                     position: absolute !important;
@@ -2174,15 +2177,18 @@
                     display: flex !important;
                     width: 76px !important;
                     height: 76px !important;
-                    background: rgba(18, 18, 26, 0.92) !important;
-                    backdrop-filter: blur(14px) !important;
-                    -webkit-backdrop-filter: blur(14px) !important;
+                    background: #12121a !important;
+                    backdrop-filter: none !important;
+                    -webkit-backdrop-filter: none !important;
                     border: 1px solid rgba(255, 255, 255, 0.38) !important;
-                    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.9), 0 0 24px rgba(255, 255, 255, 0.22) !important;
+                    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6) !important;
                     border-radius: 50% !important;
                     padding: 0 !important;
                     justify-content: center !important;
                     align-items: center !important;
+                    will-change: transform;
+                    -webkit-backface-visibility: hidden;
+                    backface-visibility: hidden;
                 }
                 .tech-card-info { display: none !important; }
                 .tech-icon-wrapper {
@@ -2195,7 +2201,6 @@
                     display: flex !important;
                     align-items: center !important;
                     justify-content: center !important;
-                    filter: drop-shadow(0 5px 12px rgba(0, 0, 0, 0.75));
                 }
                 .tech-icon-wrapper i,
                 .tech-icon-wrapper svg,
