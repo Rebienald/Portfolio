@@ -827,6 +827,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     const phi = Math.PI * (3 - Math.sqrt(5));
                     const cardElements = [];
 
+                    let totalDragDistance = 0;
+
                     sphereData.forEach((item, i) => {
                         const y = 1 - (i / (count - 1)) * 2;
                         const r = Math.sqrt(1 - y * y);
@@ -857,13 +859,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
                         card.addEventListener('click', (e) => {
                             e.stopPropagation();
+                            if (totalDragDistance > 8) return;
                             selectNode(item, card);
                         });
-
-                        card.addEventListener('touchend', (e) => {
-                            e.stopPropagation();
-                            selectNode(item, card);
-                        }, { passive: true });
 
                         ball.appendChild(card);
                         cardElements.push({ el: card, y, r, theta });
@@ -898,6 +896,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     function onStart(e) {
                         isDragging = true;
+                        totalDragDistance = 0;
                         velX = 0;
                         velY = 0;
                         const clientX = e.touches ? e.touches[0].clientX : e.clientX;
@@ -912,6 +911,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         const clientY = e.touches ? e.touches[0].clientY : e.clientY;
                         const deltaX = clientX - startX;
                         const deltaY = clientY - startY;
+
+                        totalDragDistance += Math.hypot(deltaX, deltaY);
 
                         const isMobile = window.innerWidth <= 768;
 
