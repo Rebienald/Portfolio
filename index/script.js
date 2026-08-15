@@ -499,7 +499,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                         let lastMarqueeScroll = marquee.scrollLeft;
                         marquee.addEventListener('scroll', () => {
-                            if (Math.abs(marquee.scrollLeft - lastMarqueeScroll) > 35) {
+                            if ((isInteracting || isMouseDown) && Math.abs(marquee.scrollLeft - lastMarqueeScroll) > 40) {
                                 lastMarqueeScroll = marquee.scrollLeft;
                                 playSelectionTickSound();
                             }
@@ -824,8 +824,8 @@ document.addEventListener('DOMContentLoaded', () => {
                             rotX = Math.max(-40, Math.min(40, rotX));
                         }
 
-                        if (isDragging || Math.abs(velY) > 0.05) {
-                            if (Math.abs(rotY - lastTickRotY) >= 20) {
+                        if (isDragging) {
+                            if (Math.abs(rotY - lastTickRotY) >= 22) {
                                 lastTickRotY = rotY;
                                 playSelectionTickSound();
                             }
@@ -861,7 +861,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             item.el.style.pointerEvents = isMobile ? (posZ > 0 ? 'auto' : 'none') : (posZ > 10 ? 'auto' : 'none');
                         });
 
-                        if (closestIdx !== -1 && closestIdx !== lastFocusedNodeIndex) {
+                        if (isDragging && closestIdx !== -1 && closestIdx !== lastFocusedNodeIndex) {
                             lastFocusedNodeIndex = closestIdx;
                             playSelectionTickSound();
                         }
