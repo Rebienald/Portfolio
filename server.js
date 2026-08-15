@@ -23,12 +23,12 @@ Projects:
 1. PrintHub / Print Portal (June 2026):
 - Description: Web-based print management system featuring PDF submission, print customization, payment verification, and real-time queue tracking.
 - Technologies: PHP, MySQL, JavaScript, HTML, CSS.
-2. SamAI (February 2026):
-- Description: AI-powered document learning platform using Retrieval-Augmented Generation (RAG), intelligent load balancing, data caching, and multi-LLM processing.
+2. SamAI (June 2026):
+- Description: AI-powered document learning platform using Retrieval-Augmented Generation (RAG), intelligent load balancing, data caching, and multi-LLM processing. Developed in June 2026.
 - Features: PDF-based tutoring, automated quiz generation, accurate document retrieval, and efficient AI inference.
-3. InfoWhiz (September 2025):
-- Description: AI-powered gamified learning platform integrating local and cloud LLMs.
-- Features: Real-time coding assistance, debugging support, simulation-based programming education, and interactive AI-driven feedback.
+3. InfoWhiz (September 2025 - Rebienald's Best & Hardest Project):
+- Description: Rebienald's flagship, best, and hardest project. Won Best in Capstone Development and Best in System Development among all SHS ICT students at STI College Bacoor. An AI-powered gamified learning platform integrating local and cloud LLMs for programming education.
+- Features: Real-time coding assistance, debugging support, simulation-based programming education, and interactive AI-driven feedback. Won Best in Capstone Development and Best in System Development among all SHS ICT students at STI College Bacoor.
 4. NAS.IO Bot:
 - Description: Automated Discord membership verification bot that verifies subscriber emails in MongoDB and auto-kicks expired users.
 - Technologies: Node.js, Discord.js, MongoDB.
