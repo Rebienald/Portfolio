@@ -482,19 +482,17 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
                 });
                 document.addEventListener('DOMContentLoaded', () => {
-                    const marquees = document.querySelectorAll('.projects-marquee, .certs-marquee, .guestbook-marquee');
+                    const marquees = document.querySelectorAll('.projects-marquee, .certs-marquee');
                     marquees.forEach(marquee => {
-                        const track = marquee.querySelector('.projects-marquee-track, .certs-marquee-track, .guestbook-marquee-track');
+                        const track = marquee.querySelector('.projects-marquee-track, .certs-marquee-track');
                         if (!track) return;
-                        const group = track.querySelector('.projects-marquee-group, .certs-marquee-group, .guestbook-marquee-group');
-                        const cloneCount = (group.children.length <= 2) ? 3 : 1;
-                        for (let i = 0; i < cloneCount; i++) {
-                            const clone = group.cloneNode(true);
-                            clone.setAttribute('aria-hidden', 'true');
-                            clone.querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
-                            clone.querySelectorAll('.reveal').forEach(el => el.classList.remove('reveal'));
-                            track.appendChild(clone);
-                        }
+                        const group = track.querySelector('.projects-marquee-group, .certs-marquee-group');
+                        if (!group) return;
+                        const clone = group.cloneNode(true);
+                        clone.setAttribute('aria-hidden', 'true');
+                        clone.querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
+                        clone.querySelectorAll('.reveal').forEach(el => el.classList.remove('reveal'));
+                        track.appendChild(clone);
                         const isLTR = marquee.classList.contains('certs-marquee-ltr');
                         const speed = marquee.classList.contains('certs-marquee') ? 0.5 : 0.8;
                         let scrollPos = isLTR ? group.offsetWidth : 0;
@@ -1328,19 +1326,6 @@ document.addEventListener('DOMContentLoaded', () => {
                                 </div>
                             `;
                         }).join('');
-
-                        const track = grid.parentElement;
-                        if (track && track.classList.contains('guestbook-marquee-track')) {
-                            const existingClones = track.querySelectorAll('[aria-hidden="true"]');
-                            existingClones.forEach(c => c.remove());
-                            const cloneCount = (entries.length <= 2) ? 3 : 1;
-                            for (let i = 0; i < cloneCount; i++) {
-                                const clone = grid.cloneNode(true);
-                                clone.setAttribute('aria-hidden', 'true');
-                                clone.querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
-                                track.appendChild(clone);
-                            }
-                        }
                     }
 
                     const SB_GB_URL = "https://ngjckggjadtoevbnhjhi.supabase.co/rest/v1/comments";
