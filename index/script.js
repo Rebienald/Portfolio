@@ -55,8 +55,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 });
                 window.toggleMobileMenu = function() {
+                    playClickSound();
                     const mobileMenu = document.getElementById('mobileMenu');
-                    if (mobileMenu) mobileMenu.classList.toggle('active');
+                    if (mobileMenu) {
+                        const isActive = mobileMenu.classList.toggle('active');
+                        document.body.style.overflow = isActive ? 'hidden' : '';
+                    }
                 };
 
                 let audioCtx = null;
@@ -232,7 +236,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 document.addEventListener('DOMContentLoaded', () => {
 
-                    const interactiveSelector = 'a, button, .skill-logo-btn, .tech-float-card, .project-card, .cert-card, .glass-card, .sphere-card-node, [data-tech]';
+                    const interactiveSelector = 'a, button, .hamburger, .close-menu, .mobile-menu a, .skill-logo-btn, .tech-float-card, .project-card, .cert-card, .glass-card, .sphere-card-node, [data-tech]';
 
                     let currentHoveredContainer = null;
 

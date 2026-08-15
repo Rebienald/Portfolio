@@ -1978,17 +1978,24 @@
                 .nav-links, .nav-cta { display: none; }
                 .hamburger {
                     display: flex !important;
-                    width: 38px;
-                    height: 38px;
-                    border-radius: 50%;
-                    background: var(--bg-base);
-                    box-shadow: var(--neo-extruded-sm);
-                    border: 1px solid rgba(255, 255, 255, 0.6);
+                    width: 42px;
+                    height: 42px;
+                    border-radius: 12px;
+                    background: rgba(255, 255, 255, 0.08);
+                    box-shadow: none !important;
+                    border: 1px solid rgba(255, 255, 255, 0.3);
                     align-items: center;
                     justify-content: center;
-                    color: var(--text-primary);
-                    font-size: 1rem;
+                    color: #FFFFFF !important;
+                    font-size: 1.1rem;
                     cursor: pointer;
+                    transition: all 0.25s ease;
+                    outline: none;
+                }
+                .hamburger:active {
+                    transform: scale(0.92);
+                    background: rgba(255, 255, 255, 0.18);
+                    border-color: #FFFFFF;
                 }
                 section {
                     width: 100% !important;
@@ -2337,38 +2344,92 @@
                 .btn-group { flex-direction: column !important; }
             }
             .mobile-menu {
-                position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-                background: var(--bg-base);
-                z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center;
-                opacity: 0; pointer-events: none; transition: 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(6, 6, 8, 0.96);
+                backdrop-filter: blur(28px);
+                -webkit-backdrop-filter: blur(28px);
+                z-index: 99999;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                opacity: 0;
+                visibility: hidden;
+                pointer-events: none;
+                transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.35s;
+                transform: translateY(-12px) scale(0.98);
                 gap: 1.25rem;
+                padding: 2rem;
             }
-            .mobile-menu.active { opacity: 1; pointer-events: all; }
+            .mobile-menu.active {
+                opacity: 1;
+                visibility: visible;
+                pointer-events: all;
+                transform: translateY(0) scale(1);
+            }
             .mobile-menu a {
-                color: var(--text-primary);
-                font-size: 1.2rem;
+                color: #FFFFFF;
+                font-family: var(--font-heading);
+                font-size: 1.15rem;
                 font-weight: 700;
-                padding: 0.85rem 2rem;
-                width: 82%;
-                max-width: 320px;
-                text-align: center;
-                border-radius: 100px;
-                background: var(--bg-base);
-                box-shadow: var(--neo-extruded);
-                border: 1px solid rgba(255, 255, 255, 0.6);
-                transition: all 0.3s ease;
+                padding: 1.05rem 1.6rem;
+                width: 90%;
+                max-width: 330px;
+                text-align: left;
+                border-radius: 16px;
+                background: rgba(255, 255, 255, 0.05);
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
                 text-decoration: none;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                letter-spacing: 0.02em;
+            }
+            .mobile-menu a::after {
+                content: '↗';
+                font-size: 1rem;
+                opacity: 0.7;
+                transition: transform 0.25s ease, opacity 0.25s ease;
             }
             .mobile-menu a:hover, .mobile-menu a:active {
-                box-shadow: var(--neo-inset);
-                color: var(--accent);
+                background: rgba(255, 255, 255, 0.14);
+                border-color: #FFFFFF;
+                color: #FFFFFF;
+                transform: translateY(-2px);
+                box-shadow: 0 14px 35px rgba(0, 0, 0, 0.7), 0 0 20px rgba(255, 255, 255, 0.1);
+            }
+            .mobile-menu a:hover::after, .mobile-menu a:active::after {
+                opacity: 1;
+                transform: translate(2px, -2px);
             }
             .mobile-menu .close-menu {
-                position: absolute; top: 2rem; right: 2rem;
-                width: 44px; height: 44px; border-radius: 50%;
-                background: var(--bg-base); box-shadow: var(--neo-extruded);
-                border: 1px solid rgba(255, 255, 255, 0.6);
-                display: flex; align-items: center; justify-content: center;
+                position: absolute;
+                top: 1.75rem;
+                right: 1.75rem;
+                width: 44px;
+                height: 44px;
+                border-radius: 50%;
+                background: rgba(255, 255, 255, 0.08);
+                box-shadow: none;
+                border: 1px solid rgba(255, 255, 255, 0.3);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #FFFFFF;
+                font-size: 1.1rem;
+                cursor: pointer;
+                transition: all 0.25s ease;
+            }
+            .mobile-menu .close-menu:active {
+                transform: scale(0.92);
+                background: rgba(255, 255, 255, 0.2);
+                border-color: #FFFFFF;
             }
 
             /* Full-page loading signature shown whenever this page opens or reloads. */
