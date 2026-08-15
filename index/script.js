@@ -1270,31 +1270,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 (function() {
                     let guestbookEntries = [
                         {
-                            id: "gb_1",
-                            name: "Engr. Jay",
-                            role: "Teammate & Collaborator",
+                            id: "gb_reb_1",
+                            name: "Reb",
+                            role: "Developer",
                             rating: 5,
-                            message: "Contributes majority of the ideas",
+                            message: "Try leaving a note!",
                             date: "Aug 16, 2026",
-                            likes: 12
-                        },
-                        {
-                            id: "gb_2",
-                            name: "Charles",
-                            role: "Back-End Developer",
-                            rating: 5,
-                            message: "Reb is a highly skilled back-end developer, a reliable teammate, and a great friend. He communicates clearly and always delivers quality work.",
-                            date: "Aug 15, 2026",
-                            likes: 9
-                        },
-                        {
-                            id: "gb_3",
-                            name: "John",
-                            role: "Client & Collaborator",
-                            rating: 5,
-                            message: "Super smooth ng transaction and very easy to talk to. Maayos and mabilis yung service, and very transparent from start to finish!",
-                            date: "Aug 14, 2026",
-                            likes: 7
+                            likes: 0
                         }
                     ];
 
