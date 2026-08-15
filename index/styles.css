@@ -2584,10 +2584,10 @@
     position: relative;
     width: 100%;
     max-width: 1100px;
-    height: 440px;
-    margin: 1.5rem auto 0 auto;
+    height: 380px;
+    margin: 0.5rem auto 0 auto;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
     perspective: 1200px;
 }
@@ -2597,15 +2597,16 @@
     width: 100%;
     height: 100%;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
 }
 
 .testimonial-deck-card {
     position: absolute;
+    top: 0;
     width: 88%;
     max-width: 380px;
-    min-height: 230px;
+    min-height: 220px;
     background: rgba(18, 18, 26, 0.92);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
@@ -2703,14 +2704,14 @@
 
 @media (max-width: 768px) {
     .testimonials-section {
-        padding: 3.5rem 0 2rem 0 !important;
+        padding: 2rem 0 1rem 0 !important;
     }
     .testimonials-section .section-header {
-        margin-bottom: 0.75rem !important;
+        margin-bottom: 0.5rem !important;
     }
     .testimonial-deck-viewport {
-        height: 420px !important;
-        margin-top: 0.25rem !important;
+        height: 360px !important;
+        margin-top: 0 !important;
         align-items: flex-start !important;
     }
     .testimonial-deck-card {
@@ -2718,6 +2719,7 @@
         min-height: 190px;
         width: 92%;
         max-width: 340px;
+        top: 0 !important;
     }
     .testi-card-body p {
         font-size: 0.88rem;
