@@ -641,6 +641,53 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.addEventListener('dragstart', (e) => {
                     e.preventDefault();
                 });
+
+                // MOBILE PC-ONLY PROJECT INTERCEPTOR (SamAI, TechnoBytes Photobooth, NAS.IO Bot)
+                document.addEventListener('DOMContentLoaded', () => {
+                    document.addEventListener('click', (e) => {
+                        if (window.innerWidth > 768) return;
+
+                        const card = e.target.closest('.project-card');
+                        if (!card) return;
+
+                        const href = card.getAttribute('href') || '';
+                        const text = card.textContent || '';
+
+                        let projectName = '';
+                        if (href.includes('samai') || text.includes('SamAI')) {
+                            projectName = 'SamAI';
+                        } else if (href.includes('TechnoPhotobooth') || text.includes('TechnoBytes Photobooth') || text.includes('Photobooth')) {
+                            projectName = 'TechnoBytes Photobooth';
+                        } else if (href.includes('NasIoPing') || text.includes('NAS.IO Bot') || text.includes('NAS.IO')) {
+                            projectName = 'NAS.IO Bot';
+                        }
+
+                        if (projectName) {
+                            e.preventDefault();
+                            e.stopPropagation();
+
+                            playClickSound();
+
+                            const tooltip = document.getElementById('techTooltip');
+                            const tooltipName = document.getElementById('tooltipName');
+                            const tooltipTag = document.getElementById('tooltipTag');
+                            const tooltipDesc = document.getElementById('tooltipDesc');
+                            const tooltipIcon = document.getElementById('tooltipIcon');
+
+                            if (tooltip) {
+                                if (tooltipName) tooltipName.innerText = projectName;
+                                if (tooltipTag) tooltipTag.innerText = '💻 DESKTOP REQUIRED';
+                                if (tooltipDesc) tooltipDesc.innerText = `In order to view and experience ${projectName}, you need to be on a PC / Desktop computer.`;
+                                if (tooltipIcon) tooltipIcon.innerHTML = '<i class="fas fa-desktop" style="color:var(--accent);"></i>';
+                                tooltip.classList.add('visible');
+                            }
+
+                            if (typeof window.openChatbotWithMessage === 'function') {
+                                window.openChatbotWithMessage(projectName);
+                            }
+                        }
+                    }, true);
+                });
                 function switchEduTab(tabName) {
                     const eduBtn = document.getElementById('tab-education');
                     const engBtn = document.getElementById('tab-engagements');

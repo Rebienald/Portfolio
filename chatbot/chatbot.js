@@ -401,6 +401,17 @@ It is an AI-powered gamified learning platform for computer programming that won
         });
     }
 
+    window.openChatbotWithMessage = function(projectName) {
+        const windowEl = document.getElementById('chatbotWindow');
+        const trigger = document.getElementById('chatbotTrigger');
+        if (windowEl) {
+            windowEl.classList.add('open');
+            if (trigger) trigger.classList.add('active');
+        }
+        const notice = `💻 **Desktop Required**: In order to view and experience **${projectName}**, you need to be on a PC or Desktop computer for full resolution and interactive capabilities.`;
+        appendMessage('bot', notice);
+    };
+
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', () => {
             initChatbotDOM();
