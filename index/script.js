@@ -869,6 +869,33 @@ document.addEventListener('DOMContentLoaded', () => {
                         cardElements.push({ el: card, y, r, theta });
                     });
 
+                    const mobileBar = document.getElementById('mobileMilestoneBar');
+                    if (mobileBar) {
+                        mobileBar.innerHTML = sphereData.map((item, idx) => `
+                            <div class="mobile-milestone-card ${idx === 0 ? 'active-mobile-node' : ''}" data-idx="${idx}">
+                                <div class="mobile-milestone-card-top">
+                                    <span class="mobile-milestone-tag">${item.tag}</span>
+                                    <i class="${item.icon}" style="color: #00A8FF; font-size: 0.85rem;"></i>
+                                </div>
+                                <div class="mobile-milestone-title">${item.title}</div>
+                                <div class="mobile-milestone-sub">${item.sub}</div>
+                            </div>
+                        `).join('');
+
+                        mobileBar.querySelectorAll('.mobile-milestone-card').forEach((mCard, idx) => {
+                            mCard.addEventListener('click', () => {
+                                playSelectionTickSound();
+                                mobileBar.querySelectorAll('.mobile-milestone-card').forEach(c => c.classList.remove('active-mobile-node'));
+                                mCard.classList.add('active-mobile-node');
+                                const item = sphereData[idx];
+                                if (detailsTitle) detailsTitle.innerText = item.title;
+                                if (detailsSub) detailsSub.innerText = item.sub;
+                                if (detailsTag) detailsTag.innerText = item.tag;
+                                if (detailsYear) detailsYear.innerText = item.year;
+                            });
+                        });
+                    }
+
                     function onStart(e) {
                         isDragging = true;
                         velX = 0;

@@ -1626,7 +1626,8 @@
                 overflow: visible;
                 cursor: grab;
                 user-select: none;
-                touch-action: pan-y;
+                touch-action: pan-y pan-x;
+                -webkit-touch-callout: none;
             }
             .sphere-viewport:active {
                 cursor: grabbing;
@@ -2316,6 +2317,65 @@
                 }
                 .sphere-hud-title { font-size: 1.05rem !important; white-space: normal !important; word-break: break-word !important; }
                 .sphere-hud-sub { font-size: 0.78rem !important; white-space: normal !important; word-break: break-word !important; }
+
+                .mobile-milestone-bar {
+                    display: flex !important;
+                    overflow-x: auto !important;
+                    gap: 0.85rem !important;
+                    width: 100% !important;
+                    padding: 0.85rem 0 !important;
+                    margin-top: 0.85rem !important;
+                    scroll-snap-type: x mandatory !important;
+                    -webkit-overflow-scrolling: touch !important;
+                    scrollbar-width: none !important;
+                }
+                .mobile-milestone-bar::-webkit-scrollbar {
+                    display: none !important;
+                }
+                .mobile-milestone-card {
+                    flex: 0 0 78vw !important;
+                    max-width: 280px !important;
+                    background: #0d0e12 !important;
+                    border: 1.5px solid rgba(255, 255, 255, 0.22) !important;
+                    border-radius: 14px !important;
+                    padding: 0.85rem 1rem !important;
+                    scroll-snap-align: center !important;
+                    cursor: pointer !important;
+                    transition: all 0.25s ease !important;
+                }
+                .mobile-milestone-card.active-mobile-node {
+                    border-color: #00A8FF !important;
+                    background: rgba(0, 168, 255, 0.12) !important;
+                    box-shadow: 0 0 15px rgba(0, 168, 255, 0.3) !important;
+                }
+                .mobile-milestone-card-top {
+                    display: flex !important;
+                    align-items: center !important;
+                    justify-content: space-between !important;
+                    margin-bottom: 0.4rem !important;
+                }
+                .mobile-milestone-tag {
+                    color: #00A8FF !important;
+                    font-size: 0.72rem !important;
+                    font-weight: 700 !important;
+                    text-transform: uppercase !important;
+                }
+                .mobile-milestone-title {
+                    color: #FFFFFF !important;
+                    font-size: 0.88rem !important;
+                    font-weight: 700 !important;
+                    margin-bottom: 0.25rem !important;
+                    line-height: 1.3 !important;
+                }
+                .mobile-milestone-sub {
+                    color: #94A3B8 !important;
+                    font-size: 0.75rem !important;
+                    line-height: 1.4 !important;
+                    display: -webkit-box !important;
+                    -webkit-line-clamp: 2 !important;
+                    -webkit-box-orient: vertical !important;
+                    overflow: hidden !important;
+                }
 
                 .certs-marquee-group {
                     gap: 0.4rem !important;
