@@ -58,68 +58,150 @@ document.addEventListener('DOMContentLoaded', () => {
                     document.getElementById('mobileMenu').classList.toggle('active');
                 }
                 document.addEventListener('DOMContentLoaded', () => {
-                    const hudName = document.getElementById('hudName');
-                    const hudTag = document.getElementById('hudTag');
-                    const hudDesc = document.getElementById('hudDesc');
-                    const hudIcon = document.getElementById('hudIcon');
-                    const skillButtons = document.querySelectorAll('.skill-logo-btn');
+                    const allTechElements = document.querySelectorAll('.skill-logo-btn, .tech-float-card, [data-tech]');
+
+                    // Create or select the dynamic floating tooltip
+                    let tooltip = document.getElementById('techTooltip');
+                    if (!tooltip) {
+                        tooltip = document.createElement('div');
+                        tooltip.id = 'techTooltip';
+                        tooltip.className = 'tech-tooltip';
+                        tooltip.innerHTML = `
+                            <div class="tech-tooltip-header">
+                                <div class="tech-tooltip-icon" id="tooltipIcon"></div>
+                                <span class="tech-tooltip-name" id="tooltipName">HTML5</span>
+                                <span class="tech-tooltip-badge" id="tooltipTag">WEB STRUCTURE</span>
+                            </div>
+                            <div class="tech-tooltip-body" id="tooltipDesc">The skeleton of websites — defines text, images, and layout structure.</div>
+                        `;
+                        document.body.appendChild(tooltip);
+                    }
+
+                    const tooltipName = document.getElementById('tooltipName');
+                    const tooltipTag = document.getElementById('tooltipTag');
+                    const tooltipDesc = document.getElementById('tooltipDesc');
+                    const tooltipIcon = document.getElementById('tooltipIcon');
 
                     const techDescriptions = {
-                        'HTML5': { tag: 'FRONTEND ARCHITECTURE', desc: 'Semantic HTML structure with strict accessibility, responsive layout structure, and search engine optimization.', icon: 'devicon-html5-plain colored' },
-                        'CSS3': { tag: 'STYLING & ANIMATION', desc: 'Custom Vanilla CSS design systems, CSS variables, high-performance 60fps animations, and responsive breakpoints.', icon: 'devicon-css3-plain colored' },
-                        'Tailwind': { tag: 'UTILITY CSS FRAMEWORK', desc: 'Rapid responsive UI prototyping with utility-first layout composition.', icon: 'devicon-tailwindcss-original colored' },
-                        'JavaScript': { tag: 'FRONTEND LOGIC & DOM', desc: 'Asynchronous DOM manipulation, ES6+ logic, Fetch API integrations, dynamic state management, and event handling.', icon: 'devicon-javascript-plain colored' },
-                        'Bootstrap': { tag: 'RESPONSIVE UI FRAMEWORK', desc: 'Mobile-first grid architecture, component libraries, and rapid cross-browser layout building.', icon: 'devicon-bootstrap-plain colored' },
-                        'PHP': { tag: 'BACKEND ARCHITECTURE', desc: '5 Years experience in server-side scripting, custom API endpoints, session authentication, and database querying.', icon: 'devicon-php-plain colored' },
-                        'C#': { tag: 'OBJECT-ORIENTED & .NET', desc: 'Desktop applications, .NET MAUI mobile development, object-oriented logic, and C# software architecture.', icon: 'devicon-csharp-plain colored' },
-                        'Java': { tag: 'OBJECT-ORIENTED APPS', desc: 'Core Java applications, OOP principles, data structures, and cross-platform software building.', icon: 'devicon-java-plain colored' },
-                        'Node.js': { tag: 'SERVER-SIDE RUNTIME', desc: 'Asynchronous server environments, REST APIs, Express framework, and real-time backend microservices.', icon: 'fab fa-node-js' },
-                        '.NET MAUI': { tag: 'CROSS-PLATFORM MOBILE', desc: 'Cross-platform native mobile and desktop application development using C# and XAML.', icon: 'devicon-dotnetcore-plain colored' },
-                        'ASP.NET': { tag: 'ENTERPRISE WEB APIs', desc: 'Robust C# enterprise web applications, MVC architecture, and backend service integration.', icon: 'devicon-dotnetcore-plain colored' },
-                        'MySQL': { tag: 'RELATIONAL DATABASE', desc: 'Relational database schema design, SQL query optimization, primary/foreign key indexing, and transaction safety.', icon: 'devicon-mysql-plain colored' },
-                        'MongoDB': { tag: 'DOCUMENT NOSQL', desc: 'NoSQL document database collections, JSON/BSON data structures, and scalable database schemas.', icon: 'devicon-mongodb-plain colored' },
-                        'SQLite': { tag: 'EMBEDDED DATABASE', desc: 'Lightweight zero-configuration relational database storage for local applications and mobile software.', icon: 'devicon-sqlite-plain colored' },
-                        'Supabase': { tag: 'CLOUD POSTGRES HOSTING', desc: 'Realtime cloud database management, PostgreSQL engine, row-level security, and instant REST APIs.', icon: 'fas fa-database' },
-                        'VS': { tag: 'ENTERPRISE IDE', desc: 'Visual Studio development environment for C#, .NET MAUI, desktop apps, and solution management.', icon: 'devicon-visualstudio-plain colored' },
-                        'VS Code': { tag: 'PRIMARY EDITOR', desc: 'Core code editor environment with extensions, Git integration, terminal shell, and live debugging.', icon: 'devicon-vscode-plain colored' },
-                        'Android Studio': { tag: 'MOBILE DEVELOPMENT IDE', desc: 'Native Android app creation, Java/Kotlin development, layout XML design, and device emulation.', icon: 'devicon-androidstudio-plain colored' },
-                        'NetBeans': { tag: 'JAVA DEVELOPMENT IDE', desc: 'Java application development environment, GUI building, and Java SE project compiling.', icon: 'devicon-netbeans-plain colored' },
-                        'Ubuntu': { tag: 'LINUX SERVER & OS', desc: 'Linux environment for server deployment, shell scripts, package management, and command-line execution.', icon: 'devicon-ubuntu-plain colored' },
-                        'Windows 11': { tag: 'WORKSTATION OS', desc: 'Primary OS for software compilation, .NET desktop app development, and multi-monitor productivity.', icon: 'devicon-windows8-original colored' },
-                        'Zorin OS': { tag: 'LINUX WORKSTATION', desc: 'Dedicated Linux workstation environment for local web server hosting and Unix terminal tooling.', icon: 'fas fa-desktop' },
-                        'Git': { tag: 'VERSION CONTROL', desc: 'Version control system for source code tracking, commit history, branch merging, and team collaboration.', icon: 'devicon-git-plain colored' },
-                        'GitHub': { tag: 'CODE REPOSITORY HOSTING', desc: 'Cloud Git repository hosting, open-source project management, and automated deployment pipelines.', icon: 'devicon-github-original colored' },
-                        'Cursor': { tag: 'AI-ASSISTED EDITOR', desc: 'AI-enhanced code editor environment for rapid codebase navigation and automated refactoring.', icon: 'fas fa-code' },
-                        'Devin': { tag: 'DEVELOPMENT AGENT SUITE', desc: 'Modern software engineering automation and agentic workflow orchestration.', icon: 'fas fa-robot' },
-                        'Vercel': { tag: 'FRONTEND CLOUD PLATFORM', desc: 'Serverless web application deployment, global CDN distribution, and CI/CD integration.', icon: 'fas fa-bolt' },
-                        'AWS': { tag: 'CLOUD INFRASTRUCTURE', desc: 'Amazon Web Services cloud hosting, EC2 instances, S3 storage, and cloud network deployment.', icon: 'fab fa-aws' },
-                        'Netlify': { tag: 'JAMSTACK DEPLOYMENT', desc: 'Automated continuous deployment, serverless functions, and static site hosting.', icon: 'devicon-netlify-plain colored' },
-                        'Render': { tag: 'CLOUD APPLICATION HOSTING', desc: 'Unified cloud hosting for Node.js backends, web services, and database instances.', icon: 'fas fa-server' },
-                        'XAMPP': { tag: 'LOCAL WEB SERVER', desc: 'Local Apache HTTP server, MariaDB/MySQL database engine, and PHP runtime stack for development.', icon: 'fas fa-network-wired' },
-                        'InfinityFree': { tag: 'WEB HOSTING PLATFORM', desc: 'Free cloud web hosting with PHP support, MySQL database access, and cPanel controls.', icon: 'fas fa-cloud-upload-alt' },
-                        'AeonFree': { tag: 'CLOUD HOSTING PROVIDER', desc: 'Cloud server hosting platform for PHP scripts, web applications, and database storage.', icon: 'fas fa-cloud' }
+                        'HTML5': { title: 'HTML5', tag: 'WEB STRUCTURE', desc: 'The skeleton of websites — defines the structure of text, images, buttons, and page sections.', icon: 'devicon-html5-plain colored' },
+                        'CSS3': { title: 'CSS3', tag: 'WEB STYLING', desc: 'The styling engine — adds colors, custom layouts, fonts, and smooth visual animations to web pages.', icon: 'devicon-css3-plain colored' },
+                        'Tailwind': { title: 'Tailwind CSS', tag: 'UI STYLING TOOL', desc: 'A modern utility framework for styling websites quickly without writing long raw CSS files.', icon: 'devicon-tailwindcss-original colored' },
+                        'JavaScript': { title: 'JavaScript', tag: 'WEB LOGIC & DOM', desc: 'The brain of the web — powers interactive features, popups, calculations, and live page updates.', icon: 'devicon-javascript-plain colored' },
+                        'Bootstrap': { title: 'Bootstrap', tag: 'UI FRAMEWORK', desc: 'A popular ready-made toolkit for building fast, responsive, mobile-friendly website layouts.', icon: 'devicon-bootstrap-plain colored' },
+                        'PHP': { title: 'PHP', tag: 'BACKEND ARCHITECTURE', desc: 'A server-side language that connects web pages to databases, manages user accounts, and processes form data.', icon: 'devicon-php-plain colored' },
+                        'C#': { title: 'C#', tag: 'SOFTWARE DEVELOPMENT', desc: 'A powerful Microsoft language used to build desktop programs, mobile applications, and enterprise systems.', icon: 'devicon-csharp-plain colored' },
+                        'Java': { title: 'Java', tag: 'CROSS-PLATFORM APPS', desc: 'A versatile programming language for building cross-platform desktop applications and Android software.', icon: 'devicon-java-plain colored' },
+                        'Node.js': { title: 'Node.js', tag: 'SERVER RUNTIME', desc: 'Allows JavaScript to run on backend servers, handling real-time data, web requests, and APIs.', icon: 'fab fa-node-js' },
+                        '.NET MAUI': { title: '.NET MAUI', tag: 'MOBILE & DESKTOP', desc: 'A Microsoft framework for building native Android, iOS, Windows, and Mac apps from a single codebase.', icon: 'devicon-dotnetcore-plain colored' },
+                        'ASP.NET': { title: 'ASP.NET', tag: 'ENTERPRISE WEB APIs', desc: 'A Microsoft web engine for building secure, high-performance web applications and backend API services.', icon: 'devicon-dotnetcore-plain colored' },
+                        'MySQL': { title: 'MySQL', tag: 'RELATIONAL DATABASE', desc: 'A reliable database system that organizes and stores website data in structured tables.', icon: 'devicon-mysql-plain colored' },
+                        'MongoDB': { title: 'MongoDB', tag: 'DOCUMENT DATABASE', desc: 'A flexible NoSQL database that stores data in JSON-like documents instead of traditional tables.', icon: 'devicon-mongodb-plain colored' },
+                        'SQLite': { title: 'SQLite', tag: 'EMBEDDED DATABASE', desc: 'A lightweight, zero-configuration database stored directly inside a single file for apps and local software.', icon: 'devicon-sqlite-plain colored' },
+                        'Supabase': { title: 'Supabase', tag: 'CLOUD BACKEND', desc: 'A cloud database & authentication platform providing instant database access and real-time data sync.', icon: 'fas fa-database' },
+                        'VS': { title: 'Visual Studio', tag: 'ENTERPRISE IDE', desc: 'A full-featured Microsoft development environment for C#, .NET, desktop programs, and mobile projects.', icon: 'devicon-visualstudio-plain colored' },
+                        'VS Code': { title: 'VS Code', tag: 'CODE EDITOR', desc: 'A fast, lightweight code editor used for writing, testing, and debugging web and software code.', icon: 'devicon-vscode-plain colored' },
+                        'Cursor': { title: 'Cursor Editor', tag: 'AI CODE EDITOR', desc: 'An AI-powered code editor that helps write, auto-complete, and refactor code intelligently.', icon: 'fas fa-code' },
+                        'Devin': { title: 'Devin', tag: 'AI ENGINEERING SUITE', desc: 'An autonomous AI tool that automates complex software engineering tasks and coding workflows.', icon: 'fas fa-robot' },
+                        'Android Studio': { title: 'Android Studio', tag: 'MOBILE APP IDE', desc: 'The official editor and emulator suite for designing, building, and testing native Android apps.', icon: 'devicon-androidstudio-plain colored' },
+                        'NetBeans': { title: 'NetBeans', tag: 'JAVA DEVELOPMENT', desc: 'An integrated development environment specially designed for writing and building Java software.', icon: 'devicon-netbeans-plain colored' },
+                        'Ubuntu': { title: 'Ubuntu Linux', tag: 'OPERATING SYSTEM', desc: 'A popular open-source Linux OS used for running cloud servers, web applications, and scripts.', icon: 'devicon-ubuntu-plain colored' },
+                        'Windows 11': { title: 'Windows 11', tag: 'WORKSTATION OS', desc: 'Microsoft operating system used for daily software development, code compilation, and productivity.', icon: 'devicon-windows8-original colored' },
+                        'Zorin OS': { title: 'Zorin OS', tag: 'LINUX WORKSTATION', desc: 'A fast, user-friendly Linux distribution optimized for web hosting tools and terminal workflows.', icon: 'fas fa-desktop' },
+                        'Git': { title: 'Git', tag: 'VERSION CONTROL', desc: 'A tool that records every code change, letting developers safely test features and undo mistakes.', icon: 'devicon-git-plain colored' },
+                        'GitHub': { title: 'GitHub', tag: 'CODE HOSTING', desc: 'A cloud platform for storing project code, sharing open-source work, and collaborating with developers.', icon: 'devicon-github-original colored' },
+                        'Vercel': { title: 'Vercel', tag: 'WEB HOSTING', desc: 'A cloud platform for deploying fast, automatic web applications with global edge server hosting.', icon: 'fas fa-bolt' },
+                        'AWS': { title: 'Amazon Web Services', tag: 'CLOUD INFRASTRUCTURE', desc: 'Amazon cloud platform for hosting scalable web applications, databases, and server networks.', icon: 'fab fa-aws' },
+                        'Netlify': { title: 'Netlify', tag: 'WEB HOSTING', desc: 'An automated cloud host for publishing modern static websites and web apps straight from Git.', icon: 'devicon-netlify-plain colored' },
+                        'Render': { title: 'Render', tag: 'CLOUD APP HOSTING', desc: 'A unified cloud hosting platform for running backend APIs, web services, and database instances.', icon: 'fas fa-server' },
+                        'XAMPP': { title: 'XAMPP', tag: 'LOCAL WEB SERVER', desc: 'A local offline server package with Apache, MySQL, and PHP for testing websites on your computer.', icon: 'fas fa-network-wired' },
+                        'InfinityFree': { title: 'InfinityFree', tag: 'WEB HOSTING', desc: 'A free cloud hosting provider for publishing PHP websites and MySQL databases on the web.', icon: 'fas fa-cloud-upload-alt' },
+                        'AeonFree': { title: 'AeonFree', tag: 'WEB HOSTING', desc: 'A cloud hosting platform for hosting web applications, PHP scripts, and online databases.', icon: 'fas fa-cloud' }
                     };
 
-                    skillButtons.forEach(btn => {
-                        const name = btn.getAttribute('data-tech') || btn.getAttribute('title') || '';
-                        const data = techDescriptions[name] || { tag: 'TECHNICAL SKILL', desc: 'Experienced in practical software development and production implementation.', icon: 'fas fa-code' };
+                    function getIconContent(el, fallbackIcon) {
+                        const wrapper = el.querySelector('.tech-icon-wrapper') || el;
+                        const svg = wrapper.querySelector('svg');
+                        const i = wrapper.querySelector('i');
+                        if (svg) return svg.outerHTML;
+                        if (i) return i.outerHTML;
+                        if (fallbackIcon) return `<i class="${fallbackIcon}"></i>`;
+                        return `<i class="fas fa-code"></i>`;
+                    }
 
-                        const activateButton = () => {
-                            skillButtons.forEach(b => b.classList.remove('active-btn'));
-                            btn.classList.add('active-btn');
+                    function positionTooltip(e) {
+                        if (!tooltip) return;
+                        const padding = 15;
+                        let x = e.clientX;
+                        let y = e.clientY - 15;
 
-                            if (hudName && hudTag && hudDesc) {
-                                hudName.innerText = name;
-                                hudTag.innerText = data.tag;
-                                hudDesc.innerText = data.desc;
-                                if (hudIcon) {
-                                    hudIcon.innerHTML = `<i class="${data.icon}"></i>`;
-                                }
-                            }
+                        const rect = tooltip.getBoundingClientRect();
+                        const tooltipWidth = rect.width || 250;
+                        const tooltipHeight = rect.height || 100;
+
+                        if (x - tooltipWidth / 2 < padding) {
+                            x = padding + tooltipWidth / 2;
+                        } else if (x + tooltipWidth / 2 > window.innerWidth - padding) {
+                            x = window.innerWidth - padding - tooltipWidth / 2;
+                        }
+
+                        if (y - tooltipHeight < padding + 20) {
+                            y = e.clientY + 35;
+                        }
+
+                        tooltip.style.left = `${x}px`;
+                        tooltip.style.top = `${y}px`;
+                    }
+
+                    allTechElements.forEach(el => {
+                        const name = el.getAttribute('data-tech') || el.getAttribute('title') || '';
+                        if (!name) return;
+
+                        const data = techDescriptions[name] || {
+                            title: name,
+                            tag: 'TECHNICAL SKILL',
+                            desc: 'Experienced in practical software development and production implementation.',
+                            icon: 'fas fa-code'
                         };
 
-                        btn.addEventListener('mouseenter', activateButton);
-                        btn.addEventListener('click', activateButton);
+                        const iconHtml = getIconContent(el, data.icon);
+
+                        const activateTech = (e) => {
+                            if (tooltipName && tooltipTag && tooltipDesc && tooltipIcon) {
+                                tooltipName.innerText = data.title || name;
+                                tooltipTag.innerText = data.tag;
+                                tooltipDesc.innerText = data.desc;
+                                tooltipIcon.innerHTML = iconHtml;
+                            }
+
+                            if (e && e.clientX && e.clientY) {
+                                positionTooltip(e);
+                            }
+                            tooltip.classList.add('visible');
+                        };
+
+                        el.addEventListener('mouseenter', (e) => {
+                            activateTech(e);
+                        });
+
+                        el.addEventListener('mousemove', (e) => {
+                            positionTooltip(e);
+                        });
+
+                        el.addEventListener('mouseleave', () => {
+                            if (tooltip) tooltip.classList.remove('visible');
+                        });
+
+                        el.addEventListener('click', (e) => {
+                            activateTech(e);
+                        });
+
+                        el.addEventListener('touchstart', (e) => {
+                            const touch = e.touches[0];
+                            if (touch) {
+                                positionTooltip(touch);
+                            }
+                            activateTech(e);
+                        }, { passive: true });
                     });
                 });
                 document.addEventListener('DOMContentLoaded', () => {
