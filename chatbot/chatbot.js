@@ -162,6 +162,50 @@
         }
     }
 
+    let chatAudioCtx = null;
+    function playChatbotReplySound() {
+        try {
+            if (!chatAudioCtx) {
+                chatAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (chatAudioCtx.state === 'suspended') {
+                chatAudioCtx.resume();
+            }
+
+            const t = chatAudioCtx.currentTime;
+
+            // Two-tone sleek digital message chime (1050Hz -> 1400Hz)
+            const osc1 = chatAudioCtx.createOscillator();
+            const gain1 = chatAudioCtx.createGain();
+
+            osc1.type = 'sine';
+            osc1.frequency.setValueAtTime(1050, t);
+
+            gain1.gain.setValueAtTime(0.2, t);
+            gain1.gain.exponentialRampToValueAtTime(0.001, t + 0.08);
+
+            osc1.connect(gain1);
+            gain1.connect(chatAudioCtx.destination);
+
+            const osc2 = chatAudioCtx.createOscillator();
+            const gain2 = chatAudioCtx.createGain();
+
+            osc2.type = 'sine';
+            osc2.frequency.setValueAtTime(1400, t + 0.06);
+
+            gain2.gain.setValueAtTime(0.25, t + 0.06);
+            gain2.gain.exponentialRampToValueAtTime(0.001, t + 0.16);
+
+            osc2.connect(gain2);
+            gain2.connect(chatAudioCtx.destination);
+
+            osc1.start(t);
+            osc1.stop(t + 0.08);
+            osc2.start(t + 0.06);
+            osc2.stop(t + 0.16);
+        } catch (e) {}
+    }
+
     function appendMessage(sender, content) {
         const messagesArea = document.getElementById('chatMessages');
         if (!messagesArea) return;
@@ -176,6 +220,7 @@
             bubbleDiv.textContent = content;
         } else {
             bubbleDiv.innerHTML = parseMarkdown(content);
+            playChatbotReplySound();
         }
 
         msgDiv.appendChild(bubbleDiv);

@@ -1465,6 +1465,25 @@
                 line-height: 1.45;
                 word-break: break-word;
             }
+            @media (max-width: 768px) {
+                .tech-tooltip {
+                    position: fixed !important;
+                    top: auto !important;
+                    bottom: 24px !important;
+                    left: 50% !important;
+                    right: auto !important;
+                    width: 90% !important;
+                    max-width: 380px !important;
+                    transform: translate(-50%, 20px) scale(0.95) !important;
+                    transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s !important;
+                    box-sizing: border-box !important;
+                }
+                .tech-tooltip.visible {
+                    opacity: 1 !important;
+                    visibility: visible !important;
+                    transform: translate(-50%, 0) scale(1) !important;
+                }
+            }
 
 
             .tech-buttons-matrix {

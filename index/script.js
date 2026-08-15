@@ -54,9 +54,152 @@ document.addEventListener('DOMContentLoaded', () => {
                         observer.observe(el);
                     }
                 });
-                function toggleMobileMenu() {
-                    document.getElementById('mobileMenu').classList.toggle('active');
+                window.toggleMobileMenu = function() {
+                    const mobileMenu = document.getElementById('mobileMenu');
+                    if (mobileMenu) mobileMenu.classList.toggle('active');
+                };
+
+                // TACTILE UI CLICK & HOVER SOUND ENGINE (WEB AUDIO API)
+                let audioCtx = null;
+                let lastHoverSoundTime = 0;
+
+                function initAudioContext() {
+                    if (!audioCtx) {
+                        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                    }
+                    if (audioCtx.state === 'suspended') {
+                        audioCtx.resume();
+                    }
                 }
+
+                // CRASH-PROOF & ACCURATE CLICKY UI SOUND ENGINE
+                function playHoverSound() {
+                    try {
+                        initAudioContext();
+                        if (!audioCtx) return;
+
+                        const t = audioCtx.currentTime;
+
+                        // Ultra-crisp mechanical clicky pop (2600Hz -> 550Hz)
+                        const osc = audioCtx.createOscillator();
+                        const gain = audioCtx.createGain();
+
+                        osc.type = 'sine';
+                        osc.frequency.setValueAtTime(2600, t);
+                        osc.frequency.exponentialRampToValueAtTime(550, t + 0.012);
+
+                        gain.gain.setValueAtTime(0.35, t);
+                        gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.012);
+
+                        osc.connect(gain);
+                        gain.connect(audioCtx.destination);
+
+                        osc.start(t);
+                        osc.stop(t + 0.012);
+                    } catch (err) {}
+                }
+
+                function playClickSound() {
+                    try {
+                        initAudioContext();
+                        if (!audioCtx) return;
+
+                        const t = audioCtx.currentTime;
+
+                        // Punchy mechanical mouse click
+                        const osc = audioCtx.createOscillator();
+                        const gain = audioCtx.createGain();
+
+                        osc.type = 'triangle';
+                        osc.frequency.setValueAtTime(1600, t);
+                        osc.frequency.exponentialRampToValueAtTime(220, t + 0.035);
+
+                        gain.gain.setValueAtTime(0.5, t);
+                        gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.035);
+
+                        osc.connect(gain);
+                        gain.connect(audioCtx.destination);
+
+                        osc.start(t);
+                        osc.stop(t + 0.035);
+                    } catch (err) {}
+                }
+
+                function playTypingSound() {
+                    try {
+                        initAudioContext();
+                        if (!audioCtx) return;
+
+                        const t = audioCtx.currentTime;
+                        const freq = 2400 + Math.random() * 600;
+
+                        const osc = audioCtx.createOscillator();
+                        const gain = audioCtx.createGain();
+
+                        osc.type = 'sine';
+                        osc.frequency.setValueAtTime(freq, t);
+                        osc.frequency.exponentialRampToValueAtTime(500, t + 0.014);
+
+                        gain.gain.setValueAtTime(0.4, t);
+                        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.014);
+
+                        osc.connect(gain);
+                        gain.connect(audioCtx.destination);
+
+                        osc.start(t);
+                        osc.stop(t + 0.014);
+                    } catch (err) {}
+                }
+
+                // TOP-LEVEL AUDIO UNLOCK LISTENER (Unlocks AudioContext instantly on load)
+                (function() {
+                    const unlock = () => {
+                        initAudioContext();
+                        window.removeEventListener('pointerdown', unlock);
+                        window.removeEventListener('pointermove', unlock);
+                        window.removeEventListener('mousemove', unlock);
+                        window.removeEventListener('touchstart', unlock);
+                        window.removeEventListener('keydown', unlock);
+                        window.removeEventListener('scroll', unlock);
+                    };
+                    window.addEventListener('pointerdown', unlock, { passive: true });
+                    window.addEventListener('pointermove', unlock, { passive: true });
+                    window.addEventListener('mousemove', unlock, { passive: true });
+                    window.addEventListener('touchstart', unlock, { passive: true });
+                    window.addEventListener('keydown', unlock, { passive: true });
+                    window.addEventListener('scroll', unlock, { passive: true });
+                })();
+
+                document.addEventListener('DOMContentLoaded', () => {
+
+                    const interactiveSelector = 'a, button, .skill-logo-btn, .tech-float-card, .project-card, .cert-card, .glass-card, .sphere-card-node, [data-tech]';
+
+                    let currentHoveredContainer = null;
+
+                    document.addEventListener('mouseover', (e) => {
+                        const container = e.target.closest(interactiveSelector);
+                        if (container && container !== currentHoveredContainer) {
+                            currentHoveredContainer = container;
+                            playHoverSound();
+                        }
+                    });
+
+                    document.addEventListener('mouseout', (e) => {
+                        if (!currentHoveredContainer) return;
+                        const related = e.relatedTarget;
+                        if (!related || !currentHoveredContainer.contains(related)) {
+                            currentHoveredContainer = null;
+                        }
+                    });
+
+                    document.addEventListener('click', (e) => {
+                        const target = e.target.closest(interactiveSelector);
+                        if (target) {
+                            playClickSound();
+                        }
+                    });
+                });
+
                 document.addEventListener('DOMContentLoaded', () => {
                     const allTechElements = document.querySelectorAll('.skill-logo-btn, .tech-float-card, [data-tech]');
 
@@ -130,6 +273,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     function positionTooltip(e) {
                         if (!tooltip) return;
+                        if (window.innerWidth <= 768) return;
+
                         const padding = 15;
                         let x = e.clientX;
                         let y = e.clientY - 15;
@@ -151,6 +296,14 @@ document.addEventListener('DOMContentLoaded', () => {
                         tooltip.style.left = `${x}px`;
                         tooltip.style.top = `${y}px`;
                     }
+
+                    document.addEventListener('touchstart', (e) => {
+                        if (window.innerWidth <= 768) {
+                            if (!e.target.closest('.skill-logo-btn, .tech-float-card, [data-tech], #techTooltip')) {
+                                if (tooltip) tooltip.classList.remove('visible');
+                            }
+                        }
+                    }, { passive: true });
 
                     allTechElements.forEach(el => {
                         const name = el.getAttribute('data-tech') || el.getAttribute('title') || '';
@@ -180,28 +333,22 @@ document.addEventListener('DOMContentLoaded', () => {
                         };
 
                         el.addEventListener('mouseenter', (e) => {
+                            if (window.innerWidth <= 768) return;
                             activateTech(e);
                         });
 
                         el.addEventListener('mousemove', (e) => {
+                            if (window.innerWidth <= 768) return;
                             positionTooltip(e);
                         });
 
                         el.addEventListener('mouseleave', () => {
-                            if (tooltip) tooltip.classList.remove('visible');
+                            if (tooltip && window.innerWidth > 768) tooltip.classList.remove('visible');
                         });
 
                         el.addEventListener('click', (e) => {
                             activateTech(e);
                         });
-
-                        el.addEventListener('touchstart', (e) => {
-                            const touch = e.touches[0];
-                            if (touch) {
-                                positionTooltip(touch);
-                            }
-                            activateTech(e);
-                        }, { passive: true });
                     });
                 });
                 document.addEventListener('DOMContentLoaded', () => {
@@ -751,6 +898,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         let letterIndex = 0;
                         const typing = setInterval(() => {
                             loadingName.textContent += name.charAt(letterIndex);
+                            playTypingSound();
                             letterIndex += 1;
                             if (letterIndex === name.length) clearInterval(typing);
                         }, 65);
