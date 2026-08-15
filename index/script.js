@@ -1298,6 +1298,14 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                     ];
 
+                    function isCardLiked(id) {
+                        try {
+                            return localStorage.getItem('liked_gb_' + id) === 'true';
+                        } catch (e) {
+                            return false;
+                        }
+                    }
+
                     function renderGuestbook(entries) {
                         const grid = document.getElementById('guestbookGrid');
                         if (!grid) return;
@@ -1312,6 +1320,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 `<i class="fas fa-star" style="color: ${i < item.rating ? '#D4AF37' : 'rgba(255,255,255,0.2)'}"></i>`
                             ).join('');
                             const initial = (item.name || 'V').charAt(0).toUpperCase();
+                            const liked = isCardLiked(item.id);
 
                             return `
                                 <div class="guestbook-card" data-id="${item.id}">
@@ -1328,7 +1337,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                     </div>
                                     <div class="gb-card-footer">
                                         <span>${item.date}</span>
-                                        <button class="btn-gb-like" onclick="window.likeGuestbookEntry('${item.id}', this)">
+                                        <button class="btn-gb-like ${liked ? 'liked' : ''}" ${liked ? 'disabled' : ''} onclick="window.likeGuestbookEntry('${item.id}', this)">
                                             <i class="fas fa-heart"></i> <span>${item.likes || 0}</span>
                                         </button>
                                     </div>
@@ -1351,8 +1360,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
 
                     window.likeGuestbookEntry = async function(id, btn) {
-                        if (typeof playSelectionTickSound === 'function') playSelectionTickSound();
+                        if (isCardLiked(id)) return;
+                        try {
+                            localStorage.setItem('liked_gb_' + id, 'true');
+                        } catch (e) {}
+
+                        btn.disabled = true;
                         btn.classList.add('liked');
+
+                        if (typeof playSelectionTickSound === 'function') playSelectionTickSound();
                         const countSpan = btn.querySelector('span');
                         if (countSpan) {
                             countSpan.innerText = parseInt(countSpan.innerText || '0') + 1;

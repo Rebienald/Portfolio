@@ -2880,38 +2880,45 @@
     gap: 0.15rem;
 }
 .gb-card-msg {
-    color: #CBD5E1;
-    font-size: 0.88rem;
-    line-height: 1.5;
-    margin-bottom: 1rem;
-    word-break: break-word;
+    color: #FFFFFF !important;
+    font-size: 0.95rem !important;
+    line-height: 1.55 !important;
+    margin-bottom: 1rem !important;
+    word-break: break-word !important;
 }
 .gb-card-footer {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    font-size: 0.75rem;
-    color: #64748B;
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
-    padding-top: 0.65rem;
+    font-size: 0.78rem;
+    color: #94A3B8;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    padding-top: 0.75rem;
 }
 .btn-gb-like {
     background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
     color: #FFFFFF;
     border-radius: 100px;
-    padding: 0.25rem 0.65rem;
-    font-size: 0.75rem;
+    padding: 0.3rem 0.75rem;
+    font-size: 0.8rem;
     cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 0.35rem;
+    gap: 0.4rem;
     transition: all 0.25s ease;
 }
-.btn-gb-like:hover, .btn-gb-like.liked {
-    background: rgba(255, 255, 255, 0.15);
+.btn-gb-like:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.2);
     border-color: #FFFFFF;
     color: #FFFFFF;
+}
+.btn-gb-like.liked, .btn-gb-like:disabled {
+    background: rgba(255, 255, 255, 0.25) !important;
+    border-color: #FFFFFF !important;
+    color: #FFFFFF !important;
+    cursor: default !important;
+    opacity: 0.85;
 }
 
 /* GUESTBOOK MODAL */
@@ -2921,9 +2928,9 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(6, 6, 8, 0.85);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: rgba(6, 6, 8, 0.9);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
     z-index: 999999;
     display: flex;
     align-items: center;
@@ -2938,16 +2945,17 @@
     visibility: visible;
 }
 .guestbook-modal-card {
-    background: #0d0e12;
-    border: 1px solid rgba(255, 255, 255, 0.35);
+    background: #0d0e12 !important;
+    border: 1px solid rgba(255, 255, 255, 0.4) !important;
     border-radius: 20px;
     padding: 1.85rem;
     width: 100%;
-    max-width: 480px;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.95);
+    max-width: 500px;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.98), 0 0 30px rgba(255, 255, 255, 0.1);
     position: relative;
     transform: scale(0.92);
     transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 1000000;
 }
 .guestbook-modal-overlay.active .guestbook-modal-card {
     transform: scale(1);
@@ -2959,9 +2967,9 @@
     background: transparent;
     border: none;
     color: #FFFFFF;
-    font-size: 1.75rem;
+    font-size: 1.85rem;
     cursor: pointer;
-    opacity: 0.7;
+    opacity: 0.8;
     transition: opacity 0.2s;
 }
 .guestbook-modal-close:hover {
@@ -2976,23 +2984,24 @@
 .gb-modal-icon {
     font-size: 1.5rem;
     color: #FFFFFF;
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    width: 46px;
-    height: 46px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    width: 48px;
+    height: 48px;
     border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 .gb-modal-header h3 {
-    color: #FFFFFF;
-    font-size: 1.2rem;
+    color: #FFFFFF !important;
+    font-size: 1.25rem !important;
+    font-weight: 700 !important;
     margin: 0 0 0.2rem 0;
 }
 .gb-modal-header p {
-    color: #94A3B8;
-    font-size: 0.82rem;
+    color: #CBD5E1 !important;
+    font-size: 0.85rem !important;
     margin: 0;
 }
 .gb-form-row {
@@ -3003,33 +3012,39 @@
 .gb-form-group {
     display: flex;
     flex-direction: column;
-    gap: 0.4rem;
+    gap: 0.45rem;
     margin-bottom: 1rem;
 }
 .gb-form-group label {
-    color: #E2E8F0;
-    font-size: 0.82rem;
-    font-weight: 600;
+    color: #FFFFFF !important;
+    font-size: 0.85rem !important;
+    font-weight: 700 !important;
 }
 .gb-form-group input,
 .gb-form-group textarea {
-    background: #060608;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 10px;
-    padding: 0.65rem 0.85rem;
-    color: #FFFFFF;
-    font-size: 0.88rem;
-    outline: none;
-    transition: border-color 0.25s ease;
+    background: #121319 !important;
+    border: 1px solid rgba(255, 255, 255, 0.35) !important;
+    border-radius: 10px !important;
+    padding: 0.75rem 0.9rem !important;
+    color: #FFFFFF !important;
+    font-size: 0.95rem !important;
+    outline: none !important;
+    transition: border-color 0.25s ease !important;
+}
+.gb-form-group input::placeholder,
+.gb-form-group textarea::placeholder {
+    color: #94A3B8 !important;
+    opacity: 0.9 !important;
 }
 .gb-form-group input:focus,
 .gb-form-group textarea:focus {
-    border-color: #FFFFFF;
+    border-color: #FFFFFF !important;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.25) !important;
 }
 .gb-star-rating {
     display: flex;
-    gap: 0.35rem;
-    font-size: 1.35rem;
+    gap: 0.4rem;
+    font-size: 1.5rem;
     color: rgba(255, 255, 255, 0.25);
     cursor: pointer;
 }
@@ -3044,7 +3059,7 @@
     color: #060608;
     border: 1px solid #FFFFFF;
     font-weight: 700;
-    font-size: 0.92rem;
+    font-size: 0.95rem;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -3057,11 +3072,38 @@
     color: #FFFFFF;
     border-color: #FFFFFF;
 }
-@media (max-width: 600px) {
-    .gb-form-row {
-        grid-template-columns: 1fr;
+
+@media (max-width: 768px) {
+    .guestbook-section {
+        padding: 2rem 0 !important;
+    }
+    .guestbook-header-row {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 0.75rem !important;
+    }
+    .btn-guestbook-action {
+        width: 100% !important;
+        justify-content: center !important;
+        padding: 0.75rem 1rem !important;
+        font-size: 0.9rem !important;
     }
     .guestbook-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr !important;
+        gap: 1rem !important;
+    }
+    .guestbook-card {
+        padding: 1.15rem 1.2rem !important;
+    }
+    .guestbook-modal-card {
+        padding: 1.35rem 1.2rem !important;
+        width: 94% !important;
+        max-height: 88vh !important;
+        overflow-y: auto !important;
+        border-radius: 16px !important;
+    }
+    .gb-form-row {
+        grid-template-columns: 1fr !important;
+        gap: 0.5rem !important;
     }
 }
