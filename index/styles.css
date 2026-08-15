@@ -2781,8 +2781,7 @@
 .guestbook-section {
     padding: 3rem 0;
     position: relative;
-    max-width: 900px;
-    margin: 0 auto;
+    width: 100%;
 }
 .guestbook-header-row {
     display: flex;
@@ -2823,16 +2822,18 @@
     transform: translateY(-2px) !important;
 }
 .guestbook-grid {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
     gap: 1.25rem;
     width: 100%;
-    margin-top: 1rem;
+    margin-top: 1.5rem;
+}
+@media (max-width: 1200px) and (min-width: 769px) {
+    .guestbook-grid {
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    }
 }
 .guestbook-card {
-    flex: 1 1 300px;
-    max-width: 400px;
     background: #0d0e12;
     border: 1px solid rgba(255, 255, 255, 0.22);
     border-radius: 16px;
@@ -2842,6 +2843,7 @@
     justify-content: space-between;
     transition: all 0.3s ease;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    width: 100%;
 }
 @media (max-width: 768px) {
     .guestbook-grid {
@@ -2849,6 +2851,7 @@
         flex-wrap: nowrap;
         overflow-x: auto;
         justify-content: flex-start;
+        gap: 1rem;
         scroll-snap-type: x mandatory;
         padding-bottom: 0.75rem;
         -webkit-overflow-scrolling: touch;
@@ -2858,8 +2861,8 @@
         display: none;
     }
     .guestbook-grid .guestbook-card {
-        flex: 0 0 85vw;
-        max-width: 320px;
+        flex: 0 0 82vw;
+        max-width: 300px;
         scroll-snap-align: center;
     }
 }
