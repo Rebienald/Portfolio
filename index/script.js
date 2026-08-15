@@ -844,7 +844,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <div class="sphere-card-sub">${item.sub}</div>
                         `;
 
-                        const selectNode = (item, card, theta) => {
+                        const selectNode = (item, card) => {
                             playSelectionTickSound();
                             document.querySelectorAll('.sphere-card-node').forEach(c => c.classList.remove('active-sphere-node'));
                             card.classList.add('active-sphere-node');
@@ -853,22 +853,16 @@ document.addEventListener('DOMContentLoaded', () => {
                             if (detailsSub) detailsSub.innerText = item.sub;
                             if (detailsTag) detailsTag.innerText = item.tag;
                             if (detailsYear) detailsYear.innerText = item.year;
-
-                            // Smoothly rotate the selected card to front center
-                            const targetRotY = ((Math.PI / 2 - theta) * 180 / Math.PI);
-                            rotY = targetRotY;
-                            velY = 0;
-                            velX = 0;
                         };
 
                         card.addEventListener('click', (e) => {
                             e.stopPropagation();
-                            selectNode(item, card, theta);
+                            selectNode(item, card);
                         });
 
                         card.addEventListener('touchend', (e) => {
                             e.stopPropagation();
-                            selectNode(item, card, theta);
+                            selectNode(item, card);
                         }, { passive: true });
 
                         ball.appendChild(card);
