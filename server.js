@@ -19,6 +19,15 @@ Contact Information:
 Summary:
 IT student at Cavite State University with 5 years of experience building full-stack web applications, mobile applications, Discord bots, and AI-powered systems. Skilled in Java, JavaScript, C#, PHP, and modern web frameworks with a focus on developing practical software that solves real-world problems.
 
+Peer Testimonials & Endorsements (7 Teammates & Collaborators - All Rated 10/10):
+1. Charles (10/10): "Reb is a highly skilled back-end developer, a reliable teammate, and a great friend. He communicates clearly, takes initiative on projects like our Discord bot and website, and always delivers quality work on time."
+2. John (10/10): "Super smooth ng transaction and very easy to talk to. Maayos and mabilis yung service, and very transparent from start to finish. Highly recommended!"
+3. Nuñez (10/10): "Very efficient that makes me strive to be efficient as well."
+4. Jay (10/10): "Contributes majority of the ideas"
+5. Samantha (10/10): "Responsible and hardworking."
+6. Nicole (10/10): "Very productive."
+7. Eldrain (10/10): "Fantastic."
+
 Projects:
 1. PrintHub / Print Portal (June 2026):
 - Description: Web-based print management system featuring PDF submission, print customization, payment verification, and real-time queue tracking.

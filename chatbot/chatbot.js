@@ -270,7 +270,17 @@
 
         infowhiz: `**InfoWhiz** is one of Rebienald's **most challenging and best projects**!
 
-It is an AI-powered gamified learning platform for computer programming that won **Best in Capstone Development** and **Best in System Development** among all SHS ICT students at STI College Bacoor. It features real-time coding assistance, interactive AI feedback, and simulation-based learning.`
+It is an AI-powered gamified learning platform for computer programming that won **Best in Capstone Development** and **Best in System Development** among all SHS ICT students at STI College Bacoor. It features real-time coding assistance, interactive AI feedback, and simulation-based learning.`,
+
+        testimonials: `🌟 **Peer Testimonials & Endorsements (7 Endorsements - 10/10 Rating)**:
+
+1. **Charles** (10/10): *"Reb is a highly skilled back-end developer, a reliable teammate, and a great friend. He communicates clearly, takes initiative on projects like our Discord bot and website, and always delivers quality work on time."*
+2. **John** (10/10): *"Super smooth ng transaction and very easy to talk to. Maayos and mabilis yung service, and very transparent from start to finish. Highly recommended!"*
+3. **Nuñez** (10/10): *"Very efficient that makes me strive to be efficient as well."*
+4. **Jay** (10/10): *"Contributes majority of the ideas"*
+5. **Samantha** (10/10): *"Responsible and hardworking."*
+6. **Nicole** (10/10): *"Very productive."*
+7. **Eldrain** (10/10): *"Fantastic."*`
     };
 
     function getSmartLocalAnswer(query) {
@@ -285,6 +295,9 @@ It is an AI-powered gamified learning platform for computer programming that won
         }
         if (q.includes('infowhiz') || q.includes('info whiz') || q.includes('capstone')) {
             return LOCAL_KNOWLEDGE.infowhiz;
+        }
+        if (q.includes('testimonial') || q.includes('endorse') || q.includes('feedback') || q.includes('review') || q.includes('jay') || q.includes('charles') || q.includes('john') || q.includes('nuñez') || q.includes('samantha') || q.includes('nicole') || q.includes('eldrain')) {
+            return LOCAL_KNOWLEDGE.testimonials;
         }
 
         return null;
