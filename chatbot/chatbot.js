@@ -256,11 +256,17 @@
 
 🏆 **InfoWhiz**: An AI-powered educational gaming platform for computer programming. Won **Best in Capstone Development** and **Best in System Development** among all SHS ICT students at STI College Bacoor!
 
-🚀 **SamAI**: Developed in **July 2026**. A Hello Kitty-themed AI study companion powered by RAG (Retrieval-Augmented Generation), intelligent load balancing, data caching, and multi-LLM processing for PDF tutoring and quiz generation.`,
+🚀 **SamAI**: Developed in **July 2026**. A Hello Kitty-themed AI study companion powered by RAG (Retrieval-Augmented Generation), intelligent load balancing, data caching, multi-LLM orchestration (Gemini & Groq), and PHP 8 PSR-4 architecture with SQLite.`,
 
-        samai: `**SamAI** was developed in **July 2026** and is one of Rebienald's **most challenging and best projects**!
+        samai: `🔒 **SamAI Technical Architecture & System Overview** (Developed in July 2026 - Rebienald's Best & Hardest Project)
 
-It is a Hello Kitty-themed AI study companion powered by Retrieval-Augmented Generation (RAG), intelligent load balancing, data caching, and multi-LLM processing. It extracts text from PDF handouts, generates smart quizzes, and provides interactive AI tutoring.`,
+*Note: Live web access to SamAI is restricted for privacy and security reasons.*
+
+- 🎀 **Concept & Design**: A Hello Kitty-themed, AI-powered study companion and document tutoring web application engineered for interactive PDF analysis, automated quiz generation, and Retrieval-Augmented Generation (RAG) on uploaded learning materials.
+- 💻 **Backend Architecture**: Built on a PHP 8 backend following a structured PSR-4 object-oriented architecture (divided into Controllers, Services, Repositories, and Helpers) hosted on Apache.
+- 🗄️ **Database System**: Utilizes an embedded SQLite database via PDO to persist indexed document text chunks, cached AI summaries, generated quiz banks, and session states.
+- 🧠 **Multi-LLM Orchestration**: Integrates custom API wrappers for both Google Gemini and Groq with an automated key-rotation and rate-limit cooldown mechanism for high availability, token cost optimization, and intelligent model switching.
+- 📄 **Document Extraction Pipeline**: Combines a server-side extraction pipeline leveraging PHP PDF parsers and Tesseract OCR for scanned image documents with client-side JavaScript PDF parsing, feeding into a custom chunking engine and contextual search system for real-time AI tutoring.`,
 
         infowhiz: `**InfoWhiz** is one of Rebienald's **most challenging and best projects**!
 
@@ -401,7 +407,7 @@ It is an AI-powered gamified learning platform for computer programming that won
         });
     }
 
-    window.openChatbotWithMessage = function(projectName) {
+    window.openChatbotWithMessage = function(projectName, isPrivacyRestricted) {
         const tooltip = document.getElementById('techTooltip');
         if (tooltip) tooltip.classList.remove('visible');
 
@@ -411,8 +417,12 @@ It is an AI-powered gamified learning platform for computer programming that won
             windowEl.classList.add('open');
             if (trigger) trigger.classList.add('active');
         }
-        const notice = `💻 **Desktop Required**: In order to view and experience **${projectName}**, you need to be on a PC or Desktop computer for full resolution and interactive capabilities.`;
-        appendMessage('bot', notice);
+        if (isPrivacyRestricted || projectName === 'SamAI') {
+            appendMessage('bot', LOCAL_KNOWLEDGE.samai);
+        } else {
+            const notice = `💻 **Desktop Required**: In order to view and experience **${projectName}**, you need to be on a PC or Desktop computer for full resolution and interactive capabilities.`;
+            appendMessage('bot', notice);
+        }
     };
 
     if (document.readyState === 'loading') {

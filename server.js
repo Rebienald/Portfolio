@@ -23,9 +23,9 @@ Projects:
 1. PrintHub / Print Portal (June 2026):
 - Description: Web-based print management system featuring PDF submission, print customization, payment verification, and real-time queue tracking.
 - Technologies: PHP, MySQL, JavaScript, HTML, CSS.
-2. SamAI (July 2026 - Rebienald's Best & Hardest Project):
-- Description: Rebienald's flagship, best, and hardest project (alongside InfoWhiz). Developed in July 2026. AI-powered document learning platform using Retrieval-Augmented Generation (RAG), intelligent load balancing, data caching, and multi-LLM processing.
-- Features: PDF-based tutoring, automated quiz generation, accurate document retrieval, and efficient AI inference.
+2. SamAI (July 2026 - Rebienald's Best & Hardest Project - Private Architecture):
+- Description: Hello Kitty-themed, AI-powered study companion and document tutoring web application engineered for interactive PDF analysis, automated quiz generation, and Retrieval-Augmented Generation (RAG). Built on a PHP 8 backend following structured PSR-4 OOP architecture (Controllers, Services, Repositories, Helpers) on Apache with embedded SQLite via PDO.
+- Architecture & Features: Multi-LLM orchestration layer integrating custom API wrappers for Google Gemini and Groq with automated key-rotation and rate-limit cooldown mechanisms. Document extraction pipeline combining PHP PDF parsers, Tesseract OCR for scanned documents, and client-side JS PDF parsing feeding a custom chunking engine and contextual search system for real-time tutoring. Live web access restricted for privacy reasons.
 3. InfoWhiz (September 2025 - Rebienald's Best & Hardest Project):
 - Description: Rebienald's flagship, best, and hardest project (alongside SamAI). Won Best in Capstone Development and Best in System Development among all SHS ICT students at STI College Bacoor. An AI-powered gamified learning platform integrating local and cloud LLMs for programming education.
 - Features: Real-time coding assistance, debugging support, simulation-based programming education, and interactive AI-driven feedback. Won Best in Capstone Development and Best in System Development among all SHS ICT students at STI College Bacoor.

@@ -633,24 +633,31 @@ document.addEventListener('DOMContentLoaded', () => {
                     e.preventDefault();
                 });
 
-                // MOBILE PC-ONLY PROJECT INTERCEPTOR (SamAI, TechnoBytes Photobooth, NAS.IO Bot)
+                // PROJECT CLICK INTERCEPTOR (SamAI restricted on PC & Mobile; TechnoBytes & NAS.IO restricted on Mobile)
                 document.addEventListener('DOMContentLoaded', () => {
                     document.addEventListener('click', (e) => {
-                        if (window.innerWidth > 768) return;
-
                         const card = e.target.closest('.project-card');
                         if (!card) return;
 
                         const href = card.getAttribute('href') || '';
                         const text = card.textContent || '';
+                        const privateAttr = card.getAttribute('data-private-project') || '';
+
+                        const isSamAI = href.includes('samai') || text.includes('SamAI') || privateAttr === 'SamAI';
+                        const isMobile = window.innerWidth <= 768;
 
                         let projectName = '';
-                        if (href.includes('samai') || text.includes('SamAI')) {
+                        let isPrivacy = false;
+
+                        if (isSamAI) {
                             projectName = 'SamAI';
-                        } else if (href.includes('TechnoPhotobooth') || text.includes('TechnoBytes Photobooth') || text.includes('Photobooth')) {
-                            projectName = 'TechnoBytes Photobooth';
-                        } else if (href.includes('NasIoPing') || text.includes('NAS.IO Bot') || text.includes('NAS.IO')) {
-                            projectName = 'NAS.IO Bot';
+                            isPrivacy = true;
+                        } else if (isMobile) {
+                            if (href.includes('TechnoPhotobooth') || text.includes('TechnoBytes Photobooth') || text.includes('Photobooth')) {
+                                projectName = 'TechnoBytes Photobooth';
+                            } else if (href.includes('NasIoPing') || text.includes('NAS.IO Bot') || text.includes('NAS.IO')) {
+                                projectName = 'NAS.IO Bot';
+                            }
                         }
 
                         if (projectName) {
@@ -668,19 +675,23 @@ document.addEventListener('DOMContentLoaded', () => {
                             let tooltipHideTimeout = null;
                             if (tooltip) {
                                 if (tooltipName) tooltipName.innerText = projectName;
-                                if (tooltipTag) tooltipTag.innerText = '💻 DESKTOP REQUIRED';
-                                if (tooltipDesc) tooltipDesc.innerText = `In order to view and experience ${projectName}, you need to be on a PC / Desktop computer.`;
-                                if (tooltipIcon) tooltipIcon.innerHTML = '<i class="fas fa-desktop" style="color:var(--accent);"></i>';
+                                if (tooltipTag) tooltipTag.innerText = isPrivacy ? '🔒 PRIVATE SYSTEM' : '💻 DESKTOP REQUIRED';
+                                if (tooltipDesc) tooltipDesc.innerText = isPrivacy
+                                    ? `Live web access to SamAI is restricted for privacy and security. Ask the AI Chatbot for full technical architecture details!`
+                                    : `In order to view and experience ${projectName}, you need to be on a PC / Desktop computer.`;
+                                if (tooltipIcon) tooltipIcon.innerHTML = isPrivacy 
+                                    ? '<i class="fas fa-lock" style="color:var(--accent);"></i>'
+                                    : '<i class="fas fa-desktop" style="color:var(--accent);"></i>';
                                 tooltip.classList.add('visible');
 
                                 if (tooltipHideTimeout) clearTimeout(tooltipHideTimeout);
                                 tooltipHideTimeout = setTimeout(() => {
                                     if (tooltip) tooltip.classList.remove('visible');
-                                }, 2500);
+                                }, 3000);
                             }
 
                             if (typeof window.openChatbotWithMessage === 'function') {
-                                window.openChatbotWithMessage(projectName);
+                                window.openChatbotWithMessage(projectName, isPrivacy);
                             }
                         }
                     }, true);
