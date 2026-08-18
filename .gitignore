@@ -8,3 +8,4 @@ contacts/messages.db
 .DS_Store
 *.log
 .vercel
+.env*
