@@ -47,6 +47,7 @@
         <button id="chatbotTrigger" class="chatbot-trigger" aria-label="Open Chatbot" title="Chat with Rebienald AI">
         <svg class="trigger-icon-open" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
         <svg class="trigger-icon-close" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        <span id="chatbotBadge" class="chatbot-badge" style="display: none;">!</span>
         </button>
 
         <!-- Chatbot Modal Window -->
@@ -206,6 +207,21 @@
         } catch (e) {}
     }
 
+    function showChatbotBadge() {
+        const badge = document.getElementById('chatbotBadge');
+        const windowEl = document.getElementById('chatbotWindow');
+        if (badge && windowEl && !windowEl.classList.contains('open')) {
+            badge.style.display = 'flex';
+        }
+    }
+
+    function clearChatbotBadge() {
+        const badge = document.getElementById('chatbotBadge');
+        if (badge) {
+            badge.style.display = 'none';
+        }
+    }
+
     function appendMessage(sender, content) {
         const messagesArea = document.getElementById('chatMessages');
         if (!messagesArea) return;
@@ -221,6 +237,7 @@
         } else {
             bubbleDiv.innerHTML = parseMarkdown(content);
             playChatbotReplySound();
+            showChatbotBadge();
         }
 
         msgDiv.appendChild(bubbleDiv);
@@ -404,6 +421,7 @@ It is an AI-powered gamified learning platform for computer programming that won
                 } else {
                     windowEl.classList.add('open');
                     trigger.classList.add('active');
+                    clearChatbotBadge();
                     document.getElementById('chatInput')?.focus();
                 }
             });
