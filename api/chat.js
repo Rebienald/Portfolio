@@ -240,7 +240,7 @@ async function queryAI(userMessage, ragContext) {
 
     // Try Groq API first (ultra-fast responses < 500ms)
     if (groqKey) {
-        const groqModels = ["qwen/qwen3.6-27b", "groq/compound"];
+        const groqModels = ["llama-3.3-70b-versatile", "llama3-70b-8192", "mixtral-8x7b-32768", "gemma2-9b-it"];
         for (const model of groqModels) {
             try {
                 const groqUrl = "https://api.groq.com/openai/v1/chat/completions";
@@ -271,7 +271,7 @@ async function queryAI(userMessage, ragContext) {
 
     // Fallback to Gemini API
     if (geminiKey) {
-        const geminiModels = ["gemini-3.6-flash", "gemini-flash-latest", "gemini-3.5-flash"];
+        const geminiModels = ["gemini-1.5-flash", "gemini-1.5-pro"];
         for (const model of geminiModels) {
             try {
                 const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${geminiKey}`;
