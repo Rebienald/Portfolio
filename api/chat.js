@@ -165,16 +165,15 @@ async function getRAGContext(userQuery) {
         try {
             const cleanUrl = supabaseUrl.replace(/\/$/, "");
             const keywords = userQuery.split(/\s+/).filter((w) => w.length > 3);
-            let ilikeFilter = "content=ilike.*InfoWhiz*";
-            if (keywords.length > 0) {
-                ilikeFilter = `content=ilike.*${encodeURIComponent(keywords[0])}*`;
-            }
-
-            const restUrl = `${cleanUrl}/rest/v1/portfolio_documents?select=content&${ilikeFilter}&limit=3`;
             const headers = { apikey: supabaseKey, Authorization: `Bearer ${supabaseKey}` };
 
-            const res = await new Promise((resolve) => {
-                const req = https.get(restUrl, { headers }, (r) => {
+            let searchFilter = "content=ilike.*InfoWhiz*";
+            if (keywords.length > 0) {
+                searchFilter = `content=ilike.*${encodeURIComponent(keywords[0])}*`;
+            }
+
+            const fetchTable = (endpoint) => new Promise((resolve) => {
+                const req = https.get(endpoint, { headers }, (r) => {
                     let data = "";
                     r.on("data", (c) => (data += c));
                     r.on("end", () => {
@@ -192,9 +191,26 @@ async function getRAGContext(userQuery) {
                 });
             });
 
-            if (res.status === 200 && Array.isArray(res.data) && res.data.length > 0) {
-                const chunks = res.data.map((item) => item.content).filter(Boolean);
-                if (chunks.length > 0) return chunks.join("\n\n");
+            // 1. Query separate projects table
+            const projUrl = `${cleanUrl}/rest/v1/portfolio_projects?select=content&${searchFilter}&limit=3`;
+            const projRes = await fetchTable(projUrl);
+
+            // 2. Query separate personal info table
+            const infoUrl = `${cleanUrl}/rest/v1/personal_info?select=content&${searchFilter}&limit=3`;
+            const infoRes = await fetchTable(infoUrl);
+
+            // 3. Fallback to main portfolio_documents table if needed
+            const docsUrl = `${cleanUrl}/rest/v1/portfolio_documents?select=content&${searchFilter}&limit=3`;
+            const docsRes = await fetchTable(docsUrl);
+
+            const allChunks = [
+                ...(Array.isArray(projRes.data) ? projRes.data.map((i) => i.content) : []),
+                ...(Array.isArray(infoRes.data) ? infoRes.data.map((i) => i.content) : []),
+                ...(Array.isArray(docsRes.data) ? docsRes.data.map((i) => i.content) : []),
+            ].filter(Boolean);
+
+            if (allChunks.length > 0) {
+                return allChunks.join("\n\n");
             }
         } catch (err) {
             console.warn("Supabase RAG notice:", err.message);
