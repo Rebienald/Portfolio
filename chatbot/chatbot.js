@@ -344,6 +344,53 @@ It is an AI-powered gamified learning platform for computer programming that won
         return null;
     }
 
+    const conversationHistory = [];
+
+    function updateSuggestionChips(lastQuery, botReply) {
+        const suggestionsContainer = document.querySelector('.chat-suggestions');
+        if (!suggestionsContainer) return;
+
+        const combined = ((lastQuery || '') + ' ' + (botReply || '')).toLowerCase();
+        let chips = [];
+
+        if (combined.includes('infowhiz') || combined.includes('cheesewiz') || combined.includes('codedefuse')) {
+            chips = [
+                { label: '🎮 InfoWhiz Games', query: 'Tell me about the interactive games in InfoWhiz.' },
+                { label: '🤖 SamAI RAG Project', query: 'How does SamAI work and what is its RAG pipeline?' },
+                { label: '📬 Contact Rebienald', query: 'How can I reach out to hire or collaborate with Rebienald?' }
+            ];
+        } else if (combined.includes('samai') || combined.includes('rag') || combined.includes('pdfchunker')) {
+            chips = [
+                { label: '⚡ Multi-LLM Failover', query: 'How does SamAI handle key rotation and rate limits?' },
+                { label: '🏆 InfoWhiz Awards', query: 'What awards did InfoWhiz win at STI College?' },
+                { label: '💼 Tech Skills Matrix', query: 'What backend and database technologies does Rebienald master?' }
+            ];
+        } else if (combined.includes('portping') || combined.includes('sentinel') || combined.includes('supabase')) {
+            chips = [
+                { label: '📜 PrintPortal System', query: 'How does PrintPortal calculate prices and detect color?' },
+                { label: '🌟 Peer Testimonials', query: 'What do teammates and clients say about Rebienald?' },
+                { label: '📬 Hire Rebienald', query: 'How can I get in touch with Rebienald for an opportunity?' }
+            ];
+        } else if (combined.includes('printportal') || combined.includes('pricing') || combined.includes('ghostscript')) {
+            chips = [
+                { label: '📷 TechnoPhotobooth', query: 'What is TechnoBytes Photobooth?' },
+                { label: '☕ Cup Of Story', query: 'Tell me about the Cup Of Story web app.' },
+                { label: '📬 Contact Info', query: 'What are Rebienald\'s contact details?' }
+            ];
+        } else {
+            chips = [
+                { label: '🚀 Flagship Projects', query: 'What are Rebienald\'s top flagship projects?' },
+                { label: '💡 Core Skills', query: 'What are Rebienald\'s key technical skills and expertise?' },
+                { label: '📬 Hire / Contact', query: 'How can I get in touch to collaborate with Rebienald?' }
+            ];
+        }
+
+        suggestionsContainer.innerHTML = chips
+            .map(c => `<button class="suggestion-chip" data-query="${c.query}">${c.label}</button>`)
+            .join('');
+        suggestionsContainer.style.display = 'flex';
+    }
+
     async function handleSendMessage(messageText) {
         const input = document.getElementById('chatInput');
         const sendBtn = document.getElementById('chatSendBtn');
@@ -364,17 +411,18 @@ It is an AI-powered gamified learning platform for computer programming that won
         }
 
         appendMessage('user', query);
+        conversationHistory.push({ role: 'user', content: query });
 
         if (isPromptInjection(query)) {
             showTypingIndicator();
             setTimeout(() => {
                 removeTypingIndicator();
-                appendMessage('bot', "I am designed exclusively to assist with questions regarding Carpio Rebienald Khei's portfolio, skills, projects, and background.");
+                const warning = "I am designed exclusively to assist with questions regarding Carpio Rebienald Khei's portfolio, skills, projects, and background.";
+                appendMessage('bot', warning);
+                conversationHistory.push({ role: 'assistant', content: warning });
             }, 400);
             return;
         }
-
-// All questions sent directly to the live serverless AI backend for conversational responses
 
         if (sendBtn) sendBtn.disabled = true;
         if (input) input.disabled = true;
@@ -382,24 +430,35 @@ It is an AI-powered gamified learning platform for computer programming that won
         showTypingIndicator();
 
         try {
+            const payload = {
+                message: query,
+                history: conversationHistory.slice(-8)
+            };
+
             const response = await fetch(CHAT_BACKEND_URL, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ message: query })
+                body: JSON.stringify(payload)
             });
 
             removeTypingIndicator();
 
             if (response.ok) {
                 const data = await response.json();
-                appendMessage('bot', data.response || "No response received.");
+                const botReply = data.response || "No response received.";
+                appendMessage('bot', botReply);
+                conversationHistory.push({ role: 'assistant', content: botReply });
+                if (conversationHistory.length > 16) {
+                    conversationHistory.splice(0, conversationHistory.length - 16);
+                }
+                updateSuggestionChips(query, botReply);
             } else {
                 appendMessage('bot', "Sorry, unable to process your request at the moment. Please try again.");
             }
         } catch (err) {
-            console.error('Render API error:', err);
+            console.error('Chat API error:', err);
             removeTypingIndicator();
             appendMessage('bot', "Connection issue contacting AI server. Please check your connection.");
         } finally {
@@ -466,9 +525,12 @@ It is an AI-powered gamified learning platform for computer programming that won
         }
         if (isPrivacyRestricted || projectName === 'SamAI') {
             appendMessage('bot', LOCAL_KNOWLEDGE.samai);
+            conversationHistory.push({ role: 'assistant', content: LOCAL_KNOWLEDGE.samai });
+            updateSuggestionChips('samai', LOCAL_KNOWLEDGE.samai);
         } else {
             const notice = `💻 **Desktop Required**: In order to view and experience **${projectName}**, you need to be on a PC or Desktop computer for full resolution and interactive capabilities.`;
             appendMessage('bot', notice);
+            conversationHistory.push({ role: 'assistant', content: notice });
         }
     };
 
