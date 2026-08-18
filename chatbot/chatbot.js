@@ -374,15 +374,7 @@ It is an AI-powered gamified learning platform for computer programming that won
             return;
         }
 
-        const localAnswer = getSmartLocalAnswer(query);
-        if (localAnswer) {
-            showTypingIndicator();
-            setTimeout(() => {
-                removeTypingIndicator();
-                appendMessage('bot', localAnswer);
-            }, 350);
-            return;
-        }
+// All questions sent directly to the live serverless AI backend for conversational responses
 
         if (sendBtn) sendBtn.disabled = true;
         if (input) input.disabled = true;
