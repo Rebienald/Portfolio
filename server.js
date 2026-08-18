@@ -241,7 +241,7 @@ async function queryAI(userMessage, ragContext) {
                     {
                         systemInstruction: { parts: [{ text: systemPrompt }] },
                         contents: [{ parts: [{ text: userMessage }] }],
-                        generationConfig: { temperature: 0.3, maxOutputTokens: 512 },
+                        generationConfig: { temperature: 0.3, maxOutputTokens: 800 },
                     }
                 );
 
