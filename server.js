@@ -8,16 +8,14 @@ const PORT = process.env.PORT || 10000;
 const FALLBACK_KNOWLEDGE = `
 Name: Carpio Rebienald Khei
 Title: Full-Stack Web & Mobile Developer, Software Developer, IT Student
-
-Contact Information:
-- Address: Evangelista St., Talaba IV, Bacoor, Cavite
-- Email: rebkheicarpio@gmail.com
-- Phone: 09628489009
-- Portfolio: https://rebienald.vercel.app/
-- GitHub: https://github.com/rebienalddev/Portfolio
+Address: Evangelista St., Talaba IV, Bacoor, Cavite
+Email: rebkheicarpio@gmail.com
+Phone: 09628489009
+Portfolio: https://rebienald.vercel.app/ (alias: https://rebkhei.vercel.app/)
+GitHub: https://github.com/rebienalddev/Portfolio
 
 Summary:
-IT student at Cavite State University with 5 years of experience building full-stack web applications, mobile applications, Discord bots, and AI-powered systems. Skilled in Java, JavaScript, C#, PHP, and modern web frameworks with a focus on developing practical software that solves real-world problems.
+IT student at Cavite State University with 4+ years of experience building full-stack web applications, mobile applications, Discord bots, and AI-powered systems. Skilled in Java, JavaScript, C#, PHP, Node.js, ASP.NET, .NET MAUI, MySQL, SQLite, MongoDB, and Supabase. Focused on developing practical software that solves real-world problems.
 
 Peer Testimonials & Endorsements (7 Teammates & Collaborators - All Rated 10/10):
 1. Charles (10/10): "Reb is a highly skilled back-end developer, a reliable teammate, and a great friend. He communicates clearly, takes initiative on projects like our Discord bot and website, and always delivers quality work on time."
@@ -28,78 +26,80 @@ Peer Testimonials & Endorsements (7 Teammates & Collaborators - All Rated 10/10)
 6. Nicole (10/10): "Very productive."
 7. Eldrain (10/10): "Fantastic."
 
-Projects & Detailed Technical Architecture:
+Verified Projects & Technical Specifications (Scanned Source Code & Documentation):
 
-1. InfoWhiz (September 2025 - Flagship Award Winner):
-- Description: AI-powered gamified learning platform for computer programming education. Won Best in Capstone Development and Best in System Development among all SHS ICT students at STI College Bacoor.
-- Problem Solved: Eliminates steep learning curves for beginner programmers learning Java, C#, PHP, and JavaScript by providing interactive code execution feedback and instant AI debugging.
-- Full Tech Stack & Implementation Details:
-  * Backend: PHP 8 (MVC structured endpoints), MySQL database for user progress tracking, quiz banks, and achievement logs.
-  * AI Layer: Multi-provider LLM integration (combining local lightweight LLMs and cloud LLM APIs) for syntax error analysis, real-time code debugging hints, and simulation tutoring.
-  * Frontend: Semantic HTML5, Vanilla CSS3 (custom UI styling, responsive layout), JavaScript ES6+ (AJAX code submission, real-time feedback loops).
-  * Web Server: Apache web server via XAMPP / custom hosting stack.
+1. InfoWhiz (September 2025 - Flagship Best Capstone & Best System Award Winner):
+- Overview: AI-powered gamified learning platform for computer programming education. Won Best in Capstone Development and Best in System Development among all SHS ICT students at STI College Bacoor.
+- Core Purpose: Lowers the learning curve for beginner programmers learning Java, C#, PHP, and JavaScript through interactive simulations, automated code review, and live AI tutoring.
+- Technical Architecture:
+  * Backend: PHP 8 (MVC structured endpoints), MySQL database storing user progress, quiz banks, achievements, and code submission logs.
+  * AI Orchestration: Multi-provider LLM integration combining local lightweight models and cloud LLM APIs for syntax error analysis, real-time code debugging hints, and interactive simulation tutoring.
+  * Frontend: Semantic HTML5, Vanilla CSS3 (custom responsive styling), JavaScript ES6+ for AJAX code submission and real-time execution feedback loops.
+  * Web Server: Apache web server via XAMPP / custom hosting.
   * Live URL: https://infowhiz.hstn.me/Pages/index
 
-2. SamAI (July 2026 - Flagship AI System):
-- Description: Hello Kitty-themed, AI-powered study companion and document tutoring web application engineered for interactive PDF analysis, automated quiz generation, and Retrieval-Augmented Generation (RAG).
-- Full Tech Stack & Architecture:
-  * Backend Architecture: PHP 8 structured with strict PSR-4 Object-Oriented Architecture (separated into Controllers, Services, Repositories, and Helpers) running on Apache.
-  * Database & Storage: Embedded SQLite database accessed via PDO (PHP Data Objects) for zero-latency local caching of indexed document text chunks, generated quiz banks, and user session states.
-  * Multi-LLM Orchestration: Custom API wrappers for Google Gemini and Groq with automated API key rotation, rate-limit cooldown management, and model failover.
-  * Document Parsing Pipeline: PHP PDF parsers combined with Tesseract OCR (for scanned PDF documents and image handouts) and client-side JavaScript PDF parsing.
-  * RAG Engine: Custom text chunking algorithm, contextual search index, and automated quiz generation engine (multiple-choice & identification).
-  * Privacy: Private repository & restricted live web deployment for security.
+2. SamAI (June - July 2026 - Flagship AI System):
+- Overview: Hello Kitty-themed, AI-powered study companion and document tutoring web application engineered for interactive PDF analysis, automated quiz generation, and Retrieval-Augmented Generation (RAG).
+- Technical Architecture & Engineering Specs:
+  * Backend Architecture: PHP 8 structured with strict PSR-4 Object-Oriented Architecture (separated into Controllers, Services, Repositories, Models, Core, and Helpers) running on Apache.
+  * Database & Storage: Embedded SQLite database accessed via PDO (PHP Data Objects) for zero-latency local caching of indexed document text chunks, generated quiz banks, and session states.
+  * Composer Packages & Libraries: vlucas/phpdotenv (v5.6), smalot/pdfparser (v2.10 PDF text extraction), setasign/fpdi (v2.6 PDF manipulation), tecnickcom/tcpdf (v6.11 PDF creation), thiagoalessio/tesseract_ocr (v2.13 OCR for scanned document images).
+  * Multi-LLM Orchestration: Custom API wrappers for Google Gemini and Groq with automated key rotation, rate-limit cooldown management, and model failover.
+  * RAG Engine: Custom text chunking algorithm (PDFChunker), SearchService, PromptBuilder, and automated quiz generation engine (multiple-choice & identification).
+  * Status: Private architecture & restricted web access for privacy and security.
 
 3. PortPing / Keep-Alive Sentinel (August 2026 - Formerly Nas.IO / NAS.IO Bot):
-- Description: Automated keep-alive sentinel built to prevent Supabase Cloud PostgreSQL databases from auto-pausing after periods of inactivity.
-- Full Tech Stack & Infrastructure:
-  * Core Script: Node.js HTTP/PostgREST ping client.
-  * Cloud Database: Supabase PostgreSQL cloud database.
-  * Automation Engine: GitHub Actions scheduled workflow (runs cron trigger every 3 to 6 days).
-  * Protocol: HTTPS REST requests querying PostgREST system tables ('/rest/v1/') to maintain active database I/O.
+- Overview: Automated cloud database keep-alive sentinel built to prevent Supabase Cloud PostgreSQL databases from auto-pausing during periods of inactivity.
+- Technical Infrastructure:
+  * Core Script: Node.js HTTP/PostgREST ping client (ping.js).
+  * Automation Engine: GitHub Actions scheduled workflow running automated daily/cron cycles.
+  * Targeted Endpoint: HTTPS REST requests querying PostgREST system tables ('/rest/v1/comments?select=id&limit=1') to maintain active database I/O.
+  * Smart History Inspection: Checks pings.json timestamp log before each cycle to evaluate 24-hour interval compliance.
+  * CLI Flags: node ping.js (daily cycle), node ping.js --force (force immediate ping), node ping.js --loop (continuous local loop).
   * Live URL: https://rebienalddev.github.io/PortPing/
 
-4. PrintHub / Print Portal (June 2026):
-- Description: Web-based print management system featuring document submission, print customization, automated cost calculation, payment verification, and real-time print queue tracking.
-- Full Tech Stack & Implementation:
-  * Backend: PHP 8, MySQL relational database for print jobs, pricing tables, and order statuses.
-  * Document Processing: Client-side & server-side PDF page counter and configuration parser (color vs B&W, paper size, duplex printing).
-  * Frontend: JavaScript ES6+, HTML5, CSS3 responsive grid layout.
-  * Server Environment: Apache web server.
+4. PrintHub / Print Portal (February - June 2026):
+- Overview: Web-based print job submission and management system for campus printing centers featuring automated PDF analysis, dynamic color detection, payment verification, and live queue tracking.
+- Technical Specifications:
+  * Backend & DB: PHP 8, MySQL relational database (print_jobs table storing document_path, paper_size, copies, pages, color_pages, color_type, estimated_price, instructions, payment_mode, proof_of_payment, status).
+  * PDF Analysis Pipeline: Multi-stage fallback page counting via pdfinfo (poppler-utils), qpdf, Ghostscript (gs), and regex structure parsing.
+  * Color Detection Engine: Client-side pixel rendering via PDF.js + server-side Ghostscript rendering analyzed with PHP GD library (>3% color pixel sampling threshold).
+  * Dynamic Pricing Algorithm: ₱3.00/page for B&W, ₱5.00/page for Color. Calculated as (BNW pages * ₱3 + Color pages * ₱5) * Copies.
+  * Admin & Queue: Password-protected admin dashboard (admin.php), 30-second auto-refreshing public queue (queue.php), automated 7-day temp file cleanup, and downloadable PNG receipts (receipt.php via PHP GD).
   * Live URL: https://printportal.hstn.me/
 
 5. TechnoBytes Photobooth (2025 - 2026):
-- Description: Custom web-based photobooth application developed for student organizations during STI College Bacoor Foundation Week.
-- Full Tech Stack & Implementation:
-  * Core APIs: HTML5 MediaDevices API ('navigator.mediaDevices.getUserMedia') for real-time webcam video streaming.
-  * Canvas Engine: HTML5 Canvas API ('HTMLCanvasElement.getContext(2d)') for real-time frame overlay composition, sticker rendering, image filters, and final composite image generation.
+- Overview: Custom web-based photobooth application developed for STI College Bacoor student organization (TechnoBytes) during Foundation Week.
+- Technical Architecture:
+  * Webcam Streaming: HTML5 MediaDevices API ('navigator.mediaDevices.getUserMedia') for real-time video capture.
+  * Composition Engine: HTML5 Canvas API ('HTMLCanvasElement.getContext(2d)') for real-time frame overlay blending, sticker composition, image filters, and composite PNG rendering.
   * Frontend: JavaScript ES6+, HTML5, CSS3 micro-animations.
   * Live URL: https://rebienalddev.github.io/TechnoPhotobooth/
 
 6. Cup Of Story (2025):
-- Description: Modern digital storefront showcasing advanced frontend web design, micro-animations, and responsive asset delivery for a coffee shop.
-- Full Tech Stack & Implementation:
-  * Styling System: Vanilla CSS3 utilizing custom HSL color tokens, CSS Glassmorphism ('backdrop-filter: blur()'), CSS Grid/Flexbox layouts.
-  * Interactivity: JavaScript ES6+ (dynamic shopping cart calculations, modal windows, responsive navigation toggle).
-  * Optimization: WebP image asset optimization, semantic HTML5 structure.
+- Overview: Modern digital storefront showcasing advanced frontend web design, micro-animations, and responsive asset delivery for a coffee and pastry shop.
+- Technical Specifications:
+  * Styling Architecture: Vanilla CSS3 utilizing custom HSL color tokens, Glassmorphism ('backdrop-filter: blur()'), CSS Grid/Flexbox layouts.
+  * Interactivity: JavaScript ES6+ (shopping cart calculations, dynamic modal dialogs, responsive navigation).
+  * Asset Optimization: WebP image formatting, semantic HTML5 structure.
   * Live URL: https://axionbytee.github.io/cupofstory/
 
 7. Club Management System / Club Hub (April 2024):
-- Description: Web platform for managing student organization operations, member directories, and campus event announcements.
-- Full Tech Stack & Implementation:
-  * Backend: PHP, MySQL relational database with Role-Based Access Control (RBAC) for Admins, Club Officers, and Members.
+- Overview: PHP-based web platform for managing student organization operations, member directories, and campus event announcements.
+- Technical Specifications:
+  * Backend & Security: PHP, MySQL relational database with Role-Based Access Control (RBAC) for Admins, Club Officers, and Members.
   * Frontend: HTML5, CSS3, JavaScript ES6+.
   * Live URL: https://spi-announcement-hub.free.nf/
 
 8. Personal Portfolio Website & Serverless RAG AI Assistant (August 2026):
-- Description: High-performance personal portfolio website integrated with a multi-LLM serverless AI assistant.
+- Overview: High-performance personal portfolio website integrated with a multi-LLM serverless AI assistant.
 - Full Tech Stack & Architecture:
   * Frontend: Semantic HTML5, Vanilla CSS3 (custom HSL design system, Glassmorphism, CSS Grid/Flexbox, dynamic micro-interactions), Vanilla JavaScript ES6+. Zero heavy frontend framework dependencies for ultra-fast load times.
   * Serverless Backend: Node.js Vercel Serverless Functions ('/api/chat', '/api/guestbook').
   * AI Orchestration: Multi-LLM failover engine (Google Gemini 3.6 Flash & Groq LLaMA/Qwen) with prompt injection protection and thinking-token sanitization.
   * Database & RAG: Supabase Cloud PostgreSQL with pgvector vector embeddings ('match_documents' RPC) for RAG context retrieval.
   * Infrastructure & Hosting: Vercel serverless hosting paired with GitHub Actions automated CI/CD pipeline.
-  * Live URL: https://rebkhei.vercel.app/
+  * Live URL: https://rebienald.vercel.app/ (alias: https://rebkhei.vercel.app/)
 
 Education:
 - Cavite State University - Imus: Bachelor of Science in Information Technology (2026 - Present) - Status: Active / Ongoing
@@ -107,38 +107,19 @@ Education:
 - Binakayan National High School (2020 - 2024): Computer System Servicing - Status: Completed.
 
 Technical Skills:
-- Programming Languages: Java, JavaScript, C#, PHP
-- Frontend: HTML5, CSS3, Bootstrap, Tailwind CSS, JavaScript (ES6+)
-- Back-End: PHP, C#, Java, Node.js, ASP.NET, .NET MAUI
+- Languages: Java, JavaScript, C#, PHP
+- Front-End: HTML5, CSS3, Tailwind CSS, Bootstrap, JavaScript (ES6+)
+- Back-End: PHP, Node.js, ASP.NET, .NET MAUI, C#, Java
 - Databases: MySQL, MongoDB, SQLite, Supabase (pgvector)
-- IDEs & OS: VS Code, Visual Studio, Cursor, Devin, Android Studio, NetBeans, Ubuntu Linux, Windows 11, Zorin OS
-- Infrastructure & Tools: Git, GitHub, Vercel, AWS, Netlify, Render, XAMPP, InfinityFree, AeonFree
+- Tools & Environments: Git, GitHub, Antigravity CLI, Cursor, Devin, VS Code, Android Studio, Visual Studio, Ubuntu Linux, Windows 11, Zorin OS, Vercel, AWS, Netlify, Render, XAMPP
 
-Key Engagements & Awards:
-- Best in Capstone Project (June 29, 2026) - STI College Bacoor
-- Best in System Development (May 22, 2026) - STI College Bacoor
-- Digital Learning and E-Sports Excellence (2026) - STI College Bacoor
-- Organizational Service Award (2026) - STI College Bacoor
-- G12 Representative - TechnoBytes (2025 - 2026) - STI College Bacoor Student Organization
-- Science Quiz Bee Champion - First Place Academic Science Champion
-- Resource Speaker: TechTalk Ep. 2 (October 20, 2025) - Advanced Web Responsiveness & Deployment Pipelines
-- Resource Speaker: TechTalk Ep. 1 (November 25, 2025) - HTML/CSS Fundamentals & Semantic Structuring
-- 3rd Place Web Development & Design Competition (April 24, 2025) - STI College Bacoor (7-hour contest against college-level participants)
-- CodeFest Tagisan ng Talino (February 28, 2025) - STI College Bacoor (8-hour Mobile App Competition)
-
-Certifications & Verified Credentials:
-- Responsive Web Design (freeCodeCamp - April 29, 2024): 300-hour Developer Certification covering HTML5, CSS3, Flexbox, CSS Grid, and responsive UI design.
-- JS Algorithms & Data Structures (freeCodeCamp - June 29, 2025): 300-hour Developer Certification covering ES6+, OOP, functional programming, data structures, and algorithms.
-- JAVA Certificate (HackerRank - August 2024): Verified technical skill certification covering core Java syntax, OOP principles, arrays, and problem-solving.
-- Legacy Responsive Web Design (freeCodeCamp - 2024): 300-hour Developer Certification in responsive web layout standards.
-- Web Development (Simplilearn - September 15, 2024): Course completion certificate covering full-stack web development principles.
-- Java Programming (Simplilearn - September 13, 2024): Course completion certificate in Java application development and object-oriented programming.
-- CSS Fundamentals (Simplilearn - September 7, 2024): Course completion certificate covering modern CSS styling, selectors, and box model architecture.
-- Front End Dev - CSS (Great Learning - July 2024): Certification in frontend development styling and layout techniques.
-- Front End Dev - HTML (Great Learning - July 2024): Certification in semantic HTML structure and web content layout.
-- TechTalk Episode Two Speaker Certificate (STI College Bacoor - October 25, 2025): Speaker recognition for leading workshop on Advanced Web Responsiveness & Deployment Pipelines.
-- TechTalk Episode One Speaker Certificate (STI College Bacoor - November 20, 2025): Speaker recognition for workshop on HTML/CSS Fundamentals & Semantic Structuring.
-- Web Design Competition 2025 (STI College Bacoor - April 24, 2025): Certificate of participation in the 7-hour web design competition.
+Key Awards & Recognition:
+- Best in Capstone Project - STI College Bacoor
+- Best in System Development - STI College Bacoor
+- Tagisan ng Talino - CodeFest - STI College Bacoor
+- TechTalk Ep. 2 Resource Speaker (Advanced Web Responsiveness & Deployment Pipelines) - STI College Bacoor
+- TechTalk Ep. 1 Resource Speaker (HTML/CSS Fundamentals & Semantic Structuring) - STI College Bacoor
+- 3rd Place Web Development & Design Competition - STI College Bacoor
 `;
 
 function postJSON(urlStr, headers, bodyObj) {
