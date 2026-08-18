@@ -65,9 +65,25 @@
         </div>
         </div>
         </div>
-        <button id="chatCloseBtn" class="chat-close-btn" aria-label="Close Chat">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        <div class="chat-header-actions">
+        <button id="chatExpandBtn" class="chat-header-btn chat-expand-btn" aria-label="Enlarge or restore chat window" title="Enlarge window (or double-click header)">
+        <svg class="icon-maximize" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="15 3 21 3 21 9"></polyline>
+        <polyline points="9 21 3 21 3 15"></polyline>
+        <line x1="21" y1="3" x2="14" y2="10"></line>
+        <line x1="3" y1="21" x2="10" y2="14"></line>
+        </svg>
+        <svg class="icon-minimize" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+        <polyline points="4 14 10 14 10 20"></polyline>
+        <polyline points="20 10 14 10 14 4"></polyline>
+        <line x1="14" y1="10" x2="21" y2="3"></line>
+        <line x1="10" y1="14" x2="3" y2="21"></line>
+        </svg>
         </button>
+        <button id="chatCloseBtn" class="chat-header-btn chat-close-btn" aria-label="Close Chat" title="Close Chat">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+        </div>
         </div>
 
         <div id="chatMessages" class="chat-messages">
@@ -470,10 +486,43 @@ It is an AI-powered gamified learning platform for computer programming that won
         }
     }
 
+    function toggleExpandChatbot(forceState) {
+        const windowEl = document.getElementById('chatbotWindow');
+        const expandBtn = document.getElementById('chatExpandBtn');
+        if (!windowEl) return;
+
+        const isCurrentlyExpanded = windowEl.classList.contains('expanded');
+        const nextExpanded = typeof forceState === 'boolean' ? forceState : !isCurrentlyExpanded;
+
+        if (nextExpanded) {
+            windowEl.classList.add('expanded');
+            try { localStorage.setItem('reb_chatbot_expanded', 'true'); } catch (e) {}
+            if (expandBtn) {
+                expandBtn.setAttribute('title', 'Restore normal size (or double-click header)');
+                const maxIcon = expandBtn.querySelector('.icon-maximize');
+                const minIcon = expandBtn.querySelector('.icon-minimize');
+                if (maxIcon) maxIcon.style.display = 'none';
+                if (minIcon) minIcon.style.display = 'block';
+            }
+        } else {
+            windowEl.classList.remove('expanded');
+            try { localStorage.setItem('reb_chatbot_expanded', 'false'); } catch (e) {}
+            if (expandBtn) {
+                expandBtn.setAttribute('title', 'Enlarge window (or double-click header)');
+                const maxIcon = expandBtn.querySelector('.icon-maximize');
+                const minIcon = expandBtn.querySelector('.icon-minimize');
+                if (maxIcon) maxIcon.style.display = 'block';
+                if (minIcon) minIcon.style.display = 'none';
+            }
+        }
+    }
+
     function attachEventListeners() {
         const trigger = document.getElementById('chatbotTrigger');
         const windowEl = document.getElementById('chatbotWindow');
         const closeBtn = document.getElementById('chatCloseBtn');
+        const expandBtn = document.getElementById('chatExpandBtn');
+        const headerEl = document.querySelector('.chat-header');
         const form = document.getElementById('chatInputForm');
 
         if (trigger && windowEl) {
@@ -497,6 +546,36 @@ It is an AI-powered gamified learning platform for computer programming that won
                 trigger.classList.remove('active');
             });
         }
+
+        if (expandBtn) {
+            expandBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                toggleExpandChatbot();
+            });
+        }
+
+        if (headerEl) {
+            headerEl.addEventListener('dblclick', (e) => {
+                if (e.target.closest('button')) return;
+                if (window.innerWidth >= 600) {
+                    toggleExpandChatbot();
+                }
+            });
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && windowEl && windowEl.classList.contains('open')) {
+                windowEl.classList.remove('open');
+                trigger?.classList.remove('active');
+            }
+        });
+
+        // Restore previously saved size preference on desktop screens
+        try {
+            if (window.innerWidth >= 600 && localStorage.getItem('reb_chatbot_expanded') === 'true') {
+                toggleExpandChatbot(true);
+            }
+        } catch (e) {}
 
         if (form) {
             form.addEventListener('submit', (e) => {
