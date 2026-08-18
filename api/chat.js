@@ -26,9 +26,14 @@ Verified Projects & Technical Specifications (Scanned Source Code & Documentatio
 1. InfoWhiz (September 2025 - Flagship Best Capstone & Best System Award Winner):
 - Overview: AI-powered gamified learning platform for computer programming education. Won Best in Capstone Development and Best in System Development among all SHS ICT students at STI College Bacoor.
 - Core Purpose: Lowers the learning curve for beginner programmers learning Java, C#, PHP, and JavaScript through interactive simulations, automated code review, and live AI tutoring.
-- Technical Architecture:
+- Technical Architecture & Modules:
   * Backend: PHP 8 (MVC structured endpoints), MySQL database storing user progress, quiz banks, achievements, and code submission logs.
-  * AI Orchestration: Multi-provider LLM integration combining local lightweight models and cloud LLM APIs for syntax error analysis, real-time code debugging hints, and interactive simulation tutoring.
+  * Interactive Coding Games: CheeseWhiz (Games/CheeseWhiz.php, GameScripts/CheeseWhiz.js - logic & maze puzzle mechanics), CodeDefuse (Games/CodeDefuse.php, GameScripts/CodeDefuse.js - timed bug fixing challenge), CodeQuest (Games/CodeQuest.php - client contract quests).
+  * Built-in IDE & Sandbox (Pages/IDE.php): In-browser code editing with instant AJAX execution feedback.
+  * AI Chatbot Assistant (Pages/ChatBot.php): Real-time AI debugging tutor providing targeted hints and explanations.
+  * Learning Modules (Pages/ModulePage.php): Comprehensive modules for Java, C#, PHP, and JavaScript.
+  * Progress & Time Tracking (Pages/ProgressPage.php, Functions/track_time.php): Logs time spent, module completion, and quiz scores.
+  * Admin Dashboard (Pages/AdminPage.php, Pages/admin_handler.php, Pages/edit_user.php): User management and learning progress analytics.
   * Frontend: Semantic HTML5, Vanilla CSS3 (custom responsive styling), JavaScript ES6+ for AJAX code submission and real-time execution feedback loops.
   * Web Server: Apache web server via XAMPP / custom hosting.
   * Live URL: https://infowhiz.hstn.me/Pages/index
@@ -37,30 +42,30 @@ Verified Projects & Technical Specifications (Scanned Source Code & Documentatio
 - Overview: Hello Kitty-themed, AI-powered study companion and document tutoring web application engineered for interactive PDF analysis, automated quiz generation, and Retrieval-Augmented Generation (RAG).
 - Technical Architecture & Engineering Specs:
   * Backend Architecture: PHP 8 structured with strict PSR-4 Object-Oriented Architecture (separated into Controllers, Services, Repositories, Models, Core, and Helpers) running on Apache.
-  * Database & Storage: Embedded SQLite database accessed via PDO (PHP Data Objects) for zero-latency local caching of indexed document text chunks, generated quiz banks, and session states.
+  * Database & Storage: Embedded SQLite database (Server_env.php/samai.sqlite) accessed via PDO (PHP Data Objects) for zero-latency local caching of indexed document text chunks, generated quiz banks, and session states.
   * Composer Packages & Libraries: vlucas/phpdotenv (v5.6), smalot/pdfparser (v2.10 PDF text extraction), setasign/fpdi (v2.6 PDF manipulation), tecnickcom/tcpdf (v6.11 PDF creation), thiagoalessio/tesseract_ocr (v2.13 OCR for scanned document images).
-  * Multi-LLM Orchestration: Custom API wrappers for Google Gemini and Groq with automated key rotation, rate-limit cooldown management, and model failover.
-  * RAG Engine: Custom text chunking algorithm (PDFChunker), SearchService, PromptBuilder, and automated quiz generation engine (multiple-choice & identification).
+  * Multi-LLM Orchestration: Custom API wrappers for Google Gemini (src/Helpers/GeminiClient.php) and Groq (src/Helpers/GroqClient.php) with automated key rotation, rate-limit cooldown management (Server_env.php/key_cooldowns.json), and model failover.
+  * RAG Engine: Custom text chunking algorithm (PDFChunker - min 300 words, target 500 words, max 700 words), SearchService (SQLite FTS5 full-text search with BM25 ranking), PromptBuilder, and automated quiz generation engine (multiple-choice & identification).
   * Status: Private architecture & restricted web access for privacy and security.
 
 3. PortPing / Keep-Alive Sentinel (August 2026 - Formerly Nas.IO / NAS.IO Bot):
 - Overview: Automated cloud database keep-alive sentinel built to prevent Supabase Cloud PostgreSQL databases from auto-pausing during periods of inactivity.
 - Technical Infrastructure:
   * Core Script: Node.js HTTP/PostgREST ping client (ping.js).
-  * Automation Engine: GitHub Actions scheduled workflow running automated daily/cron cycles.
+  * Automation Engine: GitHub Actions scheduled workflow running automated daily/cron cycles (.github/workflows/main.yml).
   * Targeted Endpoint: HTTPS REST requests querying PostgREST system tables ('/rest/v1/comments?select=id&limit=1') to maintain active database I/O.
   * Smart History Inspection: Checks pings.json timestamp log before each cycle to evaluate 24-hour interval compliance.
   * CLI Flags: node ping.js (daily cycle), node ping.js --force (force immediate ping), node ping.js --loop (continuous local loop).
   * Live URL: https://rebienalddev.github.io/PortPing/
 
-4. PrintHub / Print Portal (February - June 2026):
+4. PrintHub / Print Portal / PrintPortal (February - June 2026):
 - Overview: Web-based print job submission and management system for campus printing centers featuring automated PDF analysis, dynamic color detection, payment verification, and live queue tracking.
 - Technical Specifications:
-  * Backend & DB: PHP 8, MySQL relational database (print_jobs table storing document_path, paper_size, copies, pages, color_pages, color_type, estimated_price, instructions, payment_mode, proof_of_payment, status).
+  * Backend & DB: PHP 8, MySQL relational database (print_jobs table storing document_path, paper_size, copies, pages, color_pages, color_type, estimated_price, instructions, payment_mode, proof_of_payment, status, submission_date, is_archived).
   * PDF Analysis Pipeline: Multi-stage fallback page counting via pdfinfo (poppler-utils), qpdf, Ghostscript (gs), and regex structure parsing.
   * Color Detection Engine: Client-side pixel rendering via PDF.js + server-side Ghostscript rendering analyzed with PHP GD library (>3% color pixel sampling threshold).
-  * Dynamic Pricing Algorithm: ₱3.00/page for B&W, ₱5.00/page for Color. Calculated as (BNW pages * ₱3 + Color pages * ₱5) * Copies.
-  * Admin & Queue: Password-protected admin dashboard (admin.php), 30-second auto-refreshing public queue (queue.php), automated 7-day temp file cleanup, and downloadable PNG receipts (receipt.php via PHP GD).
+  * Dynamic Pricing Algorithm: ₱3.00/page for B&W, ₱5.00/page for Color. Calculated as (BNW pages * ₱3.00 + Color pages * ₱5.00) * Copies.
+  * Admin & Queue: Password-protected admin dashboard (admin.php), 30-second auto-refreshing public queue (queue.php), automated 7-day temp file cleanup (uploads/ and payment/), and downloadable PNG receipts (receipt.php via PHP GD).
   * Live URL: https://printportal.hstn.me/
 
 5. TechnoBytes Photobooth (2025 - 2026):
@@ -79,11 +84,14 @@ Verified Projects & Technical Specifications (Scanned Source Code & Documentatio
   * Asset Optimization: WebP image formatting, semantic HTML5 structure.
   * Live URL: https://axionbytee.github.io/cupofstory/
 
-7. Club Management System / Club Hub (April 2024):
+7. Club Management System / Club Hub / ClubHub (April 2024):
 - Overview: PHP-based web platform for managing student organization operations, member directories, and campus event announcements.
 - Technical Specifications:
-  * Backend & Security: PHP, MySQL relational database with Role-Based Access Control (RBAC) for Admins, Club Officers, and Members.
-  * Frontend: HTML5, CSS3, JavaScript ES6+.
+  * Role-Based Access Control (RBAC): Admin Dashboard (view/admin.php - approve/reject user registration, ticket management), Student Portal (view/student.php), Parent Portal (view/parent.php).
+  * Student Clubs: Journalism (club/journ.php), Math (club/math.php), Science (club/science.php), Sports (club/sports.php), Teatro / Theater (club/teatro.php).
+  * Announcements & Events: actions/add_announcement.php, actions/add_event.php, actions/delete_announcement.php, actions/delete_event.php.
+  * Backend & Security: PHP, MySQL relational database (db.php, connection.php, config.php).
+  * Frontend: HTML5, CSS3 (admin-style.css), JavaScript ES6+.
   * Live URL: https://spi-announcement-hub.free.nf/
 
 8. Personal Portfolio Website & Serverless RAG AI Assistant (August 2026):
@@ -92,7 +100,7 @@ Verified Projects & Technical Specifications (Scanned Source Code & Documentatio
   * Frontend: Semantic HTML5, Vanilla CSS3 (custom HSL design system, Glassmorphism, CSS Grid/Flexbox, dynamic micro-interactions), Vanilla JavaScript ES6+. Zero heavy frontend framework dependencies for ultra-fast load times.
   * Serverless Backend: Node.js Vercel Serverless Functions ('/api/chat', '/api/guestbook').
   * AI Orchestration: Multi-LLM failover engine (Google Gemini 3.6 Flash & Groq LLaMA/Qwen) with prompt injection protection and thinking-token sanitization.
-  * Database & RAG: Supabase Cloud PostgreSQL with pgvector vector embeddings ('match_documents' RPC) for RAG context retrieval.
+  * Database & RAG: Supabase Cloud PostgreSQL with portfolio_documents and portfolio_projects tables, keyword-assisted multi-table retrieval, and pgvector schema compatibility.
   * Infrastructure & Hosting: Vercel serverless hosting paired with GitHub Actions automated CI/CD pipeline.
   * Live URL: https://rebienald.vercel.app/ (alias: https://rebkhei.vercel.app/)
 
@@ -116,6 +124,58 @@ Key Awards & Recognition:
 - TechTalk Ep. 1 Resource Speaker (HTML/CSS Fundamentals & Semantic Structuring) - STI College Bacoor
 - 3rd Place Web Development & Design Competition - STI College Bacoor
 `;
+
+const STOPWORDS = new Set([
+    "what", "tell", "about", "your", "with", "from", "show", "help", "does", "have", "make",
+    "this", "that", "more", "some", "like", "know", "when", "where", "which", "could", "would",
+    "please", "describe", "explain", "give", "project", "details", "built", "the", "and", "for",
+    "are", "was", "were", "been", "being", "how", "who", "whom", "why", "his", "her", "their",
+    "its", "can", "will", "just", "any", "all", "each", "you", "they", "them", "our", "is"
+]);
+
+const ALIAS_MAP = {
+    "infowhiz": ["InfoWhiz", "CheeseWhiz", "CodeDefuse", "CodeQuest"],
+    "whiz": ["InfoWhiz", "CheeseWhiz"],
+    "samai": ["SamAI", "PDFChunker", "SearchService"],
+    "sam": ["SamAI"],
+    "portping": ["PortPing", "Sentinel", "Nas.IO", "ping.js"],
+    "ping": ["PortPing", "Sentinel"],
+    "nas": ["Nas.IO", "PortPing"],
+    "printportal": ["PrintPortal", "PrintHub", "print_jobs"],
+    "printhub": ["PrintPortal", "PrintHub"],
+    "printer": ["PrintPortal", "PrintHub"],
+    "printing": ["PrintPortal", "PrintHub"],
+    "technobytes": ["TechnoBytes", "Photobooth"],
+    "photobooth": ["TechnoBytes", "Photobooth"],
+    "cupofstory": ["Cup Of Story", "cupofstory"],
+    "cup": ["Cup Of Story"],
+    "story": ["Cup Of Story"],
+    "clubhub": ["ClubHub", "Club Hub", "Club Management System"],
+    "club": ["ClubHub", "Club Management System"],
+    "portfolio": ["Portfolio", "Serverless RAG"],
+    "skills": ["Technical Skills", "Languages"],
+    "education": ["Cavite State University", "STI College"],
+    "awards": ["Best in Capstone", "Best in System Development"],
+    "testimonials": ["Peer Testimonials", "Charles", "John"]
+};
+
+function extractSearchTerms(userQuery) {
+    const clean = String(userQuery || "").toLowerCase().replace(/[^a-z0-9\s]/g, " ");
+    const words = clean.split(/\s+/).filter((w) => w.length > 2 && !STOPWORDS.has(w));
+    const terms = new Set();
+
+    // Add mapped aliases first (highest specificity)
+    for (const w of words) {
+        if (ALIAS_MAP[w]) {
+            ALIAS_MAP[w].forEach((alias) => terms.add(alias));
+        }
+    }
+    // Then add raw keywords
+    for (const w of words) {
+        terms.add(w);
+    }
+    return Array.from(terms);
+}
 
 function postJSON(urlStr, headers, bodyObj) {
     return new Promise((resolve, reject) => {
@@ -164,13 +224,11 @@ async function getRAGContext(userQuery) {
     if (supabaseUrl && supabaseKey) {
         try {
             const cleanUrl = supabaseUrl.replace(/\/$/, "");
-            const keywords = userQuery.split(/\s+/).filter((w) => w.length > 3);
+            const terms = extractSearchTerms(userQuery);
             const headers = { apikey: supabaseKey, Authorization: `Bearer ${supabaseKey}` };
 
-            let searchFilter = "content=ilike.*InfoWhiz*";
-            if (keywords.length > 0) {
-                searchFilter = `content=ilike.*${encodeURIComponent(keywords[0])}*`;
-            }
+            const orFilters = terms.slice(0, 6).map((t) => `content.ilike.*${encodeURIComponent(t)}*`).join(",");
+            const filterQuery = orFilters ? `or=(${orFilters})` : `content=ilike.*InfoWhiz*`;
 
             const fetchTable = (endpoint) => new Promise((resolve) => {
                 const req = https.get(endpoint, { headers }, (r) => {
@@ -191,17 +249,11 @@ async function getRAGContext(userQuery) {
                 });
             });
 
-            // 1. Query separate projects table
-            const projUrl = `${cleanUrl}/rest/v1/portfolio_projects?select=content&${searchFilter}&limit=3`;
-            const projRes = await fetchTable(projUrl);
-
-            // 2. Query separate personal info table
-            const infoUrl = `${cleanUrl}/rest/v1/personal_info?select=content&${searchFilter}&limit=3`;
-            const infoRes = await fetchTable(infoUrl);
-
-            // 3. Fallback to main portfolio_documents table if needed
-            const docsUrl = `${cleanUrl}/rest/v1/portfolio_documents?select=content&${searchFilter}&limit=3`;
-            const docsRes = await fetchTable(docsUrl);
+            const [projRes, infoRes, docsRes] = await Promise.all([
+                fetchTable(`${cleanUrl}/rest/v1/portfolio_projects?select=content&${filterQuery}&limit=4`),
+                fetchTable(`${cleanUrl}/rest/v1/personal_info?select=content&${filterQuery}&limit=4`),
+                fetchTable(`${cleanUrl}/rest/v1/portfolio_documents?select=content&${filterQuery}&limit=4`)
+            ]);
 
             const allChunks = [
                 ...(Array.isArray(projRes.data) ? projRes.data.map((i) => i.content) : []),
@@ -209,8 +261,9 @@ async function getRAGContext(userQuery) {
                 ...(Array.isArray(docsRes.data) ? docsRes.data.map((i) => i.content) : []),
             ].filter(Boolean);
 
-            if (allChunks.length > 0) {
-                return allChunks.join("\n\n");
+            const uniqueChunks = [...new Set(allChunks)];
+            if (uniqueChunks.length > 0) {
+                return uniqueChunks.join("\n\n");
             }
         } catch (err) {
             console.warn("Supabase RAG notice:", err.message);
