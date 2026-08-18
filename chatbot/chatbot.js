@@ -1,5 +1,5 @@
 (function () {
-    const RENDER_BACKEND_URL = 'https://portfolio-frk8.onrender.com/api/chat';
+    const CHAT_BACKEND_URL = '/api/chat';
 
     const MAX_MESSAGES_PER_WINDOW = 8;
     const RATE_LIMIT_WINDOW_MS = 60000;
@@ -280,7 +280,15 @@ It is an AI-powered gamified learning platform for computer programming that won
 4. **Engr. Jay** (10/10): *"Contributes majority of the ideas"*
 5. **Samantha** (10/10): *"Responsible and hardworking."*
 6. **Nicole** (10/10): *"Very productive."*
-7. **Eldrain** (10/10): *"Fantastic."*`
+7. **Eldrain** (10/10): *"Fantastic."*`,
+
+        portping: `⚡ **PortPing (Keep-Alive Sentinel & Automated Ping Service)**:
+
+*(Formerly known as **Nas.IO** / **NAS.IO Bot**)*
+
+- 📡 **Description**: PortPing is an automated keep-alive sentinel built with Node.js and GitHub Actions. It sends scheduled PostgREST queries to PostgreSQL / Supabase Cloud DB to prevent project auto-pausing and maintain data layer availability for the Portfolio.
+- 🛠️ **Technologies**: Node.js, Supabase, PostgreSQL, GitHub Actions, PostgREST.
+- 🔗 **Live Project**: [https://rebienalddev.github.io/PortPing/](https://rebienalddev.github.io/PortPing/)`
     };
 
     function getSmartLocalAnswer(query) {
@@ -295,6 +303,9 @@ It is an AI-powered gamified learning platform for computer programming that won
         }
         if (q.includes('infowhiz') || q.includes('info whiz') || q.includes('capstone')) {
             return LOCAL_KNOWLEDGE.infowhiz;
+        }
+        if (q.includes('portping') || q.includes('port ping') || q.includes('nas.io') || q.includes('nas io') || q.includes('nasio') || q.includes('keep-alive') || q.includes('sentinel')) {
+            return LOCAL_KNOWLEDGE.portping;
         }
         if (q.includes('testimonial') || q.includes('endorse') || q.includes('feedback') || q.includes('review') || q.includes('jay') || q.includes('charles') || q.includes('john') || q.includes('nuñez') || q.includes('samantha') || q.includes('nicole') || q.includes('eldrain')) {
             return LOCAL_KNOWLEDGE.testimonials;
@@ -349,7 +360,7 @@ It is an AI-powered gamified learning platform for computer programming that won
         showTypingIndicator();
 
         try {
-            const response = await fetch(RENDER_BACKEND_URL, {
+            const response = await fetch(CHAT_BACKEND_URL, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

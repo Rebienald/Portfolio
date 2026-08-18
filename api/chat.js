@@ -1,9 +1,4 @@
-const http = require("http");
-const fs = require("fs");
-const path = require("path");
 const https = require("https");
-
-const PORT = process.env.PORT || 10000;
 
 const FALLBACK_KNOWLEDGE = `
 Name: Carpio Rebienald Khei
@@ -179,303 +174,102 @@ async function queryAI(userMessage, ragContext) {
     4. Use short subheadings (### Title) to break up sections cleanly when answering longer questions.
     5. Provide concise answers without unnecessary fluff or huge text blocks.
     6. If asked about contacting Rebienald, share email: rebkheicarpio@gmail.com and phone: 09628489009.
+    7. If asked about PortPing or Nas.IO / NAS.IO Bot, clarify that PortPing (formerly Nas.IO) is an automated Supabase Cloud Database keep-alive sentinel built with Node.js and GitHub Actions.
     `;
 
     if (geminiKey) {
-        try {
-            const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${geminiKey}`;
-            const res = await postJSON(
-                geminiUrl,
-                {},
-                {
-                    systemInstruction: { parts: [{ text: systemPrompt }] },
-                    contents: [{ parts: [{ text: userMessage }] }],
-                    generationConfig: { temperature: 0.3, maxOutputTokens: 512 },
-                }
-            );
+        const geminiModels = ["gemini-2.5-flash", "gemini-flash-latest", "gemini-3.6-flash"];
+        for (const model of geminiModels) {
+            try {
+                const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${geminiKey}`;
+                const res = await postJSON(
+                    geminiUrl,
+                    {},
+                    {
+                        systemInstruction: { parts: [{ text: systemPrompt }] },
+                        contents: [{ parts: [{ text: userMessage }] }],
+                        generationConfig: { temperature: 0.3, maxOutputTokens: 512 },
+                    }
+                );
 
-            if (res.status === 200 && res.data?.candidates?.[0]?.content?.parts?.[0]?.text) {
-                return res.data.candidates[0].content.parts[0].text;
+                if (res.status === 200 && res.data?.candidates?.[0]?.content?.parts?.[0]?.text) {
+                    return res.data.candidates[0].content.parts[0].text;
+                }
+            } catch (err) {
+                console.warn(`Gemini model ${model} error:`, err.message);
             }
-        } catch (err) {
-            console.warn("Gemini API error, falling back to Groq:", err.message);
         }
     }
 
     if (groqKey) {
-        try {
-            const groqUrl = "https://api.groq.com/openai/v1/chat/completions";
-            const res = await postJSON(
-                groqUrl,
-                { Authorization: `Bearer ${groqKey}`, "User-Agent": "Portfolio-AI-Backend/1.0" },
-                {
-                    model: "llama-3.3-70b-versatile",
-                    messages: [
-                        { role: "system", content: systemPrompt },
-                        { role: "user", content: userMessage },
-                    ],
-                    temperature: 0.3,
-                    max_tokens: 512,
-                }
-            );
+        const groqModels = ["qwen/qwen3.6-27b", "groq/compound"];
+        for (const model of groqModels) {
+            try {
+                const groqUrl = "https://api.groq.com/openai/v1/chat/completions";
+                const res = await postJSON(
+                    groqUrl,
+                    { Authorization: `Bearer ${groqKey}`, "User-Agent": "Portfolio-AI-Backend/1.0" },
+                    {
+                        model: model,
+                        messages: [
+                            { role: "system", content: systemPrompt },
+                            { role: "user", content: userMessage },
+                        ],
+                        temperature: 0.3,
+                        max_tokens: 512,
+                    }
+                );
 
-            if (res.status === 200 && res.data?.choices?.[0]?.message?.content) {
-                return res.data.choices[0].message.content;
+                if (res.status === 200 && res.data?.choices?.[0]?.message?.content) {
+                    return res.data.choices[0].message.content;
+                }
+            } catch (err) {
+                console.error(`Groq API model ${model} error:`, err.message);
             }
-        } catch (err) {
-            console.error("Groq API error:", err.message);
         }
     }
 
     return "Sorry, unable to generate a response at the moment. Please try again.";
 }
 
-http.createServer(async (req, res) => {
+module.exports = async function handler(req, res) {
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
     res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
     if (req.method === "OPTIONS") {
-        res.writeHead(200);
-        return res.end();
+        return res.status(200).end();
     }
 
-    // GUESTBOOK STORAGE & SUPABASE CLOUD DB ENDPOINTS
-    const GUESTBOOK_DIR = path.join(__dirname, "data");
-    const GUESTBOOK_FILE = path.join(GUESTBOOK_DIR, "guestbook.json");
-    const SUPABASE_GB_URL = "https://ngjckggjadtoevbnhjhi.supabase.co/rest/v1/comments";
-    const SUPABASE_GB_KEY = "sb_publishable_zFd8VxxbMxpu7wFblnC36w_8Np8JVVf";
-
-    const DEFAULT_GUESTBOOK = [
-        {
-            id: "gb_reb_1",
-            name: "Reb",
-            role: "Developer",
-            rating: 5,
-            message: "Try leaving a note!",
-            date: "Aug 16, 2026",
-            likes: 0
-        }
-    ];
-
-    function getGuestbookData() {
-        try {
-            if (!fs.existsSync(GUESTBOOK_DIR)) fs.mkdirSync(GUESTBOOK_DIR, { recursive: true });
-            if (!fs.existsSync(GUESTBOOK_FILE)) {
-                fs.writeFileSync(GUESTBOOK_FILE, JSON.stringify(DEFAULT_GUESTBOOK, null, 2), "utf8");
-                return DEFAULT_GUESTBOOK;
-            }
-            const raw = fs.readFileSync(GUESTBOOK_FILE, "utf8");
-            return JSON.parse(raw || "[]");
-        } catch (err) {
-            return DEFAULT_GUESTBOOK;
-        }
+    if (req.method !== "POST") {
+        return res.status(405).json({ error: "Method not allowed" });
     }
 
-    function saveGuestbookData(data) {
-        try {
-            if (!fs.existsSync(GUESTBOOK_DIR)) fs.mkdirSync(GUESTBOOK_DIR, { recursive: true });
-            fs.writeFileSync(GUESTBOOK_FILE, JSON.stringify(data, null, 2), "utf8");
-        } catch (err) {}
-    }
-
-    function sanitizeInput(str) {
-        if (!str) return "";
-        return String(str)
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#039;");
-    }
-
-    if (req.url === "/api/guestbook" && req.method === "GET") {
-        try {
-            const reqClient = https.get(`${SUPABASE_GB_URL}?select=*&order=id.desc`, {
-                headers: {
-                    "apikey": SUPABASE_GB_KEY,
-                    "Authorization": `Bearer ${SUPABASE_GB_KEY}`
-                }
-            }, (sbRes) => {
-                let sbData = "";
-                sbRes.on("data", (chunk) => sbData += chunk);
-                sbRes.on("end", () => {
-                    try {
-                        const parsed = JSON.parse(sbData);
-                        if (Array.isArray(parsed) && parsed.length > 0) {
-                            res.writeHead(200, { "Content-Type": "application/json" });
-                            return res.end(JSON.stringify({ status: "success", entries: parsed, source: "supabase" }));
-                        }
-                    } catch (e) {}
-                    const entries = getGuestbookData();
-                    res.writeHead(200, { "Content-Type": "application/json" });
-                    return res.end(JSON.stringify({ status: "success", entries, source: "local" }));
-                });
-            });
-            reqClient.on("error", () => {
-                const entries = getGuestbookData();
-                res.writeHead(200, { "Content-Type": "application/json" });
-                return res.end(JSON.stringify({ status: "success", entries, source: "local" }));
-            });
-        } catch (err) {
-            const entries = getGuestbookData();
-            res.writeHead(200, { "Content-Type": "application/json" });
-            return res.end(JSON.stringify({ status: "success", entries, source: "local" }));
-        }
-        return;
-    }
-
-    if (req.url === "/api/guestbook" && req.method === "POST") {
-        let body = "";
-        req.on("data", (chunk) => (body += chunk));
-        req.on("end", () => {
+    try {
+        let userMsg = "";
+        if (typeof req.body === "string") {
             try {
-                const parsed = JSON.parse(body || "{}");
-                const name = sanitizeInput((parsed.name || "").trim().slice(0, 50));
-                const role = sanitizeInput((parsed.role || "Visitor").trim().slice(0, 50));
-                const message = sanitizeInput((parsed.message || "").trim().slice(0, 300));
-                const rating = Math.min(5, Math.max(1, parseInt(parsed.rating) || 5));
-
-                if (!name || !message) {
-                    res.writeHead(400, { "Content-Type": "application/json" });
-                    return res.end(JSON.stringify({ error: "Name and message are required." }));
-                }
-
-                const newEntry = {
-                    id: "gb_" + Date.now(),
-                    name,
-                    role: role || "Visitor",
-                    rating,
-                    message,
-                    date: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
-                    likes: 0
-                };
-
-                const entries = getGuestbookData();
-                entries.unshift(newEntry);
-                saveGuestbookData(entries);
-
-                // Post to Supabase Cloud DB
-                try {
-                    const sbReqData = JSON.stringify(newEntry);
-                    const parsedUrl = new URL(SUPABASE_GB_URL);
-                    const sbReq = https.request({
-                        hostname: parsedUrl.hostname,
-                        path: parsedUrl.pathname,
-                        method: "POST",
-                        headers: {
-                            "apikey": SUPABASE_GB_KEY,
-                            "Authorization": `Bearer ${SUPABASE_GB_KEY}`,
-                            "Content-Type": "application/json",
-                            "Content-Length": Buffer.byteLength(sbReqData)
-                        }
-                    });
-                    sbReq.on("error", () => {});
-                    sbReq.write(sbReqData);
-                    sbReq.end();
-                } catch (e) {}
-
-                res.writeHead(200, { "Content-Type": "application/json" });
-                res.end(JSON.stringify({ status: "success", entry: newEntry, entries }));
-            } catch (err) {
-                res.writeHead(500, { "Content-Type": "application/json" });
-                res.end(JSON.stringify({ error: "Server Error" }));
+                const parsed = JSON.parse(req.body);
+                userMsg = parsed.message || "";
+            } catch (e) {
+                userMsg = req.body;
             }
-        });
-        return;
-    }
-
-    if (req.url === "/api/guestbook/like" && req.method === "POST") {
-        let body = "";
-        req.on("data", (chunk) => (body += chunk));
-        req.on("end", () => {
-            try {
-                const parsed = JSON.parse(body || "{}");
-                const id = parsed.id;
-                const entries = getGuestbookData();
-                const target = entries.find(e => e.id === id);
-                if (target) {
-                    target.likes = (target.likes || 0) + 1;
-                    saveGuestbookData(entries);
-
-                    // Update Supabase Cloud DB
-                    try {
-                        const sbReqData = JSON.stringify({ likes: target.likes });
-                        const parsedUrl = new URL(`${SUPABASE_GB_URL}?id=eq.${id}`);
-                        const sbReq = https.request({
-                            hostname: parsedUrl.hostname,
-                            path: parsedUrl.pathname + parsedUrl.search,
-                            method: "PATCH",
-                            headers: {
-                                "apikey": SUPABASE_GB_KEY,
-                                "Authorization": `Bearer ${SUPABASE_GB_KEY}`,
-                                "Content-Type": "application/json",
-                                "Content-Length": Buffer.byteLength(sbReqData)
-                            }
-                        });
-                        sbReq.on("error", () => {});
-                        sbReq.write(sbReqData);
-                        sbReq.end();
-                    } catch (e) {}
-                }
-                res.writeHead(200, { "Content-Type": "application/json" });
-                res.end(JSON.stringify({ status: "success", entries }));
-            } catch (err) {
-                res.writeHead(500, { "Content-Type": "application/json" });
-                res.end(JSON.stringify({ error: "Server Error" }));
-            }
-        });
-        return;
-    }
-
-    if (req.url === "/api/chat" && req.method === "POST") {
-        let body = "";
-        req.on("data", (chunk) => (body += chunk));
-        req.on("end", async () => {
-            try {
-                const parsed = JSON.parse(body || "{}");
-                const userMsg = (parsed.message || "").trim().slice(0, 300);
-
-                if (!userMsg) {
-                    res.writeHead(400, { "Content-Type": "application/json" });
-                    return res.end(JSON.stringify({ error: "Message is required" }));
-                }
-
-                const ragContext = await getRAGContext(userMsg);
-                const reply = await queryAI(userMsg, ragContext);
-
-                res.writeHead(200, { "Content-Type": "application/json" });
-                res.end(JSON.stringify({ status: "success", response: reply }));
-            } catch (err) {
-                res.writeHead(500, { "Content-Type": "application/json" });
-                res.end(JSON.stringify({ error: "Server Error" }));
-            }
-        });
-        return;
-    }
-
-    const MIME_TYPES = {
-        ".html": "text/html; charset=utf-8",
-        ".css": "text/css; charset=utf-8",
-        ".js": "text/javascript; charset=utf-8",
-        ".png": "image/png",
-        ".jpg": "image/jpeg",
-        ".svg": "image/svg+xml",
-    };
-
-    const safePath = path.normalize(req.url).replace(/^(\.\.[\/\\])+/, "");
-    let filePath = path.join(__dirname, safePath === "/" ? "index.html" : safePath);
-    const ext = path.extname(filePath).toLowerCase();
-
-    fs.readFile(filePath, (err, content) => {
-        if (err) {
-            res.writeHead(404);
-            res.end("Not Found");
-        } else {
-            res.writeHead(200, { "Content-Type": MIME_TYPES[ext] || "text/plain" });
-            res.end(content);
+        } else if (req.body && typeof req.body === "object") {
+            userMsg = req.body.message || "";
         }
-    });
-}).listen(PORT, () => {
-    console.log(`Render Backend Server running on port ${PORT}`);
-});
+
+        userMsg = String(userMsg).trim().slice(0, 300);
+
+        if (!userMsg) {
+            return res.status(400).json({ error: "Message is required" });
+        }
+
+        const ragContext = await getRAGContext(userMsg);
+        const reply = await queryAI(userMsg, ragContext);
+
+        return res.status(200).json({ status: "success", response: reply });
+    } catch (err) {
+        console.error("Vercel Chat API error:", err);
+        return res.status(500).json({ error: "Server Error" });
+    }
+};
