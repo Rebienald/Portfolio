@@ -210,7 +210,7 @@ async function queryAI(userMessage, ragContext) {
                             { role: "user", content: userMessage },
                         ],
                         temperature: 0.3,
-                        max_tokens: 512,
+                        max_tokens: 1200,
                     }
                 );
 
@@ -237,7 +237,7 @@ async function queryAI(userMessage, ragContext) {
                     {
                         systemInstruction: { parts: [{ text: systemPrompt }] },
                         contents: [{ parts: [{ text: userMessage }] }],
-                        generationConfig: { temperature: 0.3, maxOutputTokens: 800 },
+                        generationConfig: { temperature: 0.3, maxOutputTokens: 1024 },
                     }
                 );
 

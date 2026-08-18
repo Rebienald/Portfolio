@@ -215,7 +215,7 @@ async function queryAI(userMessage, ragContext) {
                             { role: "user", content: userMessage },
                         ],
                         temperature: 0.3,
-                        max_tokens: 512,
+                        max_tokens: 1200,
                     }
                 );
 
