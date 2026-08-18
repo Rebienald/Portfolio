@@ -269,11 +269,13 @@
     }
 
     const LOCAL_KNOWLEDGE = {
-        best: `Rebienald's **most challenging and best projects** are **InfoWhiz** and **SamAI**!
+        best: `🏆 **InfoWhiz & SamAI** are Rebienald's ultimate **flagship, most challenging, and best projects**!
 
-🏆 **InfoWhiz**: An AI-powered educational gaming platform for computer programming. Won **Best in Capstone Development** and **Best in System Development** among all SHS ICT students at STI College Bacoor!
+👑 **InfoWhiz** (#1 Flagship Project):
+An AI-powered gamified learning platform for computer programming. Won **Best in Capstone Development** and **Best in System Development** among all SHS ICT students at STI College Bacoor!
 
-🚀 **SamAI**: Developed in **July 2026**. A Hello Kitty-themed AI study companion powered by RAG (Retrieval-Augmented Generation), intelligent load balancing, data caching, multi-LLM orchestration (Gemini & Groq), and PHP 8 PSR-4 architecture with SQLite.`,
+🚀 **SamAI** (Flagship AI System - Developed July 2026):
+A Hello Kitty-themed AI study companion engineered with RAG (Retrieval-Augmented Generation), PDF handout analysis, automated quiz generation, multi-LLM orchestration (Gemini & Groq), and PHP 8 PSR-4 SQLite architecture.`,
 
         samai: `🔒 **SamAI Technical Architecture & System Overview** (Developed in July 2026 - Rebienald's Best & Hardest Project)
 
@@ -320,7 +322,7 @@ It is an AI-powered gamified learning platform for computer programming that won
         if (!query) return null;
         const q = query.toLowerCase();
 
-        if (q.includes('hardest') || q.includes('most challenging') || q.includes('best project') || q.includes('top project') || q.includes('best and hardest') || q.includes('hardest project')) {
+        if (q.includes('best') || q.includes('top project') || q.includes('flagship') || q.includes('most challenging') || q.includes('hardest')) {
             return LOCAL_KNOWLEDGE.best;
         }
         if (q.includes('samai') || (q.includes('sam') && q.includes('ai')) || q.includes('july 2026')) {
