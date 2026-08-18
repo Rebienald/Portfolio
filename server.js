@@ -28,37 +28,78 @@ Peer Testimonials & Endorsements (7 Teammates & Collaborators - All Rated 10/10)
 6. Nicole (10/10): "Very productive."
 7. Eldrain (10/10): "Fantastic."
 
-Projects:
-1. PrintHub / Print Portal (June 2026):
-- Description: Web-based print management system featuring PDF submission, print customization, payment verification, and real-time queue tracking.
-- Technologies: PHP, MySQL, JavaScript, HTML, CSS.
-2. SamAI (July 2026 - Rebienald's Best & Hardest Project - Private Architecture):
-- Description: Hello Kitty-themed, AI-powered study companion and document tutoring web application engineered for interactive PDF analysis, automated quiz generation, and Retrieval-Augmented Generation (RAG). Built on a PHP 8 backend following structured PSR-4 OOP architecture (Controllers, Services, Repositories, Helpers) on Apache with embedded SQLite via PDO.
-- Architecture & Features: Multi-LLM orchestration layer integrating custom API wrappers for Google Gemini and Groq with automated key-rotation and rate-limit cooldown mechanisms. Document extraction pipeline combining PHP PDF parsers, Tesseract OCR for scanned documents, and client-side JS PDF parsing feeding a custom chunking engine and contextual search system for real-time tutoring. Live web access restricted for privacy reasons.
-3. InfoWhiz (September 2025 - Rebienald's Best & Hardest Project):
-- Description: Rebienald's flagship, best, and hardest project (alongside SamAI). Won Best in Capstone Development and Best in System Development among all SHS ICT students at STI College Bacoor. An AI-powered gamified learning platform integrating local and cloud LLMs for programming education.
-- Features: Real-time coding assistance, debugging support, simulation-based programming education, and interactive AI-driven feedback. Won Best in Capstone Development and Best in System Development among all SHS ICT students at STI College Bacoor.
-4. PortPing (Keep-Alive Sentinel & Automated Ping Service - Formerly Nas.IO / NAS.IO Bot):
-- Description: Automated Supabase Cloud Database keep-alive sentinel built with Node.js and GitHub Actions. Sends scheduled PostgREST queries to PostgreSQL to prevent project auto-pausing and maintain data layer availability for the Portfolio.
-- Technologies: Node.js, Supabase, PostgreSQL, GitHub Actions, PostgREST.
-- URL: https://rebienalddev.github.io/PortPing/
-5. TechnoBytes Photobooth:
-- Description: Custom photobooth application developed for student organizations during the STI College Bacoor Foundation Week.
-- Technologies: JavaScript, HTML5, CSS3.
-6. Cup Of Story:
-- Description: Sophisticated digital storefront demonstrating modern frontend paradigms, micro-animations, and optimized asset delivery.
-- Technologies: HTML5, CSS3, JavaScript.
+Projects & Detailed Technical Architecture:
+
+1. InfoWhiz (September 2025 - Flagship Award Winner):
+- Description: AI-powered gamified learning platform for computer programming education. Won Best in Capstone Development and Best in System Development among all SHS ICT students at STI College Bacoor.
+- Problem Solved: Eliminates steep learning curves for beginner programmers learning Java, C#, PHP, and JavaScript by providing interactive code execution feedback and instant AI debugging.
+- Full Tech Stack & Implementation Details:
+  * Backend: PHP 8 (MVC structured endpoints), MySQL database for user progress tracking, quiz banks, and achievement logs.
+  * AI Layer: Multi-provider LLM integration (combining local lightweight LLMs and cloud LLM APIs) for syntax error analysis, real-time code debugging hints, and simulation tutoring.
+  * Frontend: Semantic HTML5, Vanilla CSS3 (custom UI styling, responsive layout), JavaScript ES6+ (AJAX code submission, real-time feedback loops).
+  * Web Server: Apache web server via XAMPP / custom hosting stack.
+  * Live URL: https://infowhiz.hstn.me/Pages/index
+
+2. SamAI (July 2026 - Flagship AI System):
+- Description: Hello Kitty-themed, AI-powered study companion and document tutoring web application engineered for interactive PDF analysis, automated quiz generation, and Retrieval-Augmented Generation (RAG).
+- Full Tech Stack & Architecture:
+  * Backend Architecture: PHP 8 structured with strict PSR-4 Object-Oriented Architecture (separated into Controllers, Services, Repositories, and Helpers) running on Apache.
+  * Database & Storage: Embedded SQLite database accessed via PDO (PHP Data Objects) for zero-latency local caching of indexed document text chunks, generated quiz banks, and user session states.
+  * Multi-LLM Orchestration: Custom API wrappers for Google Gemini and Groq with automated API key rotation, rate-limit cooldown management, and model failover.
+  * Document Parsing Pipeline: PHP PDF parsers combined with Tesseract OCR (for scanned PDF documents and image handouts) and client-side JavaScript PDF parsing.
+  * RAG Engine: Custom text chunking algorithm, contextual search index, and automated quiz generation engine (multiple-choice & identification).
+  * Privacy: Private repository & restricted live web deployment for security.
+
+3. PortPing / Keep-Alive Sentinel (August 2026 - Formerly Nas.IO / NAS.IO Bot):
+- Description: Automated keep-alive sentinel built to prevent Supabase Cloud PostgreSQL databases from auto-pausing after periods of inactivity.
+- Full Tech Stack & Infrastructure:
+  * Core Script: Node.js HTTP/PostgREST ping client.
+  * Cloud Database: Supabase PostgreSQL cloud database.
+  * Automation Engine: GitHub Actions scheduled workflow (runs cron trigger every 3 to 6 days).
+  * Protocol: HTTPS REST requests querying PostgREST system tables ('/rest/v1/') to maintain active database I/O.
+  * Live URL: https://rebienalddev.github.io/PortPing/
+
+4. PrintHub / Print Portal (June 2026):
+- Description: Web-based print management system featuring document submission, print customization, automated cost calculation, payment verification, and real-time print queue tracking.
+- Full Tech Stack & Implementation:
+  * Backend: PHP 8, MySQL relational database for print jobs, pricing tables, and order statuses.
+  * Document Processing: Client-side & server-side PDF page counter and configuration parser (color vs B&W, paper size, duplex printing).
+  * Frontend: JavaScript ES6+, HTML5, CSS3 responsive grid layout.
+  * Server Environment: Apache web server.
+  * Live URL: https://printportal.hstn.me/
+
+5. TechnoBytes Photobooth (2025 - 2026):
+- Description: Custom web-based photobooth application developed for student organizations during STI College Bacoor Foundation Week.
+- Full Tech Stack & Implementation:
+  * Core APIs: HTML5 MediaDevices API ('navigator.mediaDevices.getUserMedia') for real-time webcam video streaming.
+  * Canvas Engine: HTML5 Canvas API ('HTMLCanvasElement.getContext(2d)') for real-time frame overlay composition, sticker rendering, image filters, and final composite image generation.
+  * Frontend: JavaScript ES6+, HTML5, CSS3 micro-animations.
+  * Live URL: https://rebienalddev.github.io/TechnoPhotobooth/
+
+6. Cup Of Story (2025):
+- Description: Modern digital storefront showcasing advanced frontend web design, micro-animations, and responsive asset delivery for a coffee shop.
+- Full Tech Stack & Implementation:
+  * Styling System: Vanilla CSS3 utilizing custom HSL color tokens, CSS Glassmorphism ('backdrop-filter: blur()'), CSS Grid/Flexbox layouts.
+  * Interactivity: JavaScript ES6+ (dynamic shopping cart calculations, modal windows, responsive navigation toggle).
+  * Optimization: WebP image asset optimization, semantic HTML5 structure.
+  * Live URL: https://axionbytee.github.io/cupofstory/
+
 7. Club Management System / Club Hub (April 2024):
-- Description: PHP-based club management platform featuring role-based access control, event management, and announcements.
-- Impact: Improved coordination and simplified administration across multiple school clubs.
+- Description: Web platform for managing student organization operations, member directories, and campus event announcements.
+- Full Tech Stack & Implementation:
+  * Backend: PHP, MySQL relational database with Role-Based Access Control (RBAC) for Admins, Club Officers, and Members.
+  * Frontend: HTML5, CSS3, JavaScript ES6+.
+  * Live URL: https://spi-announcement-hub.free.nf/
+
 8. Personal Portfolio Website & Serverless RAG AI Assistant (August 2026):
-- Description: Modern, high-performance personal portfolio website built with clean semantic HTML5, Vanilla CSS3 micro-animations, glassmorphism design, and a serverless RAG AI assistant.
-- Tech Stack & Architecture:
-  * Frontend: Semantic HTML5, Vanilla CSS3 (custom HSL design tokens, micro-interactions, responsive grid/flex layouts), JavaScript ES6+.
+- Description: High-performance personal portfolio website integrated with a multi-LLM serverless AI assistant.
+- Full Tech Stack & Architecture:
+  * Frontend: Semantic HTML5, Vanilla CSS3 (custom HSL design system, Glassmorphism, CSS Grid/Flexbox, dynamic micro-interactions), Vanilla JavaScript ES6+. Zero heavy frontend framework dependencies for ultra-fast load times.
   * Serverless Backend: Node.js Vercel Serverless Functions ('/api/chat', '/api/guestbook').
   * AI Orchestration: Multi-LLM failover engine (Google Gemini 3.6 Flash & Groq LLaMA/Qwen) with prompt injection protection and thinking-token sanitization.
-  * Database & RAG: Supabase Cloud PostgreSQL with pgvector embeddings ('match_documents' vector search).
-  * Hosting & Deployment: Vercel with GitHub Actions automated deployment pipelines.
+  * Database & RAG: Supabase Cloud PostgreSQL with pgvector vector embeddings ('match_documents' RPC) for RAG context retrieval.
+  * Infrastructure & Hosting: Vercel serverless hosting paired with GitHub Actions automated CI/CD pipeline.
+  * Live URL: https://rebkhei.vercel.app/
 
 Education:
 - Cavite State University - Imus: Bachelor of Science in Information Technology (2026 - Present) - Status: Active / Ongoing
