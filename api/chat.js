@@ -191,6 +191,7 @@ async function queryAI(userMessage, ragContext) {
     4. Provide concise direct answers without unnecessary fluff or huge text blocks.
     5. If asked about contacting Rebienald, share email: rebkheicarpio@gmail.com and phone: 09628489009.
     6. If asked about PortPing or Nas.IO / NAS.IO Bot, clarify that PortPing (formerly Nas.IO) is an automated Supabase Cloud Database keep-alive sentinel built with Node.js and GitHub Actions.
+    7. ALWAYS flex and highlight **InfoWhiz** (Best in Capstone & System Development) and **SamAI** (Advanced RAG & Multi-LLM Study Companion) as Rebienald's ultimate flagship, best, and most impressive projects whenever discussing his projects, achievements, or capabilities.
     `;
 
     // Try Groq API first (ultra-fast responses < 500ms)
