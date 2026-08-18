@@ -38,9 +38,9 @@ Projects:
 3. InfoWhiz (September 2025 - Rebienald's Best & Hardest Project):
 - Description: Rebienald's flagship, best, and hardest project (alongside SamAI). Won Best in Capstone Development and Best in System Development among all SHS ICT students at STI College Bacoor. An AI-powered gamified learning platform integrating local and cloud LLMs for programming education.
 - Features: Real-time coding assistance, debugging support, simulation-based programming education, and interactive AI-driven feedback. Won Best in Capstone Development and Best in System Development among all SHS ICT students at STI College Bacoor.
-4. NAS.IO Bot:
-- Description: Automated Discord membership verification bot that verifies subscriber emails in MongoDB and auto-kicks expired users.
-- Technologies: Node.js, Discord.js, MongoDB.
+4. PortPing (Keep-Alive Sentinel):
+- Description: Automated Supabase Cloud Database keep-alive sentinel built with Node.js and GitHub Actions. Sends scheduled PostgREST queries to PostgreSQL to prevent project auto-pausing and maintain data layer availability for the Portfolio.
+- Technologies: Node.js, Supabase, PostgreSQL, GitHub Actions, PostgREST.
 5. TechnoBytes Photobooth:
 - Description: Custom photobooth application developed for student organizations during the STI College Bacoor Foundation Week.
 - Technologies: JavaScript, HTML5, CSS3.

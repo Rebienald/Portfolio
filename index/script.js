@@ -700,8 +700,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         } else if (isMobile) {
                             if (href.includes('TechnoPhotobooth') || text.includes('TechnoBytes Photobooth') || text.includes('Photobooth')) {
                                 projectName = 'TechnoBytes Photobooth';
-                            } else if (href.includes('NasIoPing') || text.includes('NAS.IO Bot') || text.includes('NAS.IO')) {
-                                projectName = 'NAS.IO Bot';
                             }
                         }
 
