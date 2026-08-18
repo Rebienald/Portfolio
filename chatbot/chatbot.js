@@ -345,7 +345,7 @@ It is an AI-powered gamified learning platform for computer programming that won
     async function handleSendMessage(messageText) {
         const input = document.getElementById('chatInput');
         const sendBtn = document.getElementById('chatSendBtn');
-        let query = messageText || (input ? input.value.trim() : '');
+        let query = (typeof messageText === 'string' ? messageText : '') || (input ? input.value.trim() : '');
 
         if (!query) return;
 

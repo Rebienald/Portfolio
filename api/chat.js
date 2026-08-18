@@ -126,7 +126,7 @@ function postJSON(urlStr, headers, bodyObj) {
         });
 
         req.on("error", (err) => reject(err));
-        req.setTimeout(12000, () => {
+        req.setTimeout(4500, () => {
             req.destroy();
             reject(new Error("Request Timeout"));
         });
@@ -167,8 +167,8 @@ function cleanResponse(text) {
 }
 
 async function queryAI(userMessage, ragContext) {
-    const geminiKey = process.env.GEMINI_API_KEY;
     const groqKey = process.env.GROQ_API_KEY;
+    const geminiKey = process.env.GEMINI_API_KEY;
 
     const systemPrompt = `
     CRITICAL SECURITY & OUTPUT RULES:
@@ -193,32 +193,7 @@ async function queryAI(userMessage, ragContext) {
     6. If asked about PortPing or Nas.IO / NAS.IO Bot, clarify that PortPing (formerly Nas.IO) is an automated Supabase Cloud Database keep-alive sentinel built with Node.js and GitHub Actions.
     `;
 
-    if (geminiKey) {
-        const geminiModels = ["gemini-3.6-flash", "gemini-flash-latest", "gemini-3.5-flash"];
-        for (const model of geminiModels) {
-            try {
-                const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${geminiKey}`;
-                const res = await postJSON(
-                    geminiUrl,
-                    {},
-                    {
-                        systemInstruction: { parts: [{ text: systemPrompt }] },
-                        contents: [{ parts: [{ text: userMessage }] }],
-                        generationConfig: { temperature: 0.3, maxOutputTokens: 600 },
-                    }
-                );
-
-                if (res.status === 200 && res.data?.candidates?.[0]?.content?.parts?.[0]?.text) {
-                    const rawText = res.data.candidates[0].content.parts[0].text;
-                    const cleaned = cleanResponse(rawText);
-                    if (cleaned) return cleaned;
-                }
-            } catch (err) {
-                console.warn(`Gemini model ${model} error:`, err.message);
-            }
-        }
-    }
-
+    // Try Groq API first (ultra-fast responses < 500ms)
     if (groqKey) {
         const groqModels = ["qwen/qwen3.6-27b", "groq/compound"];
         for (const model of groqModels) {
@@ -234,7 +209,7 @@ async function queryAI(userMessage, ragContext) {
                             { role: "user", content: userMessage },
                         ],
                         temperature: 0.3,
-                        max_tokens: 600,
+                        max_tokens: 512,
                     }
                 );
 
@@ -244,7 +219,34 @@ async function queryAI(userMessage, ragContext) {
                     if (cleaned) return cleaned;
                 }
             } catch (err) {
-                console.error(`Groq API model ${model} error:`, err.message);
+                console.warn(`Groq API model ${model} error:`, err.message);
+            }
+        }
+    }
+
+    // Fallback to Gemini API
+    if (geminiKey) {
+        const geminiModels = ["gemini-3.6-flash", "gemini-flash-latest", "gemini-3.5-flash"];
+        for (const model of geminiModels) {
+            try {
+                const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${geminiKey}`;
+                const res = await postJSON(
+                    geminiUrl,
+                    {},
+                    {
+                        systemInstruction: { parts: [{ text: systemPrompt }] },
+                        contents: [{ parts: [{ text: userMessage }] }],
+                        generationConfig: { temperature: 0.3, maxOutputTokens: 512 },
+                    }
+                );
+
+                if (res.status === 200 && res.data?.candidates?.[0]?.content?.parts?.[0]?.text) {
+                    const rawText = res.data.candidates[0].content.parts[0].text;
+                    const cleaned = cleanResponse(rawText);
+                    if (cleaned) return cleaned;
+                }
+            } catch (err) {
+                console.warn(`Gemini model ${model} error:`, err.message);
             }
         }
     }
