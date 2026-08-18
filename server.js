@@ -245,7 +245,7 @@ async function queryAI(userMessage, ragContext) {
 
     // Try Groq API first (ultra-fast responses < 500ms)
     if (groqKey) {
-        const groqModels = ["llama-3.3-70b-versatile", "llama3-70b-8192", "mixtral-8x7b-32768", "gemma2-9b-it"];
+        const groqModels = ["openai/gpt-oss-120b", "qwen/qwen3.6-27b", "openai/gpt-oss-20b"];
         for (const model of groqModels) {
             try {
                 const groqUrl = "https://api.groq.com/openai/v1/chat/completions";
