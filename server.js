@@ -51,6 +51,14 @@ Projects:
 7. Club Management System / Club Hub (April 2024):
 - Description: PHP-based club management platform featuring role-based access control, event management, and announcements.
 - Impact: Improved coordination and simplified administration across multiple school clubs.
+8. Personal Portfolio Website & Serverless RAG AI Assistant (August 2026):
+- Description: Modern, high-performance personal portfolio website built with clean semantic HTML5, Vanilla CSS3 micro-animations, glassmorphism design, and a serverless RAG AI assistant.
+- Tech Stack & Architecture:
+  * Frontend: Semantic HTML5, Vanilla CSS3 (custom HSL design tokens, micro-interactions, responsive grid/flex layouts), JavaScript ES6+.
+  * Serverless Backend: Node.js Vercel Serverless Functions (`/api/chat`, `/api/guestbook`).
+  * AI Orchestration: Multi-LLM failover engine (Google Gemini 3.6 Flash & Groq LLaMA/Qwen) with prompt injection protection and thinking-token sanitization.
+  * Database & RAG: Supabase Cloud PostgreSQL with pgvector embeddings (`match_documents` vector search).
+  * Hosting & Deployment: Vercel with GitHub Actions automated deployment pipelines.
 
 Education:
 - Cavite State University - Imus: Bachelor of Science in Information Technology (2026 - Present) - Status: Active / Ongoing

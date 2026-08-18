@@ -305,7 +305,15 @@ It is an AI-powered gamified learning platform for computer programming that won
 
 - 📡 **Description**: PortPing is an automated keep-alive sentinel built with Node.js and GitHub Actions. It sends scheduled PostgREST queries to PostgreSQL / Supabase Cloud DB to prevent project auto-pausing and maintain data layer availability for the Portfolio.
 - 🛠️ **Technologies**: Node.js, Supabase, PostgreSQL, GitHub Actions, PostgREST.
-- 🔗 **Live Project**: [https://rebienalddev.github.io/PortPing/](https://rebienalddev.github.io/PortPing/)`
+- 🔗 **Live Project**: [https://rebienalddev.github.io/PortPing/](https://rebienalddev.github.io/PortPing/)`,
+
+        portfolio: `🎨 **Rebienald's Portfolio Architecture & Tech Stack**:
+
+- 💻 **Frontend**: Built with **Semantic HTML5**, **Vanilla CSS3** (custom HSL design system, Glassmorphism, CSS Grid/Flexbox, dynamic micro-animations), and **JavaScript ES6+**.
+- ⚡ **Serverless Backend**: Powered by **Vercel Serverless Functions** (\`/api/chat\`, \`/api/guestbook\`) running Node.js.
+- 🧠 **AI & RAG Engine**: Multi-LLM orchestration combining **Google Gemini 3.6 Flash** and **Groq** (LLaMA/Qwen) with automatic model failover, prompt-injection defense, and thinking-token sanitization.
+- 🗄️ **Database & Search**: **Supabase Cloud PostgreSQL** with **pgvector** vector search (\`match_documents\` RPC) for real-time portfolio RAG context retrieval.
+- 🚀 **Infrastructure**: Deployed on **Vercel** connected to GitHub automated deployment pipelines.`
     };
 
     function getSmartLocalAnswer(query) {
@@ -323,6 +331,9 @@ It is an AI-powered gamified learning platform for computer programming that won
         }
         if (q.includes('portping') || q.includes('port ping') || q.includes('nas.io') || q.includes('nas io') || q.includes('nasio') || q.includes('keep-alive') || q.includes('sentinel')) {
             return LOCAL_KNOWLEDGE.portping;
+        }
+        if (q.includes('portfolio tech stack') || q.includes('how was this portfolio made') || q.includes('how did you make this portfolio') || q.includes('portfolio stack') || q.includes('tech stack of this site') || q.includes('how this site was built')) {
+            return LOCAL_KNOWLEDGE.portfolio;
         }
         if (q.includes('testimonial') || q.includes('endorse') || q.includes('feedback') || q.includes('review') || q.includes('jay') || q.includes('charles') || q.includes('john') || q.includes('nuñez') || q.includes('samantha') || q.includes('nicole') || q.includes('eldrain')) {
             return LOCAL_KNOWLEDGE.testimonials;
