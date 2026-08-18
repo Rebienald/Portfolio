@@ -168,12 +168,34 @@ async function getRAGContext(userQuery) {
 
     if (supabaseUrl && supabaseKey) {
         try {
-            const rpcUrl = `${supabaseUrl.replace(/\/$/, "")}/rest/v1/rpc/match_documents`;
-            const res = await postJSON(
-                rpcUrl,
-                { apikey: supabaseKey, Authorization: `Bearer ${supabaseKey}` },
-                { query_text: userQuery, match_count: 3 }
-            );
+            const cleanUrl = supabaseUrl.replace(/\/$/, "");
+            const keywords = userQuery.split(/\s+/).filter((w) => w.length > 3);
+            let ilikeFilter = "content=ilike.*InfoWhiz*";
+            if (keywords.length > 0) {
+                ilikeFilter = `content=ilike.*${encodeURIComponent(keywords[0])}*`;
+            }
+
+            const restUrl = `${cleanUrl}/rest/v1/portfolio_documents?select=content&${ilikeFilter}&limit=3`;
+            const headers = { apikey: supabaseKey, Authorization: `Bearer ${supabaseKey}` };
+
+            const res = await new Promise((resolve) => {
+                const req = https.get(restUrl, { headers }, (r) => {
+                    let data = "";
+                    r.on("data", (c) => (data += c));
+                    r.on("end", () => {
+                        try {
+                            resolve({ status: r.statusCode, data: JSON.parse(data) });
+                        } catch (e) {
+                            resolve({ status: r.statusCode, data: [] });
+                        }
+                    });
+                });
+                req.on("error", () => resolve({ status: 500, data: [] }));
+                req.setTimeout(3000, () => {
+                    req.destroy();
+                    resolve({ status: 408, data: [] });
+                });
+            });
 
             if (res.status === 200 && Array.isArray(res.data) && res.data.length > 0) {
                 const chunks = res.data.map((item) => item.content).filter(Boolean);
