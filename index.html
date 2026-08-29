@@ -281,6 +281,33 @@
             </div>
         </section>
 
+        <!-- PROJECT DETAIL SUBPAGE MODAL (ALL PROJECTS) -->
+        <div class="samai-modal-overlay project-modal-overlay" id="projectModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="projectModalTitle">
+            <div class="samai-modal-container project-modal-container">
+                <button class="samai-modal-close project-modal-close" id="closeProjectModalBtn" aria-label="Close Project Overview">&times;</button>
+                
+                <div id="projectModalDynamicContent">
+                    <!-- Dynamic project details injected by JavaScript -->
+                </div>
+
+                <div class="samai-modal-footer project-modal-footer">
+                    <button class="samai-btn-secondary project-btn-secondary" id="closeProjectModalFooterBtn">Close Overview</button>
+                    <a href="#" id="projectModalLiveBtn" target="_blank" rel="noopener noreferrer" class="samai-btn-primary project-btn-primary">
+                        <span id="projectModalLiveBtnText">View Live Project</span> <i id="projectModalLiveBtnIcon" class="fas fa-arrow-up-right-from-square"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- SAMAI SCREENSHOT FULLSCREEN LIGHTBOX -->
+        <div class="samai-lightbox-overlay" id="samaiLightbox" aria-hidden="true" role="dialog">
+            <button class="samai-lightbox-close" id="closeSamaiLightboxBtn" aria-label="Close Fullscreen Image">&times;</button>
+            <div class="samai-lightbox-content">
+                <img id="samaiLightboxImg" src="" alt="SamAI Full Preview" class="samai-lightbox-img">
+                <p id="samaiLightboxCaption" class="samai-lightbox-caption"></p>
+            </div>
+        </div>
+
         <!-- GUESTBOOK ENDORSEMENT MODAL -->
         <div class="guestbook-modal-overlay" id="guestbookModal">
             <div class="guestbook-modal-card">
@@ -338,7 +365,7 @@
             <div class="projects-marquee reveal">
                 <div class="projects-marquee-track">
                     <div class="projects-marquee-group">
-                        <a href="https://infowhiz.hstn.me/Pages/index" target="_blank" class="glass-card project-card">
+                        <a href="https://infowhiz.hstn.me/Pages/index" target="_blank" class="glass-card project-card" data-project-id="infowhiz">
                         <img loading="lazy" decoding="async" src="projectimages/infowhiz.png" alt="InfoWhiz" class="project-image">
                         <div class="project-content">
                             <h3>InfoWhiz <i class="fas fa-arrow-up-right-from-square project-title-icon"></i></h3>
@@ -346,7 +373,7 @@
                         </div>
                         </a>
 
-                        <a href="javascript:void(0)" class="glass-card project-card" data-private-project="SamAI">
+                        <a href="javascript:void(0)" class="glass-card project-card" data-project-id="samai" data-private-project="SamAI">
                         <img loading="lazy" decoding="async" src="projectimages/samai.png" alt="SamAI" class="project-image">
                         <div class="project-content">
                             <h3>SamAI <i class="fas fa-lock project-title-icon" style="opacity:0.85;" title="Private System"></i></h3>
@@ -354,7 +381,7 @@
                         </div>
                         </a>
 
-                        <a href="https://rebienalddev.github.io/PortPing/" target="_blank" class="glass-card project-card">
+                        <a href="https://rebienalddev.github.io/PortPing/" target="_blank" class="glass-card project-card" data-project-id="portping">
                         <img loading="lazy" decoding="async" src="projectimages/NASIO.png" alt="PortPing" class="project-image">
                         <div class="project-content">
                             <h3>PortPing <i class="fas fa-arrow-up-right-from-square project-title-icon"></i></h3>
@@ -362,7 +389,7 @@
                         </div>
                         </a>
 
-                        <a href="https://printportal.hstn.me/" target="_blank" class="glass-card project-card">
+                        <a href="https://printportal.hstn.me/" target="_blank" class="glass-card project-card" data-project-id="printportal">
                         <img loading="lazy" decoding="async" src="projectimages/printportal.png" alt="Print Portal" class="project-image">
                         <div class="project-content">
                             <h3>Print Portal <i class="fas fa-arrow-up-right-from-square project-title-icon"></i></h3>
@@ -370,7 +397,7 @@
                         </div>
                         </a>
 
-                        <a href="https://rebienalddev.github.io/TechnoPhotobooth/" target="_blank" class="glass-card project-card">
+                        <a href="https://rebienalddev.github.io/TechnoPhotobooth/" target="_blank" class="glass-card project-card" data-project-id="technophotobooth">
                         <img loading="lazy" decoding="async" src="projectimages/photobooth1.png" alt="TechnoBytes Photobooth" class="project-image">
                         <div class="project-content">
                             <h3>TechnoBytes Photobooth <i class="fas fa-arrow-up-right-from-square project-title-icon"></i></h3>
@@ -378,7 +405,7 @@
                         </div>
                         </a>
 
-                        <a href="https://axionbytee.github.io/cupofstory/" target="_blank" class="glass-card project-card">
+                        <a href="https://axionbytee.github.io/cupofstory/" target="_blank" class="glass-card project-card" data-project-id="cupofstory">
                         <img loading="lazy" decoding="async" src="projectimages/cupofstory.png" alt="Cup Of Story" class="project-image">
                         <div class="project-content">
                             <h3>Cup Of Story <i class="fas fa-arrow-up-right-from-square project-title-icon"></i></h3>
@@ -386,7 +413,7 @@
                         </div>
                         </a>
 
-                        <a href="https://spi-announcement-hub.free.nf/" target="_blank" class="glass-card project-card">
+                        <a href="https://spi-announcement-hub.free.nf/" target="_blank" class="glass-card project-card" data-project-id="clubhub">
                         <img loading="lazy" decoding="async" src="projectimages/clubhub.png" alt="Club Hub" class="project-image">
                         <div class="project-content">
                             <h3>Club Hub <i class="fas fa-arrow-up-right-from-square project-title-icon"></i></h3>

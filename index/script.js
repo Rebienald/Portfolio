@@ -514,6 +514,68 @@ document.addEventListener('DOMContentLoaded', () => {
                         });
                     });
                 });
+                // GLOBAL MARQUEE DRAG SENTINEL (Prevents dragging/swiping from triggering modal clicks)
+                let globalMarqueeDragTimestamp = 0;
+                let globalMarqueePointerStartX = 0;
+                let globalMarqueePointerStartY = 0;
+                let globalMarqueeIsPointerDown = false;
+
+                window.addEventListener('mousedown', (e) => {
+                    if (e.target.closest('.projects-marquee, .certs-marquee, .project-card, .cert-card')) {
+                        globalMarqueeIsPointerDown = true;
+                        globalMarqueePointerStartX = e.clientX;
+                        globalMarqueePointerStartY = e.clientY;
+                    }
+                }, true);
+
+                window.addEventListener('mousemove', (e) => {
+                    if (globalMarqueeIsPointerDown) {
+                        const dist = Math.hypot(e.clientX - globalMarqueePointerStartX, e.clientY - globalMarqueePointerStartY);
+                        if (dist > 4) {
+                            globalMarqueeDragTimestamp = Date.now();
+                        }
+                    }
+                }, true);
+
+                window.addEventListener('mouseup', (e) => {
+                    if (globalMarqueeIsPointerDown) {
+                        const dist = Math.hypot(e.clientX - globalMarqueePointerStartX, e.clientY - globalMarqueePointerStartY);
+                        if (dist > 4) {
+                            globalMarqueeDragTimestamp = Date.now();
+                        }
+                        globalMarqueeIsPointerDown = false;
+                    }
+                }, true);
+
+                window.addEventListener('touchstart', (e) => {
+                    if (e.touches && e.touches.length > 0 && e.target.closest('.projects-marquee, .certs-marquee, .project-card, .cert-card')) {
+                        globalMarqueeIsPointerDown = true;
+                        globalMarqueePointerStartX = e.touches[0].clientX;
+                        globalMarqueePointerStartY = e.touches[0].clientY;
+                    }
+                }, { passive: true, capture: true });
+
+                window.addEventListener('touchmove', (e) => {
+                    if (globalMarqueeIsPointerDown && e.touches && e.touches.length > 0) {
+                        const dist = Math.hypot(e.touches[0].clientX - globalMarqueePointerStartX, e.touches[0].clientY - globalMarqueePointerStartY);
+                        if (dist > 4) {
+                            globalMarqueeDragTimestamp = Date.now();
+                        }
+                    }
+                }, { passive: true, capture: true });
+
+                window.addEventListener('touchend', (e) => {
+                    if (globalMarqueeIsPointerDown) {
+                        if (e.changedTouches && e.changedTouches.length > 0) {
+                            const dist = Math.hypot(e.changedTouches[0].clientX - globalMarqueePointerStartX, e.changedTouches[0].clientY - globalMarqueePointerStartY);
+                            if (dist > 4) {
+                                globalMarqueeDragTimestamp = Date.now();
+                            }
+                        }
+                        globalMarqueeIsPointerDown = false;
+                    }
+                }, { passive: true, capture: true });
+
                 document.addEventListener('DOMContentLoaded', () => {
                     const marquees = document.querySelectorAll('.projects-marquee, .certs-marquee');
                     marquees.forEach(marquee => {
@@ -624,6 +686,8 @@ document.addEventListener('DOMContentLoaded', () => {
                             if (isMouseDown) return;
                             scheduleResumeAutoScroll();
                         });
+                        let touchStartX = 0;
+                        let touchStartY = 0;
                         marquee.addEventListener('mousedown', (e) => {
                             if (e.button !== 0) return;
                             stopInertia();
@@ -642,7 +706,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             if (!isMouseDown) return;
                             const x = e.pageX - marquee.offsetLeft;
                             const walk = (x - dragStartX);
-                            if (Math.abs(walk) > 5) hasDragged = true;
+                            if (Math.abs(walk) > 6) hasDragged = true;
                             marquee.scrollLeft = scrollStart - walk;
                             wrapScroll();
                             const now = performance.now();
@@ -654,7 +718,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             }
                             lastX = e.pageX;
                             lastTime = now;
-                        });
+                        }, true);
                         window.addEventListener('mouseup', () => {
                             if (!isMouseDown) return;
                             isMouseDown = false;
@@ -672,17 +736,24 @@ document.addEventListener('DOMContentLoaded', () => {
                         marquee.addEventListener('touchstart', (e) => {
                             stopInertia();
                             isInteracting = true;
+                            hasDragged = false;
                             if (resumeTimeout) clearTimeout(resumeTimeout);
                             lastX = e.touches[0].clientX;
+                            touchStartX = e.touches[0].clientX;
+                            touchStartY = e.touches[0].clientY;
                             lastTime = performance.now();
                             velocity = 0;
                         }, { passive: true });
                         marquee.addEventListener('touchmove', (e) => {
                             isInteracting = true;
                             if (resumeTimeout) clearTimeout(resumeTimeout);
+                            const currentTouchX = e.touches[0].clientX;
+                            const currentTouchY = e.touches[0].clientY;
+                            if (Math.abs(currentTouchX - touchStartX) > 6 || Math.abs(currentTouchY - touchStartY) > 6) {
+                                hasDragged = true;
+                            }
                             const now = performance.now();
                             const dt = now - lastTime;
-                            const currentTouchX = e.touches[0].clientX;
                             if (dt > 0) {
                                 const dx = currentTouchX - lastX;
                                 const frameV = (dx / dt) * 16.67;
@@ -694,7 +765,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         }, { passive: true });
                         marquee.addEventListener('touchend', () => {
                             startInertia();
-                        }, { passive: true });
+                        });
                         marquee.addEventListener('scroll', () => {
                             if (isInteracting || isMouseDown) {
                                 scrollPos = marquee.scrollLeft;
@@ -711,64 +782,889 @@ document.addEventListener('DOMContentLoaded', () => {
                     e.preventDefault();
                 });
 
-                // PROJECT CLICK INTERCEPTOR (SamAI restricted on PC & Mobile; TechnoBytes & NAS.IO restricted on Mobile)
+                // ==========================================================================
+                // PROJECT SUBPAGE MODAL & LIVE INTERACTION ENGINE (ALL PROJECTS)
+                // ==========================================================================
+                const PROJECT_MODAL_DATA = {
+                    infowhiz: {
+                        id: 'infowhiz',
+                        title: 'InfoWhiz',
+                        titleSub: 'AI-Powered Gamified Programming Learning Platform',
+                        badges: [
+                            { text: 'BEST IN CAPSTONE DEVELOPMENT', class: 'gold', icon: 'fas fa-trophy' },
+                            { text: 'BEST IN SYSTEM DEVELOPMENT', class: 'gold', icon: 'fas fa-medal' },
+                            { text: 'FLAGSHIP PROJECT', class: 'primary', icon: 'fas fa-star' }
+                        ],
+                        subtitle: "Rebienald's flagship, double-award winning capstone platform built for STI College Bacoor SHS ICT. Combines 3 interactive game modes, real-time code evaluation, student learning telemetry, and an embedded AI chatbot tutor powered by Google Gemini.",
+                        heroImage: 'projectimages/infowhiz.png',
+                        heroTags: [
+                            { icon: 'fas fa-trophy', text: 'Won Best in Capstone & System Dev (STI College Bacoor)' },
+                            { icon: 'fas fa-robot', text: 'Google Gemini API Integration' },
+                            { icon: 'fas fa-gamepad', text: '3 Custom Games: CheeseWhiz, CodeDefuse, CodeQuest' }
+                        ],
+                        apis: [
+                            { name: 'Google Gemini 3.1 Flash API', icon: 'fas fa-robot', color: '#60a5fa', desc: 'Embedded AI Programming Tutor (ChatBot.php) with multi-key rotation and hint generation' },
+                            { name: 'PHP PDO MySQL API', icon: 'fas fa-database', color: '#38bdf8', desc: 'Secure database abstraction layer connecting remote sql311.hstn.me host' },
+                            { name: 'HTML5 Web Audio API', icon: 'fas fa-volume-up', color: '#fbbf24', desc: 'Custom sound synthesizer and background music orchestrator (bgMusic.js)' },
+                            { name: 'JavaScript Fetch API', icon: 'fas fa-bolt', color: '#34d399', desc: 'Asynchronous session telemetry and live code execution submission' }
+                        ],
+                        techStack: [
+                            { name: 'PHP 8.0', icon: 'devicon-php-plain colored' },
+                            { name: 'MySQL Relational DB', icon: 'devicon-mysql-plain colored' },
+                            { name: 'JavaScript ES6+', icon: 'devicon-javascript-plain colored' },
+                            { name: 'vlucas/phpdotenv', icon: 'fas fa-shield-alt', color: '#a78bfa' },
+                            { name: 'PressStart2P Pixel Font', icon: 'fas fa-font', color: '#f472b6' },
+                            { name: 'HTML5 Canvas 2D', icon: 'devicon-html5-plain colored' },
+                            { name: 'CSS3 Glassmorphism', icon: 'devicon-css3-plain colored' },
+                            { name: 'Bootstrap UI Framework', icon: 'devicon-bootstrap-plain colored' }
+                        ],
+                        architecture: [
+                            {
+                                icon: 'fas fa-gamepad',
+                                title: '3 Interactive Programming Game Engines',
+                                desc: 'Engineered three distinct game mechanics: <strong>CheeseWhiz</strong> (algorithmic pathfinding maze with Jerry mascot), <strong>CodeDefuse</strong> (timed syntax error debugger with live validation), and <strong>CodeQuest</strong> (virtual client job simulation with real deliverables).'
+                            },
+                            {
+                                icon: 'fas fa-laptop-code',
+                                title: 'In-Browser IDE & Code Execution Parser',
+                                desc: 'Built-in real-time code editor (<code>IDE.php</code>, <code>IDE.JS</code>) with syntax highlighting, input evaluation, and live execution output terminal for hands-on practice.'
+                            },
+                            {
+                                icon: 'fas fa-chart-line',
+                                title: 'Student Learning Telemetry & Time Tracking',
+                                desc: 'Custom background session recorder (<code>track_time.php</code>) measuring active coding durations, error frequencies, and lesson progression stored into MySQL.'
+                            },
+                            {
+                                icon: 'fas fa-user-shield',
+                                title: 'Admin & Module Management Dashboard',
+                                desc: 'Administrative suite (<code>AdminPage.php</code>, <code>admin_handler.php</code>) allowing instructors to manage student accounts, inspect analytics, and configure coding modules.'
+                            }
+                        ],
+                        features: [
+                            {
+                                icon: 'fas fa-puzzle-piece',
+                                title: 'Pedagogical Gamified Learning Loop',
+                                desc: 'Breaks complex coding topics (variables, loops, conditional branching, functions) into interactive puzzle levels with points, achievements, and unlockable stages.'
+                            },
+                            {
+                                icon: 'fas fa-comments',
+                                title: 'AI-Powered Programming Study Chatbot',
+                                desc: 'Embedded Gemini-powered tutor (<code>ChatBot.php</code>) offering contextual hints, syntax clarifications, and debugging assistance without giving away direct answers.'
+                            },
+                            {
+                                icon: 'fas fa-users-cog',
+                                title: 'Role-Based Authentication & Leaderboards',
+                                desc: 'Session-secured authentication with student profiles, personal progress monitors (<code>ProgressPage.php</code>), and competitive class rankings.'
+                            },
+                            {
+                                icon: 'fas fa-music',
+                                title: 'Immersive Audio & Character Sprites',
+                                desc: 'Dynamic sound tracks (<code>CheeseWhiz.mp3</code>, <code>CodeDefuse.mp3</code>, <code>CodeQuest.mp3</code>), animated mascot sprites, and responsive UI effects.'
+                            }
+                        ],
+                        liveUrl: 'https://infowhiz.hstn.me/Pages/index',
+                        liveBtnText: 'View Live Project',
+                        isPrivate: false
+                    },
+
+                    samai: {
+                        id: 'samai',
+                        title: 'SamAI',
+                        titleSub: 'Smart Academic Mentor & AI Study Companion',
+                        badges: [
+                            { text: 'FLAGSHIP AI SYSTEM', class: 'primary', icon: 'fas fa-crown' },
+                            { text: 'JULY 2026', class: 'secondary', icon: 'fas fa-calendar-alt' },
+                            { text: 'PRIVATE ARCHITECTURE', class: 'private', icon: 'fas fa-lock' }
+                        ],
+                        subtitle: 'A full-stack, heading-aware RAG learning assistant engineered by Rebienald Carpio. Features dual-LLM failover (Gemini + Groq LLaMA-3), 4-tier PDF extraction with Tesseract OCR fallback, zero-latency SQLite caching, and a cheerful Hello Kitty study companion dashboard.',
+                        heroImage: 'projectimages/samai.png',
+                        heroTags: [
+                            { icon: 'fas fa-microchip', text: 'Dual LLM: Gemini + Groq (LLaMA-3.3)' },
+                            { icon: 'fas fa-database', text: 'Embedded SQLite Zero-Latency Vector Caching' },
+                            { icon: 'fas fa-heart', text: 'Hello Kitty Student UX & Companion Theme' }
+                        ],
+                        apis: [
+                            { name: 'Google Gemini 3.5 Flash API', icon: 'fas fa-robot', color: '#60a5fa', desc: 'Primary LLM inference endpoint (generativelanguage.googleapis.com) with automated key rotation' },
+                            { name: 'Groq Cloud REST API (LLaMA-3.3-70B)', icon: 'fas fa-bolt', color: '#f59e0b', desc: 'Ultra-fast fallback LLM inference endpoint (api.groq.com/openai/v1/chat/completions)' },
+                            { name: 'Tesseract OCR Engine API', icon: 'fas fa-eye', color: '#ec4899', desc: 'Optical character recognition (thiagoalessio/tesseract_ocr) for scanned slide text' },
+                            { name: 'Mozilla PDF.js Extraction API', icon: 'fas fa-file-pdf', color: '#ef4444', desc: 'Client-side PDF canvas rendering and stream extraction' },
+                            { name: 'PHP PDO SQLite API', icon: 'fas fa-database', color: '#38bdf8', desc: 'Zero-latency local database storage for chunks, summaries, and quizzes' }
+                        ],
+                        techStack: [
+                            { name: 'PHP 8.0+ (PSR-4)', icon: 'devicon-php-plain colored' },
+                            { name: 'SQLite 3 (PDO)', icon: 'devicon-sqlite-plain colored' },
+                            { name: 'Smalot PDFParser', icon: 'fas fa-file-alt', color: '#f87171' },
+                            { name: 'Setasign FPDI & TCPDF', icon: 'fas fa-file-invoice', color: '#fb923c' },
+                            { name: 'Ghostscript & pdftotext', icon: 'fas fa-terminal', color: '#10b981' },
+                            { name: 'vlucas/phpdotenv', icon: 'fas fa-shield-alt', color: '#a78bfa' },
+                            { name: 'JavaScript ES6+ (NDJSON Stream)', icon: 'devicon-javascript-plain colored' },
+                            { name: 'CSS3 Glassmorphism', icon: 'devicon-css3-plain colored' }
+                        ],
+                        gallery: [
+                            {
+                                img: 'SamAI_Images/samai-preview-1.png',
+                                tag: 'STUDY BUDDY CHAT',
+                                title: 'Real-time AI Chat & Context Q&A',
+                                caption: 'SamAI Live Workspace — Interactive Study Buddy & Real-time Context-Aware Q&A'
+                            },
+                            {
+                                img: 'SamAI_Images/samai-preview-2.png',
+                                tag: 'RAG SUMMARIZER',
+                                title: 'Smart Multi-Level Summary Engine',
+                                caption: 'SamAI Live Workspace — Multi-Level Document Summarization & Handout Reader'
+                            },
+                            {
+                                img: 'SamAI_Images/samai-preview-3.png',
+                                tag: 'ASSESSMENT SYSTEM',
+                                title: 'Automated Quiz & Flashcard Engine',
+                                caption: 'SamAI Live Workspace — Automated Quiz Generator & Knowledge Assessment'
+                            },
+                            {
+                                img: 'SamAI_Images/samai-preview-4.png',
+                                tag: 'STUDENT DASHBOARD',
+                                title: 'Hello Kitty Companion & Library',
+                                caption: 'SamAI Live Workspace — Hello Kitty Companion Theme & Handout Library'
+                            }
+                        ],
+                        architecture: [
+                            {
+                                icon: 'fas fa-brain',
+                                title: 'Dual-LLM Failover & Key Rotation Engine',
+                                desc: 'Integrates primary <strong>Google Gemini API</strong> with automated real-time fallback to <strong>Groq Cloud (LLaMA-3.3-70B)</strong>. Maintains an active key cooldown manager (<code>key_cooldowns.json</code>) to seamlessly overcome strict rate limits and guarantee continuous student uptime.'
+                            },
+                            {
+                                icon: 'fas fa-file-pdf',
+                                title: '4-Tier Robust Document Extraction Pipeline',
+                                desc: 'Combines client-side <strong>PDF.js</strong>, server-side <strong>Smalot PDFParser</strong> with encryption bypass, native Linux <strong>pdftotext</strong>, and <strong>Tesseract OCR</strong> to accurately extract text from academic syllabi, encrypted slides, and scanned images.'
+                            },
+                            {
+                                icon: 'fas fa-stream',
+                                title: 'Recursive Heading-Aware RAG Pipeline',
+                                desc: 'Custom <code>PDFChunker.php</code> partitions large academic documents by semantic headings. <code>SearchService.php</code> scores chunks with token BM25 indexing, injecting relevant excerpts into <code>PromptBuilder.php</code> to ground answers in course materials and eliminate hallucinations.'
+                            },
+                            {
+                                icon: 'fas fa-database',
+                                title: 'Embedded SQLite Zero-Latency Caching',
+                                desc: 'Zero-latency local database (<code>samai.sqlite</code> via PHP PDO) caches parsed text chunks, multi-level study summaries, and generated quiz questions indexed by MD5 file hashes for instant subsequent loads without re-hitting external AI APIs.'
+                            }
+                        ],
+                        features: [
+                            {
+                                icon: 'fas fa-compress-alt',
+                                title: 'Multi-Level Smart Summarization',
+                                desc: 'Offers <em>Brief (quick cramming)</em>, <em>Moderate (core conceptual takeaways)</em>, and <em>In-Depth (comprehensive chapter breakdown)</em> summarization modes tailored to student study needs.'
+                            },
+                            {
+                                icon: 'fas fa-spell-check',
+                                title: 'Automated Quiz & Assessment Generator',
+                                desc: 'Dynamically synthesizes Multiple Choice, True/False, and Identification quizzes from handout text, with instant grading, scoring metrics, and detailed answer explanations.'
+                            },
+                            {
+                                icon: 'fas fa-comments',
+                                title: 'Context-Anchored AI Study Buddy Chat',
+                                desc: 'Real-time conversational tutor grounded strictly in uploaded PDF handouts, providing exact source citations and conceptual clarifications.'
+                            },
+                            {
+                                icon: 'fas fa-heart',
+                                title: 'Hello Kitty Companion Theme & Student UX',
+                                desc: 'Cheerful, motivating user interface with study timers, animated motivational quotes (<code>quotes.json</code>), responsive audio feedback, and streamlined handout library management.'
+                            },
+                            {
+                                icon: 'fas fa-broom',
+                                title: 'Automated 30-Day Storage Maintenance',
+                                desc: 'Integrated rolling cleanup sentinel that purges expired temporary PDF storage and associated SQLite records to prevent server bloat.'
+                            }
+                        ],
+                        liveUrl: 'contacts/contact.html',
+                        liveBtnText: 'Inquire About SamAI',
+                        isPrivate: true
+                    },
+
+                    portping: {
+                        id: 'portping',
+                        title: 'PortPing',
+                        titleSub: 'Automated Cloud Database Keep-Alive Sentinel',
+                        badges: [
+                            { text: 'DEVOPS & CLOUD AUTOMATION', class: 'green', icon: 'fas fa-server' },
+                            { text: '100% UPTIME SENTINEL', class: 'primary', icon: 'fas fa-shield-alt' },
+                            { text: 'OPEN SOURCE', class: 'secondary', icon: 'fas fa-code-branch' }
+                        ],
+                        subtitle: 'A high-reliability automated keep-alive daemon built with Node.js and GitHub Actions. PortPing performs automated cron health-checks against Supabase PostgreSQL databases via PostgREST to prevent inactivity auto-pausing and ensure 100% uptime for portfolio data services.',
+                        heroImage: 'projectimages/NASIO.png',
+                        heroTags: [
+                            { icon: 'fas fa-bolt', text: 'Automated GitHub Actions Cron Sentinel' },
+                            { icon: 'fas fa-database', text: 'Supabase PostgreSQL Auto-Pause Prevention' },
+                            { icon: 'fas fa-terminal', text: 'Cyberpunk Server Console Telemetry' }
+                        ],
+                        apis: [
+                            { name: 'Supabase PostgREST API', icon: 'fas fa-plug', color: '#38bdf8', desc: 'HTTPS REST endpoint (/rest/v1/comments?select=id&limit=1) executing authenticated database I/O' },
+                            { name: 'GitHub Actions CI/CD REST API', icon: 'devicon-github-original', color: '#ffffff', desc: 'Scheduled cron execution trigger and automated git commit sync' },
+                            { name: 'Node.js Fetch API', icon: 'fas fa-bolt', color: '#34d399', desc: 'Native global fetch request handler with timeout and exponential backoff retry logic' }
+                        ],
+                        techStack: [
+                            { name: 'Node.js 18+ (ESM)', icon: 'devicon-nodejs-plain colored' },
+                            { name: 'GitHub Actions CI/CD', icon: 'devicon-github-original' },
+                            { name: 'Supabase (PostgreSQL)', icon: 'devicon-postgresql-plain colored' },
+                            { name: 'JavaScript ES6+', icon: 'devicon-javascript-plain colored' },
+                            { name: 'JetBrains Mono Typography', icon: 'fas fa-font', color: '#f59e0b' },
+                            { name: 'JSON Audit DB (pings.json)', icon: 'fas fa-file-code', color: '#a78bfa' },
+                            { name: 'HTML5 & CSS3 Terminal UI', icon: 'devicon-html5-plain colored' }
+                        ],
+                        architecture: [
+                            {
+                                icon: 'fas fa-clock',
+                                title: 'Automated GitHub Actions Cron Scheduler',
+                                desc: 'Headless CI/CD automation running on scheduled workflows (<code>.github/workflows/main.yml</code>), triggering automated database keep-alive pings without paid hosting costs.'
+                            },
+                            {
+                                icon: 'fas fa-network-wired',
+                                title: 'Zero-Latency PostgREST Query Engine',
+                                desc: 'Lightweight Node.js daemon (<code>ping.js</code>) executing authenticated REST queries against Supabase endpoints with status evaluation, retry backoffs, and latency benchmarking.'
+                            },
+                            {
+                                icon: 'fas fa-chart-bar',
+                                title: 'Live Server Telemetry Dashboard',
+                                desc: 'Cyberpunk-themed web console (<code>index.html</code>) displaying millisecond latency distribution charts, 24-hour countdown timers, and service health status from <code>pings.json</code>.'
+                            },
+                            {
+                                icon: 'fas fa-sync-alt',
+                                title: 'Automated Git Rebase & Push Sync',
+                                desc: 'Automated <code>github-actions[bot]</code> commit pipeline recording every ping attempt to repository JSON logs with rebase handling to guarantee audit accuracy.'
+                            }
+                        ],
+                        features: [
+                            {
+                                icon: 'fas fa-shield-alt',
+                                title: 'Eliminates Free-Tier Database Dormancy',
+                                desc: 'Keeps cloud databases continuously warm, preventing Supabase from pausing projects after 7 days of inactivity so the Portfolio Guestbook is always instant.'
+                            },
+                            {
+                                icon: 'fas fa-terminal',
+                                title: 'CLI Controller & Multi-Mode Flags',
+                                desc: 'Supports single-shot execution (<code>node ping.js</code>), continuous local loop mode (<code>--loop</code>), and forced immediate execution (<code>--force</code>).'
+                            },
+                            {
+                                icon: 'fas fa-history',
+                                title: 'Historical Latency Audit Log',
+                                desc: 'Preserves the last 1,000 ping records with precise UTC timestamps, HTTP response codes, and round-trip execution durations.'
+                            },
+                            {
+                                icon: 'fas fa-feather',
+                                title: 'Ultra-Lightweight Zero-Dependency Daemon',
+                                desc: 'Built purely on native Node.js core modules (<code>node:timers/promises</code>, <code>node:fs</code>, <code>node:child_process</code>) for instantaneous execution.'
+                            }
+                        ],
+                        liveUrl: 'https://rebienalddev.github.io/PortPing/',
+                        liveBtnText: 'View Live Sentinel Dashboard',
+                        isPrivate: false
+                    },
+
+                    printportal: {
+                        id: 'printportal',
+                        title: 'Print Portal',
+                        titleSub: 'Web-Based Campus Printing & Queue Management System',
+                        badges: [
+                            { text: 'FULL-STACK WEB SYSTEM', class: 'primary', icon: 'fas fa-print' },
+                            { text: 'CAMPUS UTILITY', class: 'green', icon: 'fas fa-university' },
+                            { text: 'PHP & MYSQL', class: 'secondary', icon: 'devicon-php-plain colored' }
+                        ],
+                        subtitle: 'A full-stack campus printing management system designed to eliminate congested print shop queues. Features automated PDF structure analysis, GD pixel-sampling color detection, dynamic price computation, receipt generation, and real-time public queue tracking.',
+                        heroImage: 'projectimages/printportal.png',
+                        heroTags: [
+                            { icon: 'fas fa-calculator', text: 'Automated Page Counting & Dynamic Costing' },
+                            { icon: 'fas fa-palette', text: 'GD Pixel-Sampling Color Detection' },
+                            { icon: 'fas fa-list-ol', text: '30s Auto-Refreshing Public Queue Board' }
+                        ],
+                        apis: [
+                            { name: 'Poppler Utilities pdfinfo API', icon: 'fas fa-file-pdf', color: '#ef4444', desc: 'CLI-based PDF metadata parser for instant page count extraction' },
+                            { name: 'Ghostscript (gs) & QPDF CLI API', icon: 'fas fa-terminal', color: '#10b981', desc: 'Stream decryption and rasterized page rendering engine' },
+                            { name: 'PHP GD Graphics Library API', icon: 'fas fa-image', color: '#f59e0b', desc: 'Color pixel percentage sampling (>3% threshold) and PNG receipt generation (receipt.php)' },
+                            { name: 'Mozilla PDF.js API', icon: 'fas fa-file-alt', color: '#38bdf8', desc: 'Client-side PDF canvas preview and instant page pre-scan' },
+                            { name: 'PHP MySQLi / PDO Database API', icon: 'fas fa-database', color: '#a78bfa', desc: 'Relational database persistence for print jobs, pricing, and receipts' }
+                        ],
+                        techStack: [
+                            { name: 'PHP 8.0', icon: 'devicon-php-plain colored' },
+                            { name: 'MySQL Relational DB', icon: 'devicon-mysql-plain colored' },
+                            { name: 'PHP GD Library', icon: 'fas fa-palette', color: '#f59e0b' },
+                            { name: 'Poppler Utilities & Ghostscript', icon: 'fas fa-terminal', color: '#10b981' },
+                            { name: 'JavaScript ES6+', icon: 'devicon-javascript-plain colored' },
+                            { name: 'HTML5 & CSS3 Glassmorphism', icon: 'devicon-css3-plain colored' }
+                        ],
+                        architecture: [
+                            {
+                                icon: 'fas fa-file-upload',
+                                title: 'Multi-Engine PDF Analysis Pipeline',
+                                desc: 'Multi-stage fallback page counter combining <code>pdfinfo</code> (poppler-utils), <code>qpdf</code>, <code>Ghostscript</code>, and regex stream structure parsing to reliably read complex multi-page documents.'
+                            },
+                            {
+                                icon: 'fas fa-palette',
+                                title: 'Pixel-Sampling Color Detection Engine',
+                                desc: 'Server-side GD graphics analyzer inspecting rendered page rasterizations with a <code>> 3%</code> color pixel threshold to accurately distinguish color pages from monochrome text.'
+                            },
+                            {
+                                icon: 'fas fa-calculator',
+                                title: 'Dynamic Algorithmic Price Computation',
+                                desc: 'Automatic pricing engine calculating precise print costs: <code>(B&W pages × ₱3.00 + Color pages × ₱5.00) × Copies</code>, factoring in paper sizes (Letter, A4, Legal) and binding options.'
+                            },
+                            {
+                                icon: 'fas fa-tasks',
+                                title: '5-Stage Order Lifecycle Pipeline',
+                                desc: 'State machine managing jobs through <em>Pending &rarr; Verified &rarr; Printing &rarr; Ready for Pickup &rarr; Completed</em> with downloadable receipts (<code>receipt.php</code>).'
+                            }
+                        ],
+                        features: [
+                            {
+                                icon: 'fas fa-laptop',
+                                title: 'Remote Student Order Submission',
+                                desc: 'Allows students to configure print settings, upload documents, and submit payment verification slips from mobile or desktop before arriving at the print shop.'
+                            },
+                            {
+                                icon: 'fas fa-desktop',
+                                title: 'Password-Protected Admin Portal',
+                                desc: 'Staff dashboard (<code>admin.php</code>) providing print job queues, source document downloads, order status controls, and sales summary ledgers.'
+                            },
+                            {
+                                icon: 'fas fa-clock',
+                                title: '30-Second Auto-Refreshing Public Queue',
+                                desc: 'Public order display board (<code>queue.php</code>) updating in real-time to show queue positions and estimated completion times.'
+                            },
+                            {
+                                icon: 'fas fa-broom',
+                                title: 'Automated 7-Day Storage Cleanup',
+                                desc: 'Integrated background sentinel purging temporary uploaded documents and payment verification slips after 7 days to maintain server efficiency.'
+                            }
+                        ],
+                        liveUrl: 'https://printportal.hstn.me/',
+                        liveBtnText: 'View Live Print Portal',
+                        isPrivate: false
+                    },
+
+                    technophotobooth: {
+                        id: 'technophotobooth',
+                        title: 'TechnoBytes Photobooth',
+                        titleSub: 'Event Camera Capture & Custom Frame Printing System',
+                        badges: [
+                            { text: 'EVENT APPLICATION', class: 'primary', icon: 'fas fa-camera-retro' },
+                            { text: 'STI FOUNDATION WEEK', class: 'gold', icon: 'fas fa-calendar-check' },
+                            { text: 'WEBRTC & CANVAS', class: 'green', icon: 'fas fa-layer-group' }
+                        ],
+                        subtitle: 'A custom web photobooth system developed for the TechnoBytes organization during STI College Bacoor Foundation Week. Features real-time WebRTC camera capture, audio-synchronized countdown sequences, custom event frame compositing, and instant thermal strip photo printing.',
+                        heroImage: 'projectimages/photobooth1.png',
+                        heroTags: [
+                            { icon: 'fas fa-video', text: 'Zero-Latency WebRTC Camera Streaming' },
+                            { icon: 'fas fa-layer-group', text: 'HTML5 Canvas Frame & Sticker Compositor' },
+                            { icon: 'fas fa-print', text: 'Direct Thermal Print Strip Formatting' }
+                        ],
+                        apis: [
+                            { name: 'WebRTC MediaDevices API', icon: 'fas fa-video', color: '#38bdf8', desc: 'HTML5 navigator.mediaDevices.getUserMedia camera feed capture with mirror mode' },
+                            { name: 'HTML5 Canvas 2D Context API', icon: 'fas fa-paint-brush', color: '#f59e0b', desc: 'Real-time multi-layer frame overlay blending, sticker composition, and PNG strip rendering' },
+                            { name: 'HTML5 Web Audio API', icon: 'fas fa-volume-up', color: '#fbbf24', desc: 'Synthesized countdown beeps, shutter release audio, and visual screen flash triggers' },
+                            { name: 'CSS Print Media API', icon: 'fas fa-print', color: '#a855f7', desc: 'Formatted @media print style rules for instant 2x6 dual photostrip and 4x6 printouts' }
+                        ],
+                        techStack: [
+                            { name: 'JavaScript ES6+', icon: 'devicon-javascript-plain colored' },
+                            { name: 'WebRTC MediaStream', icon: 'fas fa-video', color: '#38bdf8' },
+                            { name: 'HTML5 Canvas 2D', icon: 'devicon-html5-plain colored' },
+                            { name: 'Web Audio API', icon: 'fas fa-volume-up', color: '#fbbf24' },
+                            { name: 'CSS3 Micro-Animations', icon: 'devicon-css3-plain colored' },
+                            { name: 'Direct Print Media CSS', icon: 'fas fa-print', color: '#a855f7' }
+                        ],
+                        architecture: [
+                            {
+                                icon: 'fas fa-video',
+                                title: 'WebRTC Zero-Latency Live Camera Streamer',
+                                desc: 'Connects directly to connected USB webcams and DSLR capture cards via <code>navigator.mediaDevices.getUserMedia</code> with live mirrored preview and auto-exposure.'
+                            },
+                            {
+                                icon: 'fas fa-stopwatch',
+                                title: 'Synchronized 3-Shot Burst Sequencer',
+                                desc: 'Visual and audio-cued countdown timer capturing multi-shot photos at timed intervals without interrupting the live video stream.'
+                            },
+                            {
+                                icon: 'fas fa-object-group',
+                                title: 'Client-Side Canvas Compositor Engine',
+                                desc: 'Composites high-resolution STI Foundation Week graphics, organization watermarks, timestamps, and decorative borders onto captured photos.'
+                            },
+                            {
+                                icon: 'fas fa-print',
+                                title: 'Instant Layout & Direct Print Driver',
+                                desc: 'Formats composite photos into standardized 2x6 dual-strip or 4x6 grid dimensions optimized for event dye-sublimation and thermal printers.'
+                            }
+                        ],
+                        features: [
+                            {
+                                icon: 'fas fa-store-alt',
+                                title: 'Campus Event Kiosk Architecture',
+                                desc: 'Engineered for high-volume foot traffic during STI Foundation Week, delivering rapid photo turnarounds for hundreds of students.'
+                            },
+                            {
+                                icon: 'fas fa-palette',
+                                title: 'Themed Frame & Overlay Selector',
+                                desc: 'Students choose between diverse event frame borders, organization badges, and color themes before initiating the photo capture sequence.'
+                            },
+                            {
+                                icon: 'fas fa-volume-up',
+                                title: 'Tactile Audio & Screen Flash Feedback',
+                                desc: 'Beeping countdown audio, authentic shutter click sound effects, and full-screen flash animations create a fun commercial photobooth feel.'
+                            },
+                            {
+                                icon: 'fas fa-download',
+                                title: 'Dual Output: Physical Print & Digital PNG',
+                                desc: 'Sends formatted strips directly to connected print dialogs while providing immediate high-resolution PNG downloads for social media sharing.'
+                            }
+                        ],
+                        liveUrl: 'https://rebienalddev.github.io/TechnoPhotobooth/',
+                        liveBtnText: 'View Live Photobooth',
+                        isPrivate: false
+                    },
+
+                    cupofstory: {
+                        id: 'cupofstory',
+                        title: 'Cup Of Story',
+                        titleSub: 'Artisan Coffee & Bakery Digital Storefront',
+                        badges: [
+                            { text: 'FRONTEND ARCHITECTURE', class: 'primary', icon: 'fas fa-mug-hot' },
+                            { text: 'UI/UX & ANIMATION', class: 'secondary', icon: 'fas fa-magic' },
+                            { text: 'E-COMMERCE SHOWCASE', class: 'green', icon: 'fas fa-shopping-bag' }
+                        ],
+                        subtitle: 'A modern e-commerce digital storefront and brand storytelling platform for an artisanal coffeehouse and bakery. Demonstrates advanced vanilla frontend architecture, rich micro-animations, glassmorphism, and responsive asset delivery.',
+                        heroImage: 'projectimages/cupofstory.png',
+                        heroTags: [
+                            { icon: 'fas fa-paint-brush', text: 'Fluid Micro-Animations & Glassmorphism' },
+                            { icon: 'fas fa-utensils', text: 'Interactive Menu & Digital Ordering UI' },
+                            { icon: 'fas fa-bolt', text: 'WebP Asset Delivery & Zero Framework Overhead' }
+                        ],
+                        apis: [
+                            { name: 'HTML5 Web Storage API', icon: 'fas fa-shopping-cart', color: '#60a5fa', desc: 'Client-side cart session state persistence across navigation' },
+                            { name: 'CSS Custom Properties API', icon: 'fas fa-palette', color: '#f59e0b', desc: 'HSL design tokenization for dynamic theme scaling and consistent brand palette' },
+                            { name: 'IntersectionObserver API', icon: 'fas fa-eye', color: '#34d399', desc: 'Hardware-accelerated viewport scroll reveals and lazy image loading' }
+                        ],
+                        techStack: [
+                            { name: 'Semantic HTML5', icon: 'devicon-html5-plain colored' },
+                            { name: 'Vanilla CSS3 (HSL Tokens)', icon: 'devicon-css3-plain colored' },
+                            { name: 'JavaScript ES6+', icon: 'devicon-javascript-plain colored' },
+                            { name: 'CSS Grid & Flexbox', icon: 'fas fa-th-large', color: '#38bdf8' },
+                            { name: 'WebP Image Optimization', icon: 'fas fa-image', color: '#a78bfa' },
+                            { name: 'Glassmorphism UI', icon: 'fas fa-sparkles', color: '#fb7185' }
+                        ],
+                        architecture: [
+                            {
+                                icon: 'fas fa-mobile-alt',
+                                title: 'Fluid Responsive Layout Architecture',
+                                desc: 'Mobile-first layout engineered with CSS Grid, Flexbox, and CSS custom variables for seamless adaptability from mobile screens to 4K displays.'
+                            },
+                            {
+                                icon: 'fas fa-sparkles',
+                                title: 'Hardware-Accelerated Micro-Interactions',
+                                desc: 'Smooth CSS transitions, tactile card hovers, and animated navigation drawers that deliver a premium, responsive user experience.'
+                            },
+                            {
+                                icon: 'fas fa-book-open',
+                                title: 'Categorized Menu Catalog Showcase',
+                                desc: 'Structured product catalog featuring artisan espresso blends, cold brews, artisanal pastries, and seasonal specialties with flavor profiles.'
+                            },
+                            {
+                                icon: 'fas fa-tachometer-alt',
+                                title: 'Optimized Asset Delivery & Zero Overhead',
+                                desc: 'High-definition WebP compressed imagery, asynchronous font rendering, and zero bulky framework dependencies for instant loading.'
+                            }
+                        ],
+                        features: [
+                            {
+                                icon: 'fas fa-coffee',
+                                title: 'Artisan Brand Identity & Ambience',
+                                desc: 'Warm, cozy, and sophisticated color palette designed to evoke the comforting aroma and atmosphere of a specialty coffee shop.'
+                            },
+                            {
+                                icon: 'fas fa-shopping-cart',
+                                title: 'Interactive Order Formulation UI',
+                                desc: 'Interactive item selection, customizable sweetness/milk preferences, and dynamic order tallying.'
+                            },
+                            {
+                                icon: 'fas fa-heart',
+                                title: 'Brand Storytelling & Heritage Sections',
+                                desc: 'Dedicated sections highlighting ethical bean sourcing, roasting philosophies, and master barista craftsmanship.'
+                            },
+                            {
+                                icon: 'fas fa-universal-access',
+                                title: 'Accessibility & Semantic HTML5',
+                                desc: 'Built according to modern web accessibility standards with semantic structure, clean contrast ratios, and intuitive keyboard navigation.'
+                            }
+                        ],
+                        techStack: [
+                            { name: 'HTML5 Semantic', icon: 'devicon-html5-plain colored' },
+                            { name: 'CSS3 Glassmorphism', icon: 'devicon-css3-plain colored' },
+                            { name: 'JavaScript ES6+', icon: 'devicon-javascript-plain colored' },
+                            { name: 'Responsive Web Design', icon: 'fas fa-mobile-alt', color: '#60a5fa' },
+                            { name: 'Web Performance Optimization', icon: 'fas fa-bolt', color: '#f59e0b' }
+                        ],
+                        liveUrl: 'https://axionbytee.github.io/cupofstory/',
+                        liveBtnText: 'View Live Storefront',
+                        isPrivate: false
+                    },
+
+                    clubhub: {
+                        id: 'clubhub',
+                        title: 'Club Hub',
+                        titleSub: 'Multi-Organization Student Club Management System',
+                        badges: [
+                            { text: 'FULL-STACK WEB PLATFORM', class: 'primary', icon: 'fas fa-users' },
+                            { text: '3-TIER ROLE-BASED ACCESS', class: 'secondary', icon: 'fas fa-user-shield' },
+                            { text: 'CAMPUS UTILITY', class: 'green', icon: 'fas fa-calendar-alt' }
+                        ],
+                        subtitle: 'A comprehensive multi-organization administration platform built with PHP and MySQL. Streamlines campus extracurriculars with role-based dashboards for Admins, Students, and Parents, dedicated organization hubs, announcement feeds, event calendars, and membership moderation.',
+                        heroImage: 'projectimages/clubhub.png',
+                        heroTags: [
+                            { icon: 'fas fa-user-shield', text: '3-Tier RBAC: Admin, Student, Parent Portals' },
+                            { icon: 'fas fa-layer-group', text: '5 Dedicated Academic Club Hubs' },
+                            { icon: 'fas fa-database', text: 'MySQL Database with Asia/Manila Time Sync' }
+                        ],
+                        apis: [
+                            { name: 'PHP MySQLi Database API', icon: 'fas fa-database', color: '#38bdf8', desc: 'Direct relational database connection (sql204.infinityfree.com) with Asia/Manila (+08:00) timezone synchronization' },
+                            { name: 'RESTful Action Dispatchers API', icon: 'fas fa-exchange-alt', color: '#10b981', desc: 'Modular backend action handlers (actions/add_announcement.php, actions/add_event.php, status/approve_user.php)' },
+                            { name: 'PHP Session Security API', icon: 'fas fa-shield-alt', color: '#f59e0b', desc: 'Role-segregated session validation preventing unauthorized access between Admin, Student, and Parent views' }
+                        ],
+                        techStack: [
+                            { name: 'PHP 8.0', icon: 'devicon-php-plain colored' },
+                            { name: 'MySQL / MariaDB', icon: 'devicon-mysql-plain colored' },
+                            { name: 'JavaScript ES6+', icon: 'devicon-javascript-plain colored' },
+                            { name: 'CSS3 Admin UI (admin-style.css)', icon: 'devicon-css3-plain colored' },
+                            { name: 'Session RBAC Security', icon: 'fas fa-shield-alt', color: '#10b981' }
+                        ],
+                        architecture: [
+                            {
+                                icon: 'fas fa-user-shield',
+                                title: '3-Tier Role-Based Access Control (RBAC)',
+                                desc: 'Role-segregated portal dashboards for <strong>Admins</strong> (<code>view/admin.php</code> - user moderation, announcement & event publishing), <strong>Students</strong> (<code>view/student.php</code> - club enrollment & ticketing), and <strong>Parents</strong> (<code>view/parent.php</code> - oversight) with session security.'
+                            },
+                            {
+                                icon: 'fas fa-building',
+                                title: '5 Dedicated Academic Club Portals',
+                                desc: 'Specialized modular hubs for Journalism (<code>club/journ.php</code>), Mathematics (<code>club/math.php</code>), Science (<code>club/science.php</code>), Sports (<code>club/sports.php</code>), and Teatro (<code>club/teatro.php</code>).'
+                            },
+                            {
+                                icon: 'fas fa-bullhorn',
+                                title: 'Announcement & Event CRUD Pipeline',
+                                desc: 'Secure action dispatchers (<code>actions/add_announcement.php</code>, <code>actions/add_event.php</code>, <code>actions/delete_announcement.php</code>, <code>actions/delete_event.php</code>) handling campus-wide publications.'
+                            },
+                            {
+                                icon: 'fas fa-user-check',
+                                title: 'Membership Moderation & Application Queue',
+                                desc: 'Student club application queue with approval/rejection moderation (<code>status/approve_user.php</code>, <code>status/reject_user.php</code>) and member directory tracking.'
+                            }
+                        ],
+                        features: [
+                            {
+                                icon: 'fas fa-comments',
+                                title: 'Unified Campus Communication Feed',
+                                desc: 'Consolidates official circulars, meeting schedules, and club activity notices into a centralized campus feed.'
+                            },
+                            {
+                                icon: 'fas fa-user-friends',
+                                title: 'Parental Transparency & Oversight Portal',
+                                desc: 'Allows parents to monitor student club affiliations, event attendance, and official school activity broadcasts.'
+                            },
+                            {
+                                icon: 'fas fa-calendar-check',
+                                title: 'Event Scheduling & Attendee Rosters',
+                                desc: 'Club officers schedule rehearsals, workshops, and competitions with real-time attendee tracking.'
+                            },
+                            {
+                                icon: 'fas fa-ticket-alt',
+                                title: 'Integrated Support & Inquiry Ticketing',
+                                desc: 'Direct student inquiry ticketing system (<code>actions/delete_ticket.php</code>) allowing members to request club assistance.'
+                            }
+                        ],
+                        liveUrl: 'https://spi-announcement-hub.free.nf/',
+                        liveBtnText: 'View Live Club Hub',
+                        isPrivate: false
+                    }
+                };
+
                 document.addEventListener('DOMContentLoaded', () => {
+                    const projectModal = document.getElementById('projectModal') || document.getElementById('samaiModal');
+                    const contentEl = document.getElementById('projectModalDynamicContent');
+                    const closeProjectBtn = document.getElementById('closeProjectModalBtn') || document.getElementById('closeSamaiModalBtn');
+                    const closeProjectFooterBtn = document.getElementById('closeProjectModalFooterBtn') || document.getElementById('closeSamaiModalFooterBtn');
+                    const liveBtn = document.getElementById('projectModalLiveBtn');
+                    const liveBtnText = document.getElementById('projectModalLiveBtnText');
+                    const liveBtnIcon = document.getElementById('projectModalLiveBtnIcon');
+
+                    function renderProjectModal(projectId) {
+                        const data = PROJECT_MODAL_DATA[projectId] || PROJECT_MODAL_DATA.infowhiz;
+                        if (!contentEl) return;
+
+                        // Badges HTML
+                        const badgesHtml = data.badges.map(b => `
+                            <span class="samai-badge ${b.class}"><i class="${b.icon}"></i> ${b.text}</span>
+                        `).join('');
+
+                        // Hero Tags HTML
+                        const heroTagsHtml = data.heroTags.map(t => `
+                            <div class="samai-hero-tag"><i class="${t.icon}"></i> ${t.text}</div>
+                        `).join('');
+
+                        // APIs HTML
+                        let apisHtml = '';
+                        if (data.apis && data.apis.length > 0) {
+                            const apiCardsHtml = data.apis.map(api => `
+                                <div class="samai-card" style="padding: 0.85rem 1rem;">
+                                    <div class="samai-card-icon" style="font-size: 1.1rem; color: ${api.color || '#60a5fa'}; margin-bottom: 0.35rem;">
+                                        <i class="${api.icon}"></i>
+                                    </div>
+                                    <h4 style="font-size: 0.88rem; margin-bottom: 0.25rem;">${api.name}</h4>
+                                    <p style="font-size: 0.78rem; line-height: 1.4;">${api.desc}</p>
+                                </div>
+                            `).join('');
+
+                            apisHtml = `
+                                <div class="samai-section">
+                                    <h3 class="samai-section-title"><i class="fas fa-plug"></i> APIs, Endpoints & Cloud Web Services</h3>
+                                    <div class="samai-grid-cards">
+                                        ${apiCardsHtml}
+                                    </div>
+                                </div>
+                            `;
+                        }
+
+                        // Architecture Cards HTML
+                        const archHtml = data.architecture.map(a => `
+                            <div class="samai-card">
+                                <div class="samai-card-icon"><i class="${a.icon}"></i></div>
+                                <h4>${a.title}</h4>
+                                <p>${a.desc}</p>
+                            </div>
+                        `).join('');
+
+                        // Features HTML
+                        const featHtml = data.features.map(f => `
+                            <li>
+                                <div class="samai-feat-icon"><i class="${f.icon}"></i></div>
+                                <div class="samai-feat-text">
+                                    <strong>${f.title}:</strong>
+                                    <span>${f.desc}</span>
+                                </div>
+                            </li>
+                        `).join('');
+
+                        // Gallery HTML (if available)
+                        let galleryHtml = '';
+                        if (data.gallery && data.gallery.length > 0) {
+                            const galleryItemsHtml = data.gallery.map(g => `
+                                <div class="samai-gallery-item" data-full-img="${g.img}" data-caption="${g.caption}">
+                                    <div class="samai-gallery-img-wrapper">
+                                        <img loading="lazy" src="${g.img}" alt="${g.title}" class="samai-gallery-img">
+                                        <div class="samai-gallery-zoom"><i class="fas fa-search-plus"></i> Click to Enlarge</div>
+                                    </div>
+                                    <div class="samai-gallery-caption">
+                                        <span class="samai-gallery-tag">${g.tag}</span>
+                                        <h4>${g.title}</h4>
+                                    </div>
+                                </div>
+                            `).join('');
+
+                            galleryHtml = `
+                                <div class="samai-section">
+                                    <h3 class="samai-section-title"><i class="fas fa-images"></i> Platform Interface & System Screenshots</h3>
+                                    <p class="samai-gallery-intro">Live captures and workspace previews (Click any image to view in full resolution):</p>
+                                    <div class="samai-gallery-grid">
+                                        ${galleryItemsHtml}
+                                    </div>
+                                </div>
+                            `;
+                        }
+
+                        // Tech Stack Pills HTML
+                        const techHtml = data.techStack.map(t => `
+                            <span class="samai-pill">
+                                <i class="${t.icon}" ${t.color ? `style="color:${t.color};"` : ''}></i> ${t.name}
+                            </span>
+                        `).join('');
+
+                        contentEl.innerHTML = `
+                            <div class="samai-modal-header">
+                                <div class="samai-badge-row">
+                                    ${badgesHtml}
+                                </div>
+                                <h2 id="projectModalTitle" class="samai-modal-title">${data.title} <span class="samai-title-sub">— ${data.titleSub}</span></h2>
+                                <p class="samai-modal-subtitle">${data.subtitle}</p>
+                            </div>
+
+                            <div class="samai-modal-hero">
+                                <img src="${data.heroImage}" alt="${data.title} Interface" class="samai-modal-img">
+                                <div class="samai-hero-overlay">
+                                    ${heroTagsHtml}
+                                </div>
+                            </div>
+
+                            <div class="samai-modal-body">
+                                <!-- APIS & WEB SERVICES -->
+                                ${apisHtml}
+
+                                <!-- ARCHITECTURE HIGHLIGHTS -->
+                                <div class="samai-section">
+                                    <h3 class="samai-section-title"><i class="fas fa-layer-group"></i> Technical Architecture & System Engineering</h3>
+                                    <div class="samai-grid-cards">
+                                        ${archHtml}
+                                    </div>
+                                </div>
+
+                                <!-- CORE PLATFORM CAPABILITIES -->
+                                <div class="samai-section">
+                                    <h3 class="samai-section-title"><i class="fas fa-star"></i> Core Features & Capabilities</h3>
+                                    <ul class="samai-feature-list">
+                                        ${featHtml}
+                                    </ul>
+                                </div>
+
+                                <!-- GALLERY (IF AVAILABLE) -->
+                                ${galleryHtml}
+
+                                <!-- TECH STACK MATRIX -->
+                                <div class="samai-section">
+                                    <h3 class="samai-section-title"><i class="fas fa-code"></i> Technology Stack</h3>
+                                    <div class="samai-tech-pills">
+                                        ${techHtml}
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+
+                        if (liveBtn) {
+                            liveBtn.href = data.liveUrl;
+                            if (data.isPrivate) {
+                                liveBtn.removeAttribute('target');
+                                if (liveBtnText) liveBtnText.innerText = data.liveBtnText || 'Inquire About Project';
+                                if (liveBtnIcon) liveBtnIcon.className = 'fas fa-arrow-right';
+                            } else {
+                                liveBtn.setAttribute('target', '_blank');
+                                liveBtn.setAttribute('rel', 'noopener noreferrer');
+                                if (liveBtnText) liveBtnText.innerText = data.liveBtnText || 'View Live Project';
+                                if (liveBtnIcon) liveBtnIcon.className = 'fas fa-arrow-up-right-from-square';
+                            }
+                        }
+                    }
+
+                    window.openProjectModal = function(projectId) {
+                        if (!projectModal) return;
+                        renderProjectModal(projectId);
+                        projectModal.classList.add('active');
+                        projectModal.setAttribute('aria-hidden', 'false');
+                        document.body.style.overflow = 'hidden';
+                        const container = projectModal.querySelector('.samai-modal-container, .project-modal-container');
+                        if (container) container.scrollTop = 0;
+                        playClickSound();
+                    };
+
+                    window.closeProjectModal = function() {
+                        if (!projectModal) return;
+                        projectModal.classList.remove('active');
+                        projectModal.setAttribute('aria-hidden', 'true');
+                        document.body.style.overflow = '';
+                        playClickSound();
+                    };
+
+                    // Backwards compatibility alias
+                    window.openSamaiModal = () => window.openProjectModal('samai');
+                    window.closeSamaiModal = window.closeProjectModal;
+
+                    if (closeProjectBtn) closeProjectBtn.addEventListener('click', window.closeProjectModal);
+                    if (closeProjectFooterBtn) closeProjectFooterBtn.addEventListener('click', window.closeProjectModal);
+
+                    if (projectModal) {
+                        renderProjectModal('infowhiz');
+                        projectModal.addEventListener('click', (e) => {
+                            if (e.target === projectModal) window.closeProjectModal();
+                        });
+                    }
+
+                    // SCREENSHOT FULLSCREEN LIGHTBOX
+                    const lightbox = document.getElementById('samaiLightbox');
+                    const lightboxImg = document.getElementById('samaiLightboxImg');
+                    const lightboxCaption = document.getElementById('samaiLightboxCaption');
+                    const closeLightboxBtn = document.getElementById('closeSamaiLightboxBtn');
+
+                    window.openSamaiLightbox = function(src, caption) {
+                        if (!lightbox || !lightboxImg) return;
+                        lightboxImg.src = src;
+                        if (lightboxCaption) lightboxCaption.innerText = caption || '';
+                        lightbox.classList.add('active');
+                        lightbox.setAttribute('aria-hidden', 'false');
+                        playClickSound();
+                    };
+
+                    window.closeSamaiLightbox = function() {
+                        if (!lightbox) return;
+                        lightbox.classList.remove('active');
+                        lightbox.setAttribute('aria-hidden', 'true');
+                        playClickSound();
+                    };
+
+                    if (closeLightboxBtn) closeLightboxBtn.addEventListener('click', window.closeSamaiLightbox);
+
+                    if (lightbox) {
+                        lightbox.addEventListener('click', (e) => {
+                            if (e.target === lightbox || e.target === closeLightboxBtn) {
+                                window.closeSamaiLightbox();
+                            }
+                        });
+                    }
+
+                    document.addEventListener('click', (e) => {
+                        const galleryItem = e.target.closest('.samai-gallery-item');
+                        if (galleryItem) {
+                            const fullImg = galleryItem.getAttribute('data-full-img');
+                            const caption = galleryItem.getAttribute('data-caption');
+                            if (fullImg) {
+                                window.openSamaiLightbox(fullImg, caption);
+                            }
+                        }
+                    });
+
+                    window.addEventListener('keydown', (e) => {
+                        if (e.key === 'Escape') {
+                            if (lightbox && lightbox.classList.contains('active')) {
+                                window.closeSamaiLightbox();
+                                return;
+                            }
+                            if (projectModal && projectModal.classList.contains('active')) {
+                                window.closeProjectModal();
+                            }
+                        }
+                    });
+
+                    // PROJECT CARD CLICK INTERCEPTOR (ALL PROJECTS OPEN MODAL SUBPAGE ON DELIBERATE CLICK ONLY)
                     document.addEventListener('click', (e) => {
                         const card = e.target.closest('.project-card');
                         if (!card) return;
 
-                        const href = card.getAttribute('href') || '';
-                        const text = card.textContent || '';
-                        const privateAttr = card.getAttribute('data-private-project') || '';
-
-                        const isSamAI = href.includes('samai') || text.includes('SamAI') || privateAttr === 'SamAI';
-                        const isMobile = window.innerWidth <= 768;
-
-                        let projectName = '';
-                        let isPrivacy = false;
-
-                        if (isSamAI) {
-                            projectName = 'SamAI';
-                            isPrivacy = true;
-                        } else if (isMobile) {
-                            if (href.includes('TechnoPhotobooth') || text.includes('TechnoBytes Photobooth') || text.includes('Photobooth')) {
-                                projectName = 'TechnoBytes Photobooth';
-                            }
-                        }
-
-                        if (projectName) {
+                        // If user dragged or swiped the carousel, completely suppress the click event!
+                        if (Date.now() - globalMarqueeDragTimestamp < 350) {
                             e.preventDefault();
                             e.stopPropagation();
+                            return false;
+                        }
 
-                            playClickSound();
+                        e.preventDefault();
+                        e.stopPropagation();
 
-                            const tooltip = document.getElementById('techTooltip');
-                            const tooltipName = document.getElementById('tooltipName');
-                            const tooltipTag = document.getElementById('tooltipTag');
-                            const tooltipDesc = document.getElementById('tooltipDesc');
-                            const tooltipIcon = document.getElementById('tooltipIcon');
+                        let projectId = card.getAttribute('data-project-id');
+                        if (!projectId) {
+                            const href = card.getAttribute('href') || '';
+                            const text = card.textContent || '';
+                            const privateAttr = card.getAttribute('data-private-project') || '';
 
-                            let tooltipHideTimeout = null;
-                            if (tooltip) {
-                                if (tooltipName) tooltipName.innerText = projectName;
-                                if (tooltipTag) tooltipTag.innerText = isPrivacy ? '🔒 PRIVATE SYSTEM' : '💻 DESKTOP REQUIRED';
-                                if (tooltipDesc) tooltipDesc.innerText = isPrivacy
-                                    ? `Live web access to SamAI is restricted for privacy and security. Ask the AI Chatbot for full technical architecture details!`
-                                    : `In order to view and experience ${projectName}, you need to be on a PC / Desktop computer.`;
-                                if (tooltipIcon) tooltipIcon.innerHTML = isPrivacy 
-                                    ? '<i class="fas fa-lock" style="color:var(--accent);"></i>'
-                                    : '<i class="fas fa-desktop" style="color:var(--accent);"></i>';
-                                tooltip.classList.add('visible');
+                            if (href.includes('samai') || text.includes('SamAI') || privateAttr === 'SamAI') projectId = 'samai';
+                            else if (href.includes('infowhiz') || text.includes('InfoWhiz')) projectId = 'infowhiz';
+                            else if (href.includes('PortPing') || href.includes('ping') || text.includes('PortPing')) projectId = 'portping';
+                            else if (href.includes('printportal') || text.includes('Print Portal')) projectId = 'printportal';
+                            else if (href.includes('TechnoPhotobooth') || text.includes('TechnoBytes') || text.includes('Photobooth')) projectId = 'technophotobooth';
+                            else if (href.includes('cupofstory') || text.includes('Cup Of Story')) projectId = 'cupofstory';
+                            else if (href.includes('club') || text.includes('Club Hub')) projectId = 'clubhub';
+                        }
 
-                                if (tooltipHideTimeout) clearTimeout(tooltipHideTimeout);
-                                tooltipHideTimeout = setTimeout(() => {
-                                    if (tooltip) tooltip.classList.remove('visible');
-                                }, 3000);
-                            }
-
-                            if (typeof window.openChatbotWithMessage === 'function') {
-                                window.openChatbotWithMessage(projectName, isPrivacy);
-                            }
+                        if (projectId && window.openProjectModal) {
+                            window.openProjectModal(projectId);
                         }
                     }, true);
                 });
@@ -1103,9 +1999,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         }, 300);
                     }
 
+                    const modalScrollSelector = '#projectModal, .project-modal-container, .project-modal-overlay, #samaiModal, .samai-modal-container, .samai-modal-overlay, #guestbookModal, .guestbook-modal-card, .guestbook-modal-overlay, #samaiLightbox, .samai-lightbox-overlay, #chatMessages, .chatbot-container, .chatbot-window, textarea, input, select';
+
                     window.addEventListener('wheel', (e) => {
                         if (!snapEnabled || isMobileDevice()) return;
-                        if (e.target.closest('#chatMessages, .chatbot-container, textarea, input')) {
+                        if (e.target.closest(modalScrollSelector) || document.querySelector('.project-modal-overlay.active, .samai-modal-overlay.active, .guestbook-modal-overlay.active, .samai-lightbox-overlay.active, .chatbot-window.open')) {
                             return;
                         }
 
@@ -1129,7 +2027,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     window.addEventListener('touchend', (e) => {
                         if (!snapEnabled || isMobileDevice()) return;
-                        if (e.target.closest('#chatMessages, .chatbot-container, textarea, input, .certs-marquee, .projects-marquee')) {
+                        if (e.target.closest(modalScrollSelector + ', .certs-marquee, .projects-marquee') || document.querySelector('.project-modal-overlay.active, .samai-modal-overlay.active, .guestbook-modal-overlay.active, .samai-lightbox-overlay.active, .chatbot-window.open')) {
                             return;
                         }
                         if (isAnimating || !e.changedTouches || e.changedTouches.length === 0) return;
@@ -1149,6 +2047,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     window.addEventListener('keydown', (e) => {
                         if (!snapEnabled || isMobileDevice()) return;
+                        if (document.querySelector('.project-modal-overlay.active, .samai-modal-overlay.active, .guestbook-modal-overlay.active, .samai-lightbox-overlay.active, .chatbot-window.open')) {
+                            return;
+                        }
                         if (['ArrowDown', 'PageDown'].includes(e.key)) {
                             e.preventDefault();
                             if (!isAnimating) {
