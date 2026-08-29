@@ -182,6 +182,10 @@
     let chatAudioCtx = null;
     function playChatbotReplySound() {
         try {
+            if (typeof window !== 'undefined') {
+                if (window.isSoundMuted && window.isSoundMuted()) return;
+                if (localStorage.getItem('portfolio_sound_muted') === 'true') return;
+            }
             if (!chatAudioCtx) {
                 chatAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
             }

@@ -67,8 +67,36 @@ document.addEventListener('DOMContentLoaded', () => {
                 let audioUnlocked = false;
                 let lastHoverSoundTime = 0;
 
+                window.isSoundMuted = function() {
+                    return localStorage.getItem('portfolio_sound_muted') === 'true';
+                };
+
+                window.setSoundMuted = function(muted) {
+                    localStorage.setItem('portfolio_sound_muted', muted ? 'true' : 'false');
+                    updateMuteButtonUI();
+                };
+
+                function updateMuteButtonUI() {
+                    const muteBtn = document.getElementById('muteToggleBtn');
+                    if (!muteBtn) return;
+                    const isMuted = window.isSoundMuted();
+                    const icon = muteBtn.querySelector('i');
+                    if (isMuted) {
+                        muteBtn.classList.add('muted');
+                        if (icon) icon.className = 'fas fa-volume-xmark';
+                        muteBtn.setAttribute('title', 'Sound: MUTED (Click to unmute)');
+                        muteBtn.setAttribute('aria-label', 'Sound is muted');
+                    } else {
+                        muteBtn.classList.remove('muted');
+                        if (icon) icon.className = 'fas fa-volume-high';
+                        muteBtn.setAttribute('title', 'Sound: ON (Click to mute)');
+                        muteBtn.setAttribute('aria-label', 'Sound is on');
+                    }
+                }
+
                 function initAudioContext() {
                     try {
+                        if (window.isSoundMuted && window.isSoundMuted()) return;
                         if (!audioCtx) {
                             audioCtx = new (window.AudioContext || window.webkitAudioContext)();
                         }
@@ -88,6 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // CRASH-PROOF & ACCURATE CLICKY UI SOUND ENGINE
                 function playHoverSound() {
+                    if (window.isSoundMuted && window.isSoundMuted()) return;
                     try {
                         initAudioContext();
                         if (!audioCtx) return;
@@ -114,6 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 function playClickSound() {
+                    if (window.isSoundMuted && window.isSoundMuted()) return;
                     try {
                         initAudioContext();
                         if (!audioCtx) return;
@@ -181,6 +211,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 function playTypingSound() {
+                    if (window.isSoundMuted && window.isSoundMuted()) return;
                     try {
                         const url = getClickWavUrl();
                         if (url) {
@@ -217,6 +248,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 let lastSelectionTickTime = 0;
                 function playSelectionTickSound() {
+                    if (window.isSoundMuted && window.isSoundMuted()) return;
                     const now = Date.now();
                     if (now - lastSelectionTickTime < 35) return;
                     lastSelectionTickTime = now;
@@ -246,6 +278,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 function playCardShuffleSound() {
+                    if (window.isSoundMuted && window.isSoundMuted()) return;
                     try {
                         initAudioContext();
                         if (!audioCtx) return;
@@ -983,7 +1016,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     animateSphere();
                 });
 
-                // STRICT SECTION-BY-SECTION SNAP SWITCHER ENGINE (DESKTOP ONLY / TOGGLEABLE)
+                // STRICT SECTION-BY-SECTION SNAP SWITCHER & FLOATING CONTROLS ENGINE (DESKTOP ONLY / TOGGLEABLE)
                 (function() {
                     let isAnimating = false;
                     let currentIndex = 0;
@@ -993,27 +1026,52 @@ document.addEventListener('DOMContentLoaded', () => {
                     let snapEnabled = !isMobileDevice();
                     
                     const toggleBtn = document.getElementById('snapToggleBtn');
-                    const toggleLabel = document.getElementById('snapToggleLabel');
+                    const muteBtn = document.getElementById('muteToggleBtn');
 
                     if (isMobileDevice()) {
                         document.documentElement.style.scrollSnapType = 'none';
                     }
 
                     if (toggleBtn) {
-                        toggleBtn.addEventListener('click', () => {
-                            snapEnabled = !snapEnabled;
+                        const updateSnapUI = () => {
+                            const icon = toggleBtn.querySelector('i');
                             if (snapEnabled) {
                                 toggleBtn.classList.remove('snap-off');
-                                toggleBtn.querySelector('i').className = 'fas fa-lock';
-                                if (toggleLabel) toggleLabel.innerText = 'Snap Scroll: ON';
+                                if (icon) icon.className = 'fas fa-lock';
+                                toggleBtn.setAttribute('title', 'Snap Scroll: ON (Click for Free Scroll)');
+                                toggleBtn.setAttribute('aria-label', 'Snap Scroll is ON');
                                 document.documentElement.style.scrollSnapType = 'y mandatory';
                             } else {
                                 toggleBtn.classList.add('snap-off');
-                                toggleBtn.querySelector('i').className = 'fas fa-unlock';
-                                if (toggleLabel) toggleLabel.innerText = 'Free Scroll: ON';
+                                if (icon) icon.className = 'fas fa-unlock';
+                                toggleBtn.setAttribute('title', 'Free Scroll: ON (Click for Snap Scroll)');
+                                toggleBtn.setAttribute('aria-label', 'Free Scroll is ON');
                                 document.documentElement.style.scrollSnapType = 'none';
                             }
+                        };
+
+                        toggleBtn.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            snapEnabled = !snapEnabled;
+                            updateSnapUI();
+                            if (typeof playClickSound === 'function') playClickSound();
                         });
+
+                        updateSnapUI();
+                    }
+
+                    if (muteBtn) {
+                        muteBtn.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            const nextMuted = !window.isSoundMuted();
+                            window.setSoundMuted(nextMuted);
+                            if (!nextMuted && typeof playClickSound === 'function') {
+                                playClickSound();
+                            }
+                        });
+                        if (typeof updateMuteButtonUI === 'function') {
+                            updateMuteButtonUI();
+                        }
                     }
 
                     const sections = Array.from(document.querySelectorAll('section, .contact-section'));

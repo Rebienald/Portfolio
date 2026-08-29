@@ -128,7 +128,7 @@
                 <!-- DESCRIPTION & BUTTONS ON RIGHT -->
                 <div class="about-right reveal">
                     <div class="section-header about-header-block" style="margin-bottom: 0.75rem; text-align: left;">
-                    <h2>About Me</h2>
+                    <h2>Rebienald Carpio</h2>
                     </div>
                     <p class="about-desc" style="margin-bottom: 1.25rem;">IT student at Cavite State University with 5 years of experience in building full-stack web applications, mobile apps, Discord bots, and AI-powered systems.</p>
                     <div class="btn-group">
@@ -731,10 +731,10 @@
         <section id="guestbook" class="guestbook-section">
             <div class="container">
                 <div class="section-header reveal" style="text-align: center; margin-bottom: 1.5rem;">
-                    <h2 class="text-gradient" style="margin-bottom: 0.75rem;">Community & Recruiter Feedback</h2>
+                    <h2 class="text-gradient" style="margin-bottom: 0.75rem;">Community Feedback</h2>
                     <div class="guestbook-header-row" style="justify-content: center; text-align: center;">
                         <button class="btn-guestbook-action" id="openGuestbookModalBtn">
-                            <i class="fas fa-pen"></i> Leave an Endorsement
+                            <i class="fas fa-pen"></i> Leave a feedback!
                         </button>
                     </div>
                 </div>
@@ -745,9 +745,15 @@
             </div>
         </section>
 
-            <button id="snapToggleBtn" class="snap-toggle-btn" title="Toggle Scroll Constraint Mode">
-                <i class="fas fa-lock"></i> <span id="snapToggleLabel">Snap Scroll: ON</span>
-            </button>
+            <!-- FLOATING DESKTOP CONTROLS (SNAP SCROLL & MUTE) -->
+            <div class="floating-controls" id="floatingControls">
+                <button id="snapToggleBtn" class="floating-btn snap-toggle-btn" title="Snap Scroll: ON (Click for Free Scroll)" aria-label="Toggle Snap Scroll">
+                    <i class="fas fa-lock"></i>
+                </button>
+                <button id="muteToggleBtn" class="floating-btn mute-toggle-btn" title="Sound: ON (Click to mute)" aria-label="Toggle Sound Effects">
+                    <i class="fas fa-volume-high"></i>
+                </button>
+            </div>
 
             <footer>
                 <div class="container" style="display: flex; justify-content: center; align-items: center; text-align: center;">

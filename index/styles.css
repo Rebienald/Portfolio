@@ -1567,33 +1567,49 @@
             .skill-logo-btn:hover svg {
                 transform: scale(1.15);
             }
-            .snap-toggle-btn {
+            .floating-controls {
                 position: fixed;
                 bottom: 2rem;
                 left: 2rem;
                 z-index: 9999;
+                display: flex;
+                align-items: center;
+                gap: 0.65rem;
+            }
+            .floating-btn,
+            .snap-toggle-btn,
+            .mute-toggle-btn {
+                width: 44px;
+                height: 44px;
+                border-radius: 50%;
                 background: linear-gradient(180deg, #1d1e28 0%, #111218 100%);
                 border: 1px solid rgba(255, 255, 255, 0.25);
                 border-bottom: 3px solid rgba(255, 255, 255, 0.4);
                 color: #FFFFFF;
-                padding: 0.6rem 1.1rem;
-                border-radius: 30px;
-                font-size: 0.78rem;
-                font-weight: 700;
+                font-size: 0.95rem;
                 font-family: 'Plus Jakarta Sans', sans-serif;
-                letter-spacing: 0.05em;
                 cursor: pointer;
                 box-shadow: 0 6px 20px rgba(0, 0, 0, 0.8);
                 display: inline-flex;
                 align-items: center;
-                gap: 0.5rem;
+                justify-content: center;
                 transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
                 user-select: none;
+                outline: none;
+                padding: 0;
             }
-            .snap-toggle-btn:hover {
+            .floating-btn:hover,
+            .snap-toggle-btn:hover,
+            .mute-toggle-btn:hover {
                 border-color: #FFFFFF;
                 box-shadow: 0 8px 25px rgba(0, 0, 0, 0.9), 0 0 16px rgba(255, 255, 255, 0.25);
                 transform: translateY(-2px);
+                color: #FFFFFF;
+            }
+            .floating-btn:active,
+            .snap-toggle-btn:active,
+            .mute-toggle-btn:active {
+                transform: translateY(1px) scale(0.96);
             }
             .snap-toggle-btn.snap-off {
                 background: linear-gradient(180deg, #14151b 0%, #0a0b0f 100%);
@@ -1601,8 +1617,28 @@
                 border-bottom-color: rgba(255, 255, 255, 0.3);
                 color: #8A8D9B;
             }
+            .mute-toggle-btn.muted {
+                background: linear-gradient(180deg, #221417 0%, #150b0e 100%);
+                border-color: rgba(248, 113, 113, 0.45);
+                border-bottom-color: rgba(248, 113, 113, 0.65);
+                color: #F87171;
+            }
+            .mute-toggle-btn.muted:hover {
+                border-color: #F87171;
+                box-shadow: 0 8px 25px rgba(0, 0, 0, 0.9), 0 0 16px rgba(248, 113, 113, 0.35);
+                color: #F87171;
+            }
             @media (max-width: 768px) {
                 .snap-toggle-btn { display: none !important; }
+                .floating-controls {
+                    bottom: 1.25rem;
+                    left: 1.25rem;
+                }
+                .mute-toggle-btn {
+                    width: 40px;
+                    height: 40px;
+                    font-size: 0.85rem;
+                }
                 html { scroll-snap-type: none !important; }
                 section, .contact-section { scroll-snap-align: none !important; }
             }
@@ -2551,7 +2587,7 @@
             }
             body .glass-card, body .cert-card, body .project-card, body nav,
             body .skill-logo-btn, body .btn-primary, body .btn-secondary,
-            body .social-link, body .snap-toggle-btn {
+            body .social-link, body .snap-toggle-btn, body .mute-toggle-btn, body .floating-btn {
                 border-color: rgba(255, 255, 255, 0.55) !important;
             }
             body h1, body h2, body h3, body h4, body h5,
