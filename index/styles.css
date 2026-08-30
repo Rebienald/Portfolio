@@ -160,14 +160,14 @@
             .logo:hover {
                 opacity: 0.85;
             }
-            .nav-links { display: flex; gap: 2rem; list-style: none; align-items: center; margin-left: auto; }
+            .nav-links { display: flex; gap: 1.15rem; list-style: none; align-items: center; margin-left: auto; }
             .nav-links a {
                 color: rgba(255, 255, 255, 0.7) !important;
-                font-size: 0.88rem;
+                font-size: 0.85rem;
                 font-weight: 500;
                 text-decoration: none;
                 transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-                padding: 0.45rem 0.9rem;
+                padding: 0.4rem 0.75rem;
                 border-radius: 8px;
                 white-space: nowrap;
                 border: 1px solid transparent;
