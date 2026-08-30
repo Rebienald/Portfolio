@@ -2,14 +2,13 @@
     --bg-base: #060608;
     --bg-elevated: #0d0e12;
     --bg-card: #121319;
-    --accent: #FF7A00;
-    --accent-hover: #E06B00;
+    --accent: #D4AF37;
+    --accent-hover: #F3E5AB;
     --text-primary: #FFFFFF;
-    --text-secondary: rgba(255, 255, 255, 0.8);
-    --text-tertiary: #9CA3AF;
-    --glass-border: rgba(255, 255, 255, 0.12);
-    --font-heading: "Plus Jakarta Sans", "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
-    --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+    --text-secondary: #FFFFFF;
+    --text-tertiary: #FFFFFF;
+    --glass-border: rgba(212, 175, 55, 0.25);
+    --font-heading: "Plus Jakarta Sans", "Inter", sans-serif;
 }
 
 * {
@@ -28,7 +27,7 @@
 }
 
 ::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(212, 175, 55, 0.3);
     border-radius: 4px;
 }
 
@@ -41,7 +40,7 @@ body {
     background-color: var(--bg-base);
     color: var(--text-secondary);
     font-family: "Plus Jakarta Sans", "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
-    line-height: 1.6;
+    line-height: 1.5;
     -webkit-font-smoothing: antialiased;
     min-height: 100vh;
     display: flex;
@@ -223,10 +222,10 @@ nav {
     border-color: #FFFFFF;
 }
 
-/* ================= MAIN CONTENT & BACK BUTTONS ================= */
+/* ================= MAIN CONTENT (ORIGINAL FLAT FORM - NO CARD) ================= */
 .main-content {
-    padding-top: 6.5rem;
-    padding-bottom: 3.5rem;
+    padding-top: 7rem;
+    padding-bottom: 3rem;
     flex-grow: 1;
     display: flex;
     align-items: center;
@@ -239,81 +238,40 @@ nav {
     margin: 0 auto;
 }
 
-/* Back Buttons (PC and Mobile) */
-.back-btn-container {
-    margin-bottom: 1.25rem;
-    display: flex;
-    align-items: center;
+.contact-form {
+    width: 100%;
 }
 
-.back-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.55rem;
+.contact-form h2 {
     font-family: var(--font-heading);
-    font-size: 0.88rem;
-    font-weight: 700;
-    color: #FFFFFF;
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    padding: 0.55rem 1.15rem;
-    border-radius: 100px;
-    text-decoration: none;
-    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    backdrop-filter: blur(10px);
-}
-
-.back-btn:hover {
-    background: rgba(255, 255, 255, 0.14);
-    border-color: #FFFFFF;
-    color: #FFFFFF;
-    transform: translateX(-4px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
-}
-
-.card-footer-back {
-    margin-top: 1.75rem;
-    padding-top: 1.25rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
-    text-align: center;
-}
-
-.back-btn.secondary {
-    font-size: 0.82rem;
-    padding: 0.45rem 1rem;
-    background: transparent;
-    border-color: rgba(255, 255, 255, 0.15);
-    color: rgba(255, 255, 255, 0.7);
-    box-shadow: none;
-}
-
-.back-btn.secondary:hover {
-    color: #FFFFFF;
-    border-color: rgba(255, 255, 255, 0.4);
-    background: rgba(255, 255, 255, 0.08);
-    transform: translateX(-3px);
-}
-
-/* Glass Card */
-.glass-card {
-    background: var(--bg-card);
-    border: 1px solid var(--glass-border);
-    border-radius: 20px;
-    padding: 2.25rem;
-    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.7);
-    transition: border-color 0.25s ease;
-}
-
-.glass-card h2 {
-    font-family: var(--font-heading);
-    font-size: 1.6rem;
-    font-weight: 800;
+    font-size: 1.5rem;
     margin-bottom: 1.5rem;
     color: var(--text-primary);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+/* Back Link (PC and Mobile) */
+.back-home {
+    margin-bottom: 1.25rem;
+}
+
+.back-link {
+    font-size: 0.88rem;
+    color: var(--accent);
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+}
+
+.back-link:hover {
+    color: var(--accent-hover);
+    transform: translateX(-3px);
 }
 
 /* Form Styles */
@@ -333,6 +291,9 @@ nav {
     font-size: 0.85rem;
     font-weight: 600;
     color: var(--text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .form-group input,
@@ -340,24 +301,22 @@ nav {
     width: 100%;
     padding: 0.85rem 1.1rem;
     background: #0d0e12;
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(212, 175, 55, 0.25);
     border-radius: 12px;
     color: var(--text-primary);
     font-family: "Plus Jakarta Sans", sans-serif;
     font-size: 0.92rem;
     outline: none;
-    transition: all 0.2s ease;
+    transition: border-color 0.2s ease;
 }
 
 .form-group input:focus,
 .form-group textarea:focus {
-    border-color: rgba(255, 255, 255, 0.6);
-    background: #101117;
-    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.08);
+    border-color: rgba(212, 175, 55, 0.7);
 }
 
 .form-group textarea {
-    min-height: 120px;
+    height: 120px;
     resize: vertical;
 }
 
@@ -371,19 +330,20 @@ nav {
     font-size: 0.95rem;
     font-weight: 700;
     border-radius: 12px;
-    background: #FFFFFF;
+    background: #D4AF37;
     color: #060608;
     border: none;
     cursor: pointer;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
-    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+    transition: all 0.25s ease;
     margin-top: 0.5rem;
+    white-space: nowrap;
 }
 
 .submit-btn:hover:not(:disabled) {
     transform: translateY(-2px);
-    background: #E5E7EB;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+    background: #F3E5AB;
+    color: #060608;
 }
 
 .submit-btn:disabled {
@@ -391,12 +351,11 @@ nav {
     cursor: not-allowed;
 }
 
-/* Status Notifications */
 .status-message {
     padding: 0.85rem 1.1rem;
     border-radius: 10px;
     font-size: 0.88rem;
-    margin-bottom: 1.25rem;
+    margin-bottom: 1rem;
     display: none;
 }
 
@@ -407,7 +366,6 @@ nav {
     background: rgba(16, 185, 129, 0.12);
     border: 1px solid rgba(16, 185, 129, 0.4);
     color: #34d399;
-    line-height: 1.4;
 }
 
 .status-message.error {
@@ -417,10 +375,8 @@ nav {
     background: rgba(239, 68, 68, 0.12);
     border: 1px solid rgba(239, 68, 68, 0.4);
     color: #f87171;
-    line-height: 1.4;
 }
 
-/* Footer */
 footer {
     text-align: center;
     padding: 2rem 1rem;
@@ -430,7 +386,7 @@ footer {
     background: #060608;
 }
 
-/* ================= EXACT INDEX MOBILE RESPONSIVENESS ================= */
+/* ================= RESPONSIVE ================= */
 @media (max-width: 768px) {
     .container {
         padding: 0 1rem;
@@ -486,17 +442,14 @@ footer {
     }
 
     .main-content {
-        padding-top: 5.5rem;
-        padding-bottom: 2.5rem;
+        padding-top: 6rem;
     }
 
-    .glass-card {
-        padding: 1.5rem 1.25rem;
-        border-radius: 16px;
+    .contact-grid {
+        width: 100%;
     }
 
     .form-row {
         grid-template-columns: 1fr;
-        gap: 0;
     }
 }
