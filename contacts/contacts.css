@@ -327,14 +327,22 @@
                 display: none;
             }
             .status-message.success {
-                background: rgba(16, 185, 129, 0.1);
-                border: 1px solid rgba(16, 185, 129, 0.3);
+                display: flex;
+                align-items: center;
+                gap: 0.6rem;
+                background: rgba(16, 185, 129, 0.12);
+                border: 1px solid rgba(16, 185, 129, 0.4);
                 color: #34d399;
+                line-height: 1.4;
             }
             .status-message.error {
-                background: rgba(239, 68, 68, 0.1);
-                border: 1px solid rgba(239, 68, 68, 0.3);
+                display: flex;
+                align-items: center;
+                gap: 0.6rem;
+                background: rgba(239, 68, 68, 0.12);
+                border: 1px solid rgba(239, 68, 68, 0.4);
                 color: #f87171;
+                line-height: 1.4;
             }
             .back-home {
                 margin-top: 1rem;
