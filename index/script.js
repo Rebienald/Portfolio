@@ -1394,139 +1394,77 @@ document.addEventListener('DOMContentLoaded', () => {
                         const data = PROJECT_MODAL_DATA[projectId] || PROJECT_MODAL_DATA.infowhiz;
                         if (!contentEl) return;
 
-                        // Badges HTML
-                        const badgesHtml = data.badges.map(b => `
-                            <span class="samai-badge ${b.class}"><i class="${b.icon}"></i> ${b.text}</span>
+                        // Tech Stack Tags (Clean Minimalist Monospace Tags)
+                        const techHtml = (data.techStack || []).map(t => `
+                            <span class="proj-min-tech-tag">${t.name}</span>
                         `).join('');
 
-                        // Hero Tags HTML
-                        const heroTagsHtml = data.heroTags.map(t => `
-                            <div class="samai-hero-tag"><i class="${t.icon}"></i> ${t.text}</div>
-                        `).join('');
-
-                        // APIs HTML
-                        let apisHtml = '';
-                        if (data.apis && data.apis.length > 0) {
-                            const apiCardsHtml = data.apis.map(api => `
-                                <div class="samai-card" style="padding: 0.85rem 1rem;">
-                                    <div class="samai-card-icon" style="font-size: 1.1rem; color: ${api.color || '#60a5fa'}; margin-bottom: 0.35rem;">
-                                        <i class="${api.icon}"></i>
+                        // Highlights (Clean Scannable Bullet Points)
+                        const highlights = (data.features && data.features.length > 0) ? data.features : (data.architecture || []);
+                        const highlightsHtml = highlights.map(f => {
+                            const cleanDesc = (f.desc || '').replace(/<\/?(code|em|strong|span|i|div)[^>]*>/gi, '');
+                            return `
+                                <li class="proj-min-highlight-item">
+                                    <span class="proj-min-highlight-bullet">&bull;</span>
+                                    <div class="proj-min-highlight-text">
+                                        <strong>${f.title}:</strong> <span>${cleanDesc}</span>
                                     </div>
-                                    <h4 style="font-size: 0.88rem; margin-bottom: 0.25rem;">${api.name}</h4>
-                                    <p style="font-size: 0.78rem; line-height: 1.4;">${api.desc}</p>
-                                </div>
-                            `).join('');
-
-                            apisHtml = `
-                                <div class="samai-section">
-                                    <h3 class="samai-section-title"><i class="fas fa-plug"></i> APIs, Endpoints & Cloud Web Services</h3>
-                                    <div class="samai-grid-cards">
-                                        ${apiCardsHtml}
-                                    </div>
-                                </div>
+                                </li>
                             `;
-                        }
+                        }).join('');
 
-                        // Architecture Cards HTML
-                        const archHtml = data.architecture.map(a => `
-                            <div class="samai-card">
-                                <div class="samai-card-icon"><i class="${a.icon}"></i></div>
-                                <h4>${a.title}</h4>
-                                <p>${a.desc}</p>
-                            </div>
-                        `).join('');
-
-                        // Features HTML
-                        const featHtml = data.features.map(f => `
-                            <li>
-                                <div class="samai-feat-icon"><i class="${f.icon}"></i></div>
-                                <div class="samai-feat-text">
-                                    <strong>${f.title}:</strong>
-                                    <span>${f.desc}</span>
-                                </div>
-                            </li>
-                        `).join('');
-
-                        // Gallery HTML (if available)
+                        // System Screenshots (if available)
                         let galleryHtml = '';
                         if (data.gallery && data.gallery.length > 0) {
                             const galleryItemsHtml = data.gallery.map(g => `
-                                <div class="samai-gallery-item" data-full-img="${g.img}" data-caption="${g.caption}">
-                                    <div class="samai-gallery-img-wrapper">
-                                        <img loading="lazy" src="${g.img}" alt="${g.title}" class="samai-gallery-img">
-                                        <div class="samai-gallery-zoom"><i class="fas fa-search-plus"></i> Click to Enlarge</div>
-                                    </div>
-                                    <div class="samai-gallery-caption">
-                                        <span class="samai-gallery-tag">${g.tag}</span>
-                                        <h4>${g.title}</h4>
-                                    </div>
+                                <div class="proj-min-gallery-item" data-full-img="${g.img}" data-caption="${g.caption || g.title}">
+                                    <img loading="lazy" src="${g.img}" alt="${g.title}" class="proj-min-gallery-img">
+                                    <span class="proj-min-gallery-label">${g.title}</span>
                                 </div>
                             `).join('');
 
                             galleryHtml = `
-                                <div class="samai-section">
-                                    <h3 class="samai-section-title"><i class="fas fa-images"></i> Platform Interface & System Screenshots</h3>
-                                    <p class="samai-gallery-intro">Live captures and workspace previews (Click any image to view in full resolution):</p>
-                                    <div class="samai-gallery-grid">
+                                <div class="proj-min-section">
+                                    <h4 class="proj-min-section-title">// SYSTEM SCREENSHOTS</h4>
+                                    <div class="proj-min-gallery-grid">
                                         ${galleryItemsHtml}
                                     </div>
                                 </div>
                             `;
                         }
 
-                        // Tech Stack Pills HTML
-                        const techHtml = data.techStack.map(t => `
-                            <span class="samai-pill">
-                                <i class="${t.icon}" ${t.color ? `style="color:${t.color};"` : ''}></i> ${t.name}
-                            </span>
-                        `).join('');
+                        const categoryText = (data.badges && data.badges[0]) ? data.badges[0].text : 'SELECTED WORK';
 
                         contentEl.innerHTML = `
-                            <div class="samai-modal-header">
-                                <div class="samai-badge-row">
-                                    ${badgesHtml}
+                            <div class="proj-min-header">
+                                <div class="proj-min-meta">
+                                    <span class="proj-min-category">// ${categoryText}</span>
+                                    ${data.isPrivate ? '<span class="proj-min-private-tag">PRIVATE DEPLOYMENT</span>' : ''}
                                 </div>
-                                <h2 id="projectModalTitle" class="samai-modal-title">${data.title} <span class="samai-title-sub">— ${data.titleSub}</span></h2>
-                                <p class="samai-modal-subtitle">${data.subtitle}</p>
+                                <h2 id="projectModalTitle" class="proj-min-title">${data.title}</h2>
+                                <p class="proj-min-desc">${data.subtitle}</p>
                             </div>
 
-                            <div class="samai-modal-hero">
-                                <img src="${data.heroImage}" alt="${data.title} Interface" class="samai-modal-img">
-                                <div class="samai-hero-overlay">
-                                    ${heroTagsHtml}
-                                </div>
+                            <div class="proj-min-hero">
+                                <img src="${data.heroImage}" alt="${data.title} Interface" class="proj-min-hero-img">
                             </div>
 
-                            <div class="samai-modal-body">
-                                <!-- APIS & WEB SERVICES -->
-                                ${apisHtml}
-
-                                <!-- ARCHITECTURE HIGHLIGHTS -->
-                                <div class="samai-section">
-                                    <h3 class="samai-section-title"><i class="fas fa-layer-group"></i> Technical Architecture & System Engineering</h3>
-                                    <div class="samai-grid-cards">
-                                        ${archHtml}
-                                    </div>
-                                </div>
-
-                                <!-- CORE PLATFORM CAPABILITIES -->
-                                <div class="samai-section">
-                                    <h3 class="samai-section-title"><i class="fas fa-star"></i> Core Features & Capabilities</h3>
-                                    <ul class="samai-feature-list">
-                                        ${featHtml}
+                            <div class="proj-min-body">
+                                <div class="proj-min-section">
+                                    <h4 class="proj-min-section-title">// KEY CAPABILITIES & IMPACT</h4>
+                                    <ul class="proj-min-highlights-list">
+                                        ${highlightsHtml}
                                     </ul>
                                 </div>
 
-                                <!-- GALLERY (IF AVAILABLE) -->
-                                ${galleryHtml}
-
-                                <!-- TECH STACK MATRIX -->
-                                <div class="samai-section">
-                                    <h3 class="samai-section-title"><i class="fas fa-code"></i> Technology Stack</h3>
-                                    <div class="samai-tech-pills">
+                                <div class="proj-min-section">
+                                    <h4 class="proj-min-section-title">// TECHNOLOGIES & TOOLS</h4>
+                                    <div class="proj-min-tech-wrap">
                                         ${techHtml}
                                     </div>
                                 </div>
+
+                                ${galleryHtml}
                             </div>
                         `;
 
@@ -1611,7 +1549,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
 
                     document.addEventListener('click', (e) => {
-                        const galleryItem = e.target.closest('.samai-gallery-item');
+                        const galleryItem = e.target.closest('.samai-gallery-item, .proj-min-gallery-item');
                         if (galleryItem) {
                             const fullImg = galleryItem.getAttribute('data-full-img');
                             const caption = galleryItem.getAttribute('data-caption');
