@@ -1642,170 +1642,249 @@
                 html { scroll-snap-type: none !important; }
                 section, .contact-section { scroll-snap-align: none !important; }
             }
-            .sphere-wrapper {
+            /* =========================================================
+               PUZZLE TYPE EDUCATION & MILESTONES SECTION
+               ========================================================= */
+            /* =========================================================
+               SHARP BRUTALIST DATA FLOW DIAGRAM (DFD) — EDUCATION
+               Pure Engineering Vector Topology, Zero Rounded Corners,
+               Zero Box Shadow Cards — Sharp Monospace DFD System
+               ========================================================= */
+            /* =========================================================
+               CLEAN TIMELINE BRANCH TREE — EDUCATION & MILESTONES
+               Pure Horizontal Rail with Monospace Tree Branches
+               ========================================================= */
+            .timeline-tree-section {
+                position: relative;
+                background: var(--bg-base) !important;
+                padding: 5rem 0 6rem;
+                width: 100%;
+                max-width: 100vw;
+                overflow: hidden;
+            }
+            .timeline-tree-container {
+                width: 94% !important;
+                max-width: 1380px !important;
+                margin: 0 auto;
+                position: relative;
+            }
+            .timeline-tree-wrapper {
+                margin-top: 3.5rem;
+                position: relative;
+                width: 100%;
+            }
+            .timeline-tree-scroll {
+                width: 100%;
+                overflow-x: auto;
+                overflow-y: visible;
+                padding: 1rem 0;
+                scrollbar-width: none;
+                -webkit-overflow-scrolling: touch;
+            }
+            .timeline-tree-scroll::-webkit-scrollbar {
+                display: none;
+            }
+            .timeline-tree-board {
+                position: relative;
+                width: 100%;
+                min-width: 1080px;
+                display: grid;
+                grid-template-columns: 1fr 1.65fr 1fr;
+                gap: 2.5rem;
+            }
+            .tree-stage {
                 display: flex;
                 flex-direction: column;
-                align-items: center;
-                gap: 4.5rem;
-                width: 100%;
                 position: relative;
-                margin-bottom: 2rem;
             }
-            .sphere-viewport {
-                perspective: 1200px;
-                width: 100%;
-                height: 540px;
-                position: relative;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                overflow: visible;
-                cursor: grab;
-                user-select: none;
-                touch-action: pan-y pan-x;
-                -webkit-touch-callout: none;
-            }
-            .sphere-viewport:active {
-                cursor: grabbing;
-            }
-            .sphere-ball {
-                position: absolute;
-                width: 100%;
-                height: 100%;
-                transform-style: preserve-3d;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-            .sphere-card-node {
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                width: 200px;
-                height: 105px;
-                margin-top: -52.5px;
-                margin-left: -100px;
-                background: linear-gradient(180deg, #14151f 0%, #0d0e14 100%);
-                border: 1px solid rgba(255, 255, 255, 0.2);
-                border-bottom: 3px solid rgba(255, 255, 255, 0.4);
-                border-radius: 14px;
-                padding: 0.75rem 0.95rem;
-                box-shadow: 0 8px 24px rgba(0, 0, 0, 0.85);
-                cursor: pointer;
-                transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease, opacity 0.2s ease;
+            .stage-rail-header {
                 display: flex;
                 flex-direction: column;
-                justify-content: space-between;
-                box-sizing: border-box;
-                backface-visibility: hidden;
+                position: relative;
             }
-            .sphere-card-node:hover,
-            .sphere-card-node.active-sphere-node {
-                border-color: #FFFFFF;
-                border-bottom-color: #FFFFFF;
-                background: linear-gradient(180deg, #1f212e 0%, #13141f 100%);
-                box-shadow: 0 12px 30px rgba(0, 0, 0, 0.95), 0 0 20px rgba(255, 255, 255, 0.2);
-            }
-            .sphere-card-header {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                width: 100%;
-            }
-            .sphere-card-tag {
-                font-size: 0.62rem;
+            .stage-year {
+                font-family: var(--font-mono, monospace);
+                font-size: 1.15rem;
                 font-weight: 800;
-                color: #FFFFFF !important;
-                letter-spacing: 0.08em;
-                text-transform: uppercase;
+                color: rgba(255, 255, 255, 0.7);
+                margin-bottom: 0.65rem;
+                letter-spacing: 0.05em;
             }
-            .sphere-card-icon {
-                font-size: 1.1rem;
-                color: #FFFFFF !important;
+            .stage-year.highlight,
+            .stage-year.current {
+                color: #FFFFFF;
             }
-            .sphere-card-title {
-                font-size: 0.86rem;
-                font-weight: 700;
-                color: #FFFFFF !important;
-                line-height: 1.25;
-                margin: 0.2rem 0;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                text-align: left;
-            }
-            .sphere-card-sub {
-                font-size: 0.7rem;
-                color: #FFFFFF !important;
-                line-height: 1.2;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                text-align: left;
-            }
-            .sphere-hud-projection {
-                width: 100%;
-                max-width: 650px;
-                background: linear-gradient(180deg, #14151f 0%, #0d0e14 100%);
-                border: 1px solid rgba(255, 255, 255, 0.25);
-                border-radius: 18px;
-                padding: 1.25rem 1.75rem;
-                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.85);
-                text-align: center;
-                position: relative;
-                transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            }
-            .sphere-hud-header {
+            .stage-track {
                 display: flex;
                 align-items: center;
-                justify-content: space-between;
-                margin-bottom: 0.5rem;
+                position: relative;
+                width: 100%;
+                height: 16px;
             }
-            .sphere-hud-tag,
-            #sphereDetailTag {
+            .stage-dot {
+                width: 14px;
+                height: 14px;
+                background: #FFFFFF;
+                border: 3px solid #FFFFFF;
+                border-radius: 50%;
+                flex-shrink: 0;
+                box-shadow: 0 0 14px rgba(255, 255, 255, 0.75);
+                z-index: 2;
+            }
+            .stage-dot.highlight,
+            .stage-dot.current {
+                background: #FFFFFF;
+                box-shadow: 0 0 16px rgba(255, 255, 255, 0.85);
+            }
+            .stage-rail-line {
+                flex: 1;
+                height: 2px;
+                background: #FFFFFF;
+            }
+            .stage-1 .stage-rail-line,
+            .stage-2 .stage-rail-line {
+                margin-right: -2.5rem; /* Bridges across the 2.5rem gap to touch the next dot */
+            }
+            .stage-rail-arrow {
+                display: flex;
+                align-items: center;
+                flex: 1;
+                color: #FFFFFF;
+            }
+            .stage-rail-arrow .stage-rail-line {
+                width: 80px;
+                flex: none;
+            }
+            .stage-rail-arrow i {
+                font-size: 0.9rem;
+                margin-left: -2px;
+                color: #FFFFFF;
+            }
+
+            /* --- Stage Body & Vertical Spine (Connected directly under dot) --- */
+            .stage-body {
+                display: flex;
+                flex-direction: column;
+                position: relative;
+            }
+            .stage-spine-drop {
+                width: 2px;
+                height: 24px;
+                background: rgba(255, 255, 255, 0.4);
+                margin-left: 6px;
+            }
+            .tree-inst-block {
+                display: flex;
+                flex-direction: column;
+                gap: 0.35rem;
+                margin-left: 6px;
+                padding-left: 14px;
+                border-left: 2px solid rgba(255, 255, 255, 0.4);
+                padding-bottom: 0.5rem;
+            }
+            .tree-inst-name {
+                font-family: var(--font-heading, sans-serif);
+                font-size: 1.05rem;
+                font-weight: 900;
+                color: #FFFFFF;
+                line-height: 1.3;
+                letter-spacing: -0.01em;
+                margin: 0;
+            }
+            .tree-inst-track {
+                font-size: 0.8rem;
+                color: rgba(255, 255, 255, 0.7);
+                line-height: 1.4;
+            }
+            .tree-inst-epoch {
+                font-family: var(--font-mono, monospace);
                 font-size: 0.72rem;
-                font-weight: 800;
-                color: #FFFFFF !important;
-                letter-spacing: 0.1em;
-                background: rgba(255, 255, 255, 0.12);
-                padding: 0.2rem 0.6rem;
-                border-radius: 6px;
-                border: 1px solid rgba(255, 255, 255, 0.3);
-            }
-            .sphere-hud-year,
-            #sphereDetailYear {
-                font-size: 0.78rem;
                 font-weight: 700;
-                color: #FFFFFF !important;
-                font-family: var(--font-heading);
+                color: rgba(255, 255, 255, 0.5);
+                margin-top: 0.15rem;
             }
-            .sphere-hud-title,
-            #sphereDetailTitle {
-                font-size: 1.25rem;
+            .tree-inst-epoch.current {
+                color: #FFFFFF;
                 font-weight: 800;
-                color: #FFFFFF !important;
-                margin-bottom: 0.25rem;
-                line-height: 1.2;
             }
-            .sphere-hud-sub,
-            #sphereDetailSub {
+
+            /* --- Vertical Trunk Line Dropping from STI --- */
+            .tree-trunk-line {
+                width: 2px;
+                height: 20px;
+                background: rgba(255, 255, 255, 0.4);
+                margin-left: 6px;
+            }
+
+            /* --- Tree Branches List (Continuous Monospace Vertical Spine with Perpendicular Ticks) --- */
+            .tree-branches-list {
+                display: flex;
+                flex-direction: column;
+                gap: 0;
+                margin-left: 6px;
+                position: relative;
+            }
+            .tree-branch-row {
+                display: flex;
+                align-items: flex-start;
+                position: relative;
+                padding: 0.35rem 0 0.35rem 24px;
+                cursor: pointer;
+                transition: transform 0.15s ease;
+            }
+            .tree-branch-row:hover {
+                transform: translateX(4px);
+            }
+            /* Continuous vertical trunk spine line */
+            .tree-branch-row::before {
+                content: "";
+                position: absolute;
+                left: 0;
+                top: 0;
+                bottom: 0;
+                width: 2px;
+                background: rgba(255, 255, 255, 0.4);
+            }
+            /* Last item terminates spine at its horizontal branch tick */
+            .tree-branch-row.last-row::before {
+                bottom: auto;
+                height: 12px;
+            }
+            /* Horizontal branch tick */
+            .tree-branch-row::after {
+                content: "";
+                position: absolute;
+                left: 0;
+                top: 11px;
+                width: 14px;
+                height: 2px;
+                background: rgba(255, 255, 255, 0.4);
+            }
+            .tree-branch-row:hover::before,
+            .tree-branch-row:hover::after {
+                background: #FFFFFF;
+            }
+            .tree-item-body {
+                display: flex;
+                flex-direction: column;
+                gap: 0.1rem;
+                min-width: 0;
+            }
+            .branch-name {
                 font-size: 0.88rem;
-                color: #FFFFFF !important;
-                font-weight: 600;
-                margin-bottom: 0.5rem;
-            }
-            .sphere-hud-desc {
-                font-size: 0.85rem;
-                color: #FFFFFF !important;
-                line-height: 1.5;
-                margin-bottom: 0.85rem;
-            }
-            .sphere-hud-hint {
-                font-size: 0.68rem;
                 font-weight: 700;
-                color: #FFFFFF !important;
-                letter-spacing: 0.12em;
-                text-transform: uppercase;
+                color: #FFFFFF;
+                line-height: 1.35;
+                transition: color 0.15s ease;
+            }
+            .tree-branch-row:hover .branch-name {
+                color: #FFFFFF;
+                text-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+            }
+            .branch-sub {
+                font-size: 0.72rem;
+                color: rgba(255, 255, 255, 0.55);
+                line-height: 1.3;
             }
             .timeline { border-left: 2px solid rgba(255, 255, 255, 0.6); margin-left: 1rem; padding-left: 2.5rem; }
             .timeline-item { position: relative; margin-bottom: 3.5rem; }
@@ -1813,6 +1892,13 @@
             .timeline-dot {
                 position: absolute; left: -2.9rem; top: 0.3rem; width: 14px; height: 14px;
                 background: var(--bg-base); border: 3px solid var(--accent); border-radius: 50%;
+                transition: 0.3s;
+                box-shadow: var(--neo-extruded-sm);
+            }
+            .timeline-item:hover .timeline-dot {
+                box-shadow: var(--neo-inset), 0 0 15px var(--accent-glow);
+            }
+            .timeline-date { font-size: 0.8rem; color: var(--accent); font-weight: 700; letter-spacing: 0.05em; margin-bottom: 0.75rem; display: block; text-transform: uppercase; }
                 transition: 0.3s;
                 box-shadow: var(--neo-extruded-sm);
             }
@@ -2326,33 +2412,176 @@
                     transform: none !important;
                 }
 
-                .sphere-wrapper {
-                    gap: 1rem !important;
+                /* --- Clean Timeline Tree: Mobile & Tablet Vertical Pipeline --- */
+                .timeline-tree-section {
+                    padding: 3.5rem 0 4.5rem !important;
+                }
+                .timeline-tree-container {
+                    width: 92% !important;
+                    padding: 0 !important;
+                }
+                .timeline-tree-wrapper {
+                    margin-top: 2rem !important;
+                }
+                .timeline-tree-scroll {
+                    padding: 0 !important;
+                    overflow-x: hidden !important;
+                }
+                .timeline-tree-board {
+                    display: flex !important;
+                    flex-direction: column !important;
+                    min-width: unset !important;
                     width: 100% !important;
+                    gap: 0 !important;
+                    position: relative !important;
+                    margin-left: 0 !important;
+                    padding-left: 0 !important;
+                    border-left: none !important;
                 }
-                .sphere-viewport {
-                    margin-bottom: 20px !important;
-                    height: 270px !important;
-                    width: 100% !important;
+                .tree-stage {
+                    display: flex !important;
+                    flex-direction: column !important;
+                    position: relative !important;
                 }
-                .sphere-card-node {
-                    width: 135px !important;
-                    height: 72px !important;
-                    margin-top: -36px !important;
-                    margin-left: -67.5px !important;
-                    padding: 0.4rem 0.55rem !important;
-                    border-radius: 10px !important;
+                /* Mobile Order: CvSU (Top) -> STI (Middle) -> Binakayan (Bottom) */
+                .stage-3 {
+                    order: 1 !important;
                 }
-                .sphere-card-title { font-size: 0.68rem !important; line-height: 1.2 !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; }
-                .sphere-card-sub { font-size: 0.54rem !important; line-height: 1.15 !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; }
-                .sphere-hud-projection {
-                    width: 100% !important;
-                    max-width: 100% !important;
-                    padding: 0.85rem !important;
-                    box-sizing: border-box !important;
+                .stage-2 {
+                    order: 2 !important;
                 }
-                .sphere-hud-title { font-size: 1.05rem !important; white-space: normal !important; word-break: break-word !important; }
-                .sphere-hud-sub { font-size: 0.78rem !important; white-space: normal !important; word-break: break-word !important; }
+                .stage-1 {
+                    order: 3 !important;
+                }
+
+                .stage-rail-header {
+                    display: flex !important;
+                    flex-direction: row !important;
+                    align-items: center !important;
+                    gap: 0 !important;
+                    height: 24px !important;
+                    margin-bottom: 0.35rem !important;
+                    position: relative !important;
+                }
+                .stage-track {
+                    order: 1 !important;
+                    display: flex !important;
+                    align-items: center !important;
+                    justify-content: center !important;
+                    width: 14px !important;
+                    height: 14px !important;
+                    position: static !important;
+                    flex-shrink: 0 !important;
+                    margin: 0 !important;
+                    padding: 0 !important;
+                }
+                /* Glowing White Dot positioned directly at the start */
+                .stage-dot {
+                    position: static !important;
+                    width: 14px !important;
+                    height: 14px !important;
+                    background: #FFFFFF !important;
+                    border: 3px solid #FFFFFF !important;
+                    border-radius: 50% !important;
+                    box-shadow: 0 0 16px rgba(255, 255, 255, 0.9) !important;
+                    z-index: 5 !important;
+                    flex-shrink: 0 !important;
+                    margin: 0 !important;
+                }
+                /* Year placed IMMEDIATELY adjacent to the dot (8px gap) */
+                .stage-year {
+                    order: 2 !important;
+                    margin: 0 0 0 8px !important;
+                    padding: 0 !important;
+                    font-size: 1.15rem !important;
+                    font-weight: 800 !important;
+                    line-height: 1 !important;
+                    color: #FFFFFF !important;
+                }
+                .stage-rail-line,
+                .stage-rail-arrow {
+                    display: none !important;
+                }
+
+                .stage-spine-drop,
+                .tree-trunk-line {
+                    display: none !important;
+                }
+
+                /* Continuous vertical line drops straight down from the dot center at x=6px */
+                .stage-body {
+                    position: relative !important;
+                    margin-left: 6px !important;
+                    border-left: 2px solid rgba(255, 255, 255, 0.4) !important;
+                    padding-left: 18px !important;
+                    padding-top: 8px !important;
+                    padding-bottom: 24px !important;
+                }
+                .stage-1 .stage-body {
+                    padding-bottom: 0.5rem !important;
+                }
+
+                .tree-inst-block {
+                    margin: 0 !important;
+                    padding: 0 !important;
+                    border-left: none !important;
+                    display: flex !important;
+                    flex-direction: column !important;
+                    gap: 0.25rem !important;
+                }
+                .tree-inst-name {
+                    font-size: 0.92rem !important;
+                    line-height: 1.3 !important;
+                    white-space: nowrap !important;
+                }
+                .tree-inst-track {
+                    font-size: 0.78rem !important;
+                    line-height: 1.35 !important;
+                }
+                .tree-inst-epoch {
+                    font-size: 0.7rem !important;
+                    margin-top: 0.1rem !important;
+                }
+
+                /* Mobile Milestone Branches */
+                .tree-branches-list {
+                    margin-top: 0.75rem !important;
+                    margin-left: 0 !important;
+                    padding-left: 0 !important;
+                    display: flex !important;
+                    flex-direction: column !important;
+                    gap: 0.55rem !important;
+                }
+                .tree-branch-row {
+                    position: relative !important;
+                    padding: 0.15rem 0 0.15rem 0 !important;
+                    display: flex !important;
+                    align-items: flex-start !important;
+                }
+                .tree-branch-row::before {
+                    display: none !important;
+                }
+                /* Branch tick reaches directly back to touch the main vertical line at -18px */
+                .tree-branch-row::after {
+                    content: "" !important;
+                    position: absolute !important;
+                    left: -18px !important;
+                    top: 9px !important;
+                    width: 14px !important;
+                    height: 2px !important;
+                    background: rgba(255, 255, 255, 0.4) !important;
+                }
+                .tree-branch-row:hover::after {
+                    background: #FFFFFF !important;
+                }
+                .branch-name {
+                    font-size: 0.82rem !important;
+                    line-height: 1.3 !important;
+                }
+                .branch-sub {
+                    font-size: 0.68rem !important;
+                    line-height: 1.25 !important;
+                }
 
                 .certs-marquee-group {
                     gap: 0.4rem !important;
@@ -2422,6 +2651,9 @@
                 }
                 .hero h1 { font-size: 1.5rem !important; }
                 .btn-group { flex-direction: column !important; }
+
+                .branch-name { font-size: 0.82rem !important; }
+                .tree-pipe { font-size: 0.85rem !important; }
             }
             .mobile-menu {
                 position: fixed;
@@ -2599,8 +2831,7 @@
                 body .project-card,
                 body .cert-card,
                 body .timeline-item,
-                body .sphere-card-node,
-                body .sphere-hud-projection {
+                body .puzzle-hud-panel {
                     background: #060608 !important;
                     border-color: #FFFFFF !important;
                     box-shadow: none !important;
