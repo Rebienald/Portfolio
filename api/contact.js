@@ -1,5 +1,69 @@
 const https = require("https");
 
+// In-memory rate limiting store (IP -> array of timestamps)
+const rateLimitMap = new Map();
+const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000; // 10 minutes window
+const MAX_MESSAGES_PER_WINDOW = 3;            // Max 3 messages per window
+const MIN_COOLDOWN_MS = 20 * 1000;           // 20 seconds minimum cooldown between sends
+
+// Periodic cleanup of old rate limit records (every 15 minutes)
+setInterval(() => {
+    const now = Date.now();
+    for (const [ip, timestamps] of rateLimitMap.entries()) {
+        const valid = timestamps.filter(t => now - t < RATE_LIMIT_WINDOW_MS);
+        if (valid.length === 0) {
+            rateLimitMap.delete(ip);
+        } else {
+            rateLimitMap.set(ip, valid);
+        }
+    }
+}, 15 * 60 * 1000);
+
+function getClientIp(req) {
+    const forwarded = req.headers["x-forwarded-for"];
+    if (forwarded) {
+        return String(forwarded).split(",")[0].trim();
+    }
+    return req.headers["x-real-ip"] || req.socket?.remoteAddress || "unknown-ip";
+}
+
+function checkRateLimit(ip) {
+    const now = Date.now();
+    let timestamps = rateLimitMap.get(ip) || [];
+
+    // Filter out timestamps older than the rate limit window
+    timestamps = timestamps.filter(t => now - t < RATE_LIMIT_WINDOW_MS);
+
+    // 1. Check cooldown between successive submissions
+    if (timestamps.length > 0) {
+        const lastSent = timestamps[timestamps.length - 1];
+        const elapsed = now - lastSent;
+        if (elapsed < MIN_COOLDOWN_MS) {
+            const waitSec = Math.ceil((MIN_COOLDOWN_MS - elapsed) / 1000);
+            return {
+                allowed: false,
+                reason: `Please wait ${waitSec} second${waitSec > 1 ? "s" : ""} before sending another message.`
+            };
+        }
+    }
+
+    // 2. Check total messages in the window
+    if (timestamps.length >= MAX_MESSAGES_PER_WINDOW) {
+        const oldest = timestamps[0];
+        const resetMinutes = Math.ceil((RATE_LIMIT_WINDOW_MS - (now - oldest)) / 60000);
+        return {
+            allowed: false,
+            reason: `Rate limit exceeded. Maximum 3 messages allowed per 10 minutes. Please try again in ~${resetMinutes} minute${resetMinutes > 1 ? "s" : ""}.`
+        };
+    }
+
+    // Record this request timestamp
+    timestamps.push(now);
+    rateLimitMap.set(ip, timestamps);
+
+    return { allowed: true };
+}
+
 function sanitizeHtml(str) {
     if (!str) return "";
     return String(str)
@@ -24,6 +88,14 @@ module.exports = async function handler(req, res) {
         return res.status(405).json({ error: "Method not allowed. Use POST." });
     }
 
+    // Enforce Rate Limiting
+    const clientIp = getClientIp(req);
+    const rateLimitCheck = checkRateLimit(clientIp);
+    if (!rateLimitCheck.allowed) {
+        res.setHeader("Retry-After", "30");
+        return res.status(429).json({ error: rateLimitCheck.reason });
+    }
+
     try {
         let body = req.body;
         if (typeof body === "string") {
@@ -34,10 +106,10 @@ module.exports = async function handler(req, res) {
             }
         }
 
-        const name = (body.name || "").trim();
-        const email = (body.email || "").trim();
-        const subject = (body.subject || "").trim();
-        const message = (body.message || "").trim();
+        const name = (body.name || "").trim().slice(0, 80);
+        const email = (body.email || "").trim().slice(0, 120);
+        const subject = (body.subject || "").trim().slice(0, 150);
+        const message = (body.message || "").trim().slice(0, 3000);
 
         if (!name || !email || !subject || !message) {
             return res.status(400).json({ error: "All fields (name, email, subject, message) are required." });
