@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8" />
         <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-        <title>Rebienald Khei Carpio</title>
+        <title>Contact | Rebienald Khei Carpio</title>
         <link href="../images/logo.png" rel="icon" type="image/png" />
         <link href="https://fonts.googleapis.com" rel="preconnect" />
         <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
@@ -12,96 +12,140 @@
             rel="stylesheet"
         />
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
-
         <link rel="stylesheet" href="contacts.css">
     </head>
     <body>
         <nav>
-            <a class="logo" href="../index.html"> Reb.Dev </a>
+            <div class="nav-left">
+                <a class="logo" href="../index.html">Reb.Dev</a>
+            </div>
+
             <ul class="nav-links">
-                <li>
-                    <a href="../index.html#work"> Projects </a>
-                </li>
-                <li>
-                    <a href="../index.html#expertise"> Expertise </a>
-                </li>
-                <li>
-                    <a href="../index.html#about"> About </a>
-                </li>
-                <li>
-                    <a href="../index.html#certifications"> Certificates </a>
-                </li>
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="../index.html#about">About</a></li>
+                <li><a href="../index.html#work">Projects</a></li>
+                <li><a href="../index.html#expertise">Expertise</a></li>
+                <li><a href="../index.html#certifications">Certificates</a></li>
+                <li><a href="contact.html" class="active">Contact</a></li>
             </ul>
-            <div class="hamburger" onclick="toggleMobileMenu()">
-                <i class="fas fa-bars"> </i>
+
+            <div class="nav-right">
+                <!-- Desktop Back Button -->
+                <a href="../index.html" class="nav-back-cta">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Back to Home</span>
+                </a>
+
+                <!-- Mobile Quick Back Icon -->
+                <a href="../index.html" class="mobile-nav-back" title="Back to Home" aria-label="Back to Home">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Back</span>
+                </a>
+
+                <!-- Mobile Hamburger Button -->
+                <button class="hamburger" id="hamburgerBtn" onclick="toggleMobileMenu()" aria-label="Open Navigation Menu">
+                    <i class="fas fa-bars"></i>
+                </button>
             </div>
         </nav>
+
         <div class="mobile-menu" id="mobileMenu">
-            <div class="close-menu" onclick="toggleMobileMenu()">
-                <i class="fas fa-times"> </i>
+            <div class="close-menu" onclick="toggleMobileMenu()" aria-label="Close navigation menu">
+                <i class="fas fa-times"></i>
             </div>
-            <a href="../index.html#work" onclick="toggleMobileMenu()"> Projects </a>
-            <a href="../index.html#expertise" onclick="toggleMobileMenu()"> Expertise </a>
-            <a href="../index.html#about" onclick="toggleMobileMenu()"> About </a>
-            <a href="../index.html#certifications" onclick="toggleMobileMenu()"> Certificates </a>
-            <a href="contact.html" onclick="toggleMobileMenu()" style="color: var(--accent)"> Let's Talk ↗ </a>
+            <a href="../index.html" onclick="toggleMobileMenu()" class="mobile-menu-back-btn">
+                <i class="fas fa-arrow-left"></i> Back to Home
+            </a>
+            <a href="../index.html#about" onclick="toggleMobileMenu()">About</a>
+            <a href="../index.html#work" onclick="toggleMobileMenu()">Projects</a>
+            <a href="../index.html#expertise" onclick="toggleMobileMenu()">Expertise</a>
+            <a href="../index.html#certifications" onclick="toggleMobileMenu()">Certificates</a>
+            <a href="contact.html" onclick="toggleMobileMenu()" class="mobile-menu-active">
+                <i class="fas fa-envelope"></i> Send Message
+            </a>
         </div>
+
         <main class="main-content">
             <div class="container">
                 <div class="contact-grid">
-                    <section class="contact-form" aria-labelledby="send-message-title">
-                        <h2 id="send-message-title">Send a Message</h2>
-                        <div id="formStatus" style="margin-bottom: 0.5rem"></div>
+                    <!-- Top Breadcrumb Back Button -->
+                    <div class="page-breadcrumb">
+                        <a href="../index.html" class="breadcrumb-back-btn">
+                            <i class="fas fa-arrow-left"></i> Back to Portfolio
+                        </a>
+                    </div>
+
+                    <section class="contact-form glass-card" aria-labelledby="send-message-title">
+                        <div class="card-header-group">
+                            <span class="card-badge">Direct Mail</span>
+                            <h2 id="send-message-title">Send a Message</h2>
+                            <p class="card-subtitle">Got an inquiry, project proposal, or want to collaborate? Fill in the form and it will reach my inbox directly.</p>
+                        </div>
+
+                        <div id="formStatus" style="margin-bottom: 1rem"></div>
+
                         <form id="contactForm">
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label for="name"> Your Name </label>
-                                    <input id="name" name="name" placeholder="John Doe" required="" type="text" />
+                                    <label for="name">Your Name</label>
+                                    <input id="name" name="name" placeholder="John Doe" required type="text" autocomplete="name" />
                                 </div>
                                 <div class="form-group">
-                                    <label for="email"> Your Email </label>
+                                    <label for="email">Your Email</label>
                                     <input
                                         id="email"
                                         name="email"
                                         placeholder="john@example.com"
-                                        required=""
+                                        required
                                         type="email"
+                                        autocomplete="email"
                                     />
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="subject"> Subject </label>
+                                <label for="subject">Subject</label>
                                 <input
                                     id="subject"
                                     name="subject"
-                                    placeholder="Project Inquiry"
-                                    required=""
+                                    placeholder="Project Inquiry / Hiring"
+                                    required
                                     type="text"
                                 />
                             </div>
                             <div class="form-group">
-                                <label for="message"> Your Message </label>
+                                <label for="message">Your Message</label>
                                 <textarea
                                     id="message"
                                     name="message"
                                     placeholder="Tell me about your project or idea..."
-                                    required=""
+                                    required
+                                    rows="5"
                                 ></textarea>
                             </div>
-                            <button class="submit-btn" id="submitBtn" type="submit">Send Message</button>
+                            <button class="submit-btn" id="submitBtn" type="submit">
+                                <i class="fas fa-paper-plane"></i>
+                                <span>Send Message</span>
+                            </button>
                         </form>
+
+                        <div class="card-footer-back">
+                            <a href="../index.html" class="back-link">
+                                <i class="fas fa-arrow-left"></i> Return to Homepage
+                            </a>
+                        </div>
                     </section>
                 </div>
             </div>
         </main>
+
         <footer>
             <div class="container">
                 <p>© 2025 Rebienald Carpio. All Rights Reserved. Engineered to scale.</p>
             </div>
         </footer>
+
         <script src="contacts.js"></script>
         <script src="../analytics.js"></script>
         <script defer="" src="/_vercel/insights/script.js"></script>
-        
     </body>
 </html>
