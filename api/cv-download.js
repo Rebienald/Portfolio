@@ -2,9 +2,9 @@ const https = require("https");
 
 // In-memory rate limiting store (IP -> array of timestamps)
 const rateLimitMap = new Map();
-const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000; // 10 minutes
-const MAX_ALERTS_PER_WINDOW = 3;             // Max 3 download alerts per 10 mins per IP
-const MIN_COOLDOWN_MS = 15 * 1000;           // 15 seconds cooldown
+const RATE_LIMIT_WINDOW_MS = 5 * 60 * 1000; // 5 minutes
+const MAX_ALERTS_PER_WINDOW = 30;            // Max 30 alerts per window (developer test friendly)
+const MIN_COOLDOWN_MS = 2 * 1000;           // 2 seconds cooldown
 
 const cleanupTimer = setInterval(() => {
     const now = Date.now();
