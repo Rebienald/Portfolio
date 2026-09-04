@@ -2241,3 +2241,45 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                     });
                 })();
+
+// ==========================================
+// CV DOWNLOAD GMAIL NOTIFICATION VIA RESEND API
+// ==========================================
+(function setupCvDownloadNotification() {
+    let lastDownloadNotification = 0;
+
+    document.addEventListener('click', function(e) {
+        const target = e.target.closest('a[download="CV.pdf"], #downloadCvBtn, a[href*="Carpio Rebienald"]');
+        if (!target) return;
+
+        const now = Date.now();
+        // 10-second client-side debounce to prevent duplicate emails from accidental double-clicks
+        if (now - lastDownloadNotification < 10000) {
+            return;
+        }
+        lastDownloadNotification = now;
+
+        const isStaticLiveServer = window.location.protocol === 'file:' || 
+            ((window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost') && 
+             (window.location.port === '5500' || window.location.port === '5501' || window.location.port === '5502' || window.location.port === '8080'));
+
+        const endpoint = isStaticLiveServer ? 'https://rebkhei.vercel.app/api/cv-download' : '/api/cv-download';
+
+        try {
+            fetch(endpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    timestamp: new Date().toISOString(),
+                    page: window.location.href,
+                    screen: `${window.screen.width}x${window.screen.height}`
+                }),
+                keepalive: true
+            }).catch(function(err) {
+                console.warn('CV notification dispatch error:', err);
+            });
+        } catch (err) {}
+    });
+})();
