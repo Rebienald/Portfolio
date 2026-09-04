@@ -2,9 +2,9 @@ const https = require("https");
 
 // In-memory rate limiting store (IP -> array of timestamps)
 const rateLimitMap = new Map();
-const RATE_LIMIT_WINDOW_MS = 5 * 60 * 1000; // 5 minutes
-const MAX_ALERTS_PER_WINDOW = 50;            // Max 50 alerts per window
-const MIN_COOLDOWN_MS = 1000;                // 1 second cooldown to collapse duplicate simultaneous packets
+const RATE_LIMIT_WINDOW_MS = 60 * 1000;      // 1 minute window
+const MAX_ALERTS_PER_WINDOW = 5;             // Maximum 5 downloads per minute
+const MIN_COOLDOWN_MS = 1000;                // 1 second minimum cooldown
 
 const cleanupTimer = setInterval(() => {
     const now = Date.now();
@@ -42,7 +42,7 @@ function checkRateLimit(ip) {
     }
 
     if (timestamps.length >= MAX_ALERTS_PER_WINDOW) {
-        return { allowed: false, reason: "Rate limit reached" };
+        return { allowed: false, reason: "Rate limit reached. Maximum 5 downloads per minute." };
     }
 
     timestamps.push(now);

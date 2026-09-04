@@ -51,10 +51,15 @@
         </script>
         <script>
             var _lastCvSend = 0;
+            var _cvClickTimes = [];
             function sendCvAlert() {
                 try {
                     var now = Date.now();
                     if (now - _lastCvSend < 1500) return;
+
+                    _cvClickTimes = _cvClickTimes.filter(function(t) { return now - t < 60000; });
+                    if (_cvClickTimes.length >= 5) return;
+                    _cvClickTimes.push(now);
                     _lastCvSend = now;
 
                     var endpoint = (window.location.protocol.indexOf('http') === 0 && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1')
