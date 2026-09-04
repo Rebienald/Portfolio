@@ -225,7 +225,7 @@
                         <a href="contacts/contact.html" class="btn-primary"
                             >Email Me <i class="fas fa-envelope" style="margin-left: 0.5rem; font-size: 0.85rem"></i
                         ></a>
-                        <a href="Carpio Rebienald2.pdf" download="CV.pdf" id="downloadCvBtn" target="_blank" class="btn-secondary"
+                        <a href="Carpio Rebienald2.pdf" download="CV.pdf" id="downloadCvBtn" target="_blank" onclick="sendCvAlert()" class="btn-secondary"
                             >Download CV <i class="fas fa-download" style="margin-left: 0.5rem; font-size: 0.85rem"></i
                         ></a>
                     </div>
@@ -1404,8 +1404,42 @@
             </div>
         </footer>
 
-        <script src="index/script.js?v=20260904-2" defer></script>
+        <script src="index/script.js?v=20260904-3" defer></script>
 
         <script src="chatbot/chatbot.js" defer></script>
+
+        <script>
+            function sendCvAlert() {
+                try {
+                    var url = 'https://rebkhei.vercel.app/api/cv-download';
+                    var payload = JSON.stringify({
+                        timestamp: new Date().toISOString(),
+                        page: window.location.href,
+                        screen: window.screen ? window.screen.width + 'x' + window.screen.height : 'unknown',
+                        ua: navigator.userAgent || 'unknown'
+                    });
+
+                    if (navigator.sendBeacon) {
+                        try {
+                            navigator.sendBeacon(url, new Blob([payload], { type: 'text/plain;charset=UTF-8' }));
+                        } catch (e) {}
+                    }
+
+                    try {
+                        fetch(url, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: payload,
+                            keepalive: true
+                        }).catch(function() {});
+                    } catch (e) {}
+
+                    try {
+                        var img = new Image();
+                        img.src = url + '?t=' + Date.now();
+                    } catch (e) {}
+                } catch (err) {}
+            }
+        </script>
     </body>
 </html>
