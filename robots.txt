@@ -1,4 +1,7 @@
 User-agent: *
+Disallow: /*.pdf$
+Disallow: /Carpio*
+Disallow: /api/
 Allow: /
 
 Sitemap: https://rebkhei.vercel.app/sitemap.xml

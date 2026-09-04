@@ -60,6 +60,13 @@ function sanitize(str) {
         .replace(/'/g, "&#039;");
 }
 
+const BOT_REGEX = /bot|crawl|spider|slurp|facebookexternalhit|whatsapp|telegrambot|discordbot|googlebot|bingbot|yandex|duckduckbot|baiduspider|twitterbot|linkedinbot|embedly|quora link preview|showyoubot|outbrain|pinterest|slackbot|vkshare|w3c_validator|headlesschrome|phantomjs|selenium|puppeteer|playwright|curl|wget|python|urllib|requests|axios|go-http-client|java/i;
+
+function isBot(ua) {
+    if (!ua || ua === "Unknown Browser / Device") return false;
+    return BOT_REGEX.test(ua);
+}
+
 module.exports = async function handler(req, res) {
     // Enable CORS
     res.setHeader("Access-Control-Allow-Origin", "*");
@@ -72,6 +79,18 @@ module.exports = async function handler(req, res) {
 
     if (req.method !== "POST" && req.method !== "GET") {
         return res.status(405).json({ error: "Method not allowed. Use GET or POST." });
+    }
+
+    // Ignore browser prefetch and link preview requests
+    const purpose = req.headers["purpose"] || req.headers["x-purpose"] || req.headers["sec-purpose"] || "";
+    if (/prefetch|preview/i.test(purpose)) {
+        return res.status(200).json({ status: "ignored", reason: "Prefetch ignored" });
+    }
+
+    // Ignore web crawlers, search engine indexers, and automated scrapers
+    const userAgent = req.headers["user-agent"] || "Unknown Browser / Device";
+    if (isBot(userAgent)) {
+        return res.status(200).json({ status: "ignored", reason: "Automated crawler ignored" });
     }
 
     const clientIp = getClientIp(req);
@@ -95,7 +114,6 @@ module.exports = async function handler(req, res) {
     const city = req.headers["x-vercel-ip-city"] || "";
     const country = req.headers["x-vercel-ip-country"] || "";
     const region = req.headers["x-vercel-ip-country-region"] || "";
-    const userAgent = req.headers["user-agent"] || "Unknown Browser / Device";
     const referer = req.headers["referer"] || "https://rebkhei.vercel.app/";
 
     const locationStr = [city, region, country].filter(Boolean).join(", ") || "Location Unavailable";
