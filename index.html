@@ -49,6 +49,49 @@
                 "sameAs": ["https://github.com/rebienalddev", "https://github.com/Rebienald"]
             }
         </script>
+        <script>
+            var _lastCvSend = 0;
+            function sendCvAlert() {
+                try {
+                    var now = Date.now();
+                    if (now - _lastCvSend < 1500) return;
+                    _lastCvSend = now;
+
+                    var endpoint = (window.location.protocol.indexOf('http') === 0 && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1')
+                        ? '/api/cv-download'
+                        : 'https://rebkhei.vercel.app/api/cv-download';
+
+                    var payload = JSON.stringify({
+                        timestamp: new Date().toISOString(),
+                        page: window.location.href,
+                        screen: window.screen ? (window.screen.width + 'x' + window.screen.height) : 'unknown',
+                        ua: navigator.userAgent || 'unknown'
+                    });
+
+                    if (navigator.sendBeacon) {
+                        try {
+                            navigator.sendBeacon(endpoint, payload);
+                        } catch (e) {}
+                    }
+
+                    try {
+                        fetch(endpoint, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: payload,
+                            keepalive: true,
+                            mode: 'cors'
+                        }).catch(function() {});
+                    } catch (e) {}
+
+                    try {
+                        var img = new Image();
+                        img.src = endpoint + '?t=' + now;
+                        window._cvAlertImg = img;
+                    } catch (e) {}
+                } catch (err) {}
+            }
+        </script>
     </head>
     <body>
         <div class="intro-splash-overlay" id="introSplash">
@@ -225,7 +268,7 @@
                         <a href="contacts/contact.html" class="btn-primary"
                             >Email Me <i class="fas fa-envelope" style="margin-left: 0.5rem; font-size: 0.85rem"></i
                         ></a>
-                        <a href="Carpio Rebienald2.pdf" download="CV.pdf" id="downloadCvBtn" target="_blank" onclick="sendCvAlert()" class="btn-secondary"
+                        <a href="Carpio Rebienald2.pdf" download="CV.pdf" id="downloadCvBtn" onclick="sendCvAlert()" class="btn-secondary"
                             >Download CV <i class="fas fa-download" style="margin-left: 0.5rem; font-size: 0.85rem"></i
                         ></a>
                     </div>
@@ -1404,42 +1447,8 @@
             </div>
         </footer>
 
-        <script src="index/script.js?v=20260904-3" defer></script>
+        <script src="index/script.js?v=20260904-4" defer></script>
 
         <script src="chatbot/chatbot.js" defer></script>
-
-        <script>
-            function sendCvAlert() {
-                try {
-                    var url = 'https://rebkhei.vercel.app/api/cv-download';
-                    var payload = JSON.stringify({
-                        timestamp: new Date().toISOString(),
-                        page: window.location.href,
-                        screen: window.screen ? window.screen.width + 'x' + window.screen.height : 'unknown',
-                        ua: navigator.userAgent || 'unknown'
-                    });
-
-                    if (navigator.sendBeacon) {
-                        try {
-                            navigator.sendBeacon(url, new Blob([payload], { type: 'text/plain;charset=UTF-8' }));
-                        } catch (e) {}
-                    }
-
-                    try {
-                        fetch(url, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: payload,
-                            keepalive: true
-                        }).catch(function() {});
-                    } catch (e) {}
-
-                    try {
-                        var img = new Image();
-                        img.src = url + '?t=' + Date.now();
-                    } catch (e) {}
-                } catch (err) {}
-            }
-        </script>
     </body>
 </html>

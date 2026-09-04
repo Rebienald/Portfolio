@@ -2249,48 +2249,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let lastDownloadNotification = 0;
 
     function sendCvAlert(triggerSource) {
-        const now = Date.now();
-        if (now - lastDownloadNotification < 2000) {
-            return;
+        if (typeof window.sendCvAlert === 'function') {
+            window.sendCvAlert();
         }
-        lastDownloadNotification = now;
-
-        const isStatic = window.location.protocol === 'file:' || 
-            window.location.hostname === '127.0.0.1' || 
-            window.location.hostname === 'localhost';
-
-        const endpoint = isStatic ? 'https://rebkhei.vercel.app/api/cv-download' : '/api/cv-download';
-        const payload = JSON.stringify({
-            timestamp: new Date().toISOString(),
-            page: window.location.href,
-            screen: `${window.screen.width}x${window.screen.height}`,
-            source: triggerSource || 'click'
-        });
-
-        // 1. sendBeacon: Browser guarantees transmission even if tab navigates or closes
-        let beaconSent = false;
-        if (navigator.sendBeacon) {
-            try {
-                const blob = new Blob([payload], { type: 'text/plain;charset=UTF-8' });
-                beaconSent = navigator.sendBeacon(endpoint, blob);
-            } catch (e) {}
-        }
-
-        // 2. fetch with keepalive: Dual assurance
-        try {
-            fetch(endpoint, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: payload,
-                keepalive: true
-            }).then(function(res) {
-                return res.json();
-            }).then(function(data) {
-                console.log('CV download alert dispatched successfully:', data);
-            }).catch(function(err) {
-                console.warn('CV notification dispatch error:', err);
-            });
-        } catch (err) {}
     }
 
     // Direct binding on the CV download button

@@ -3,8 +3,8 @@ const https = require("https");
 // In-memory rate limiting store (IP -> array of timestamps)
 const rateLimitMap = new Map();
 const RATE_LIMIT_WINDOW_MS = 5 * 60 * 1000; // 5 minutes
-const MAX_ALERTS_PER_WINDOW = 30;            // Max 30 alerts per window (developer test friendly)
-const MIN_COOLDOWN_MS = 2 * 1000;           // 2 seconds cooldown
+const MAX_ALERTS_PER_WINDOW = 50;            // Max 50 alerts per window
+const MIN_COOLDOWN_MS = 1000;                // 1 second cooldown to collapse duplicate simultaneous packets
 
 const cleanupTimer = setInterval(() => {
     const now = Date.now();
@@ -77,7 +77,6 @@ module.exports = async function handler(req, res) {
     const clientIp = getClientIp(req);
     const rateCheck = checkRateLimit(clientIp);
     if (!rateCheck.allowed) {
-        // Return 200 silently to frontend so user experience is not disrupted
         return res.status(200).json({ status: "ignored", reason: rateCheck.reason });
     }
 
@@ -107,84 +106,65 @@ module.exports = async function handler(req, res) {
         timeStyle: "short"
     });
 
-    const htmlContent = `
-<!DOCTYPE html>
-<html>
+    const htmlContent = `<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
-  <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #060608; color: #FFFFFF; margin: 0; padding: 24px; }
-    .container { max-width: 600px; margin: 0 auto; background-color: #121319; border: 1px solid rgba(212, 175, 55, 0.35); border-radius: 16px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.6); }
-    .header { background: linear-gradient(135deg, #1f202b 0%, #0d0e12 100%); padding: 28px; border-bottom: 1px solid rgba(212, 175, 55, 0.2); }
-    .badge { display: inline-block; background: rgba(212, 175, 55, 0.15); color: #D4AF37; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 4px 12px; border-radius: 20px; border: 1px solid rgba(212, 175, 55, 0.3); margin-bottom: 12px; }
-    .title { margin: 0; color: #FFFFFF; font-size: 22px; font-weight: 700; }
-    .content { padding: 28px; }
-    .meta-table { width: 100%; border-collapse: collapse; margin-bottom: 24px; }
-    .meta-table td { padding: 10px 0; font-size: 14px; border-bottom: 1px solid rgba(255,255,255,0.06); vertical-align: top; }
-    .meta-label { color: #D4AF37; font-weight: 600; width: 120px; text-transform: uppercase; font-size: 11px; letter-spacing: 0.05em; }
-    .meta-value { color: #E5E7EB; word-break: break-word; }
-    .highlight-box { background: rgba(212, 175, 55, 0.08); border-left: 3px solid #D4AF37; border-radius: 8px; padding: 16px 20px; color: #F3F4F6; font-size: 14px; margin-bottom: 20px; }
-    .footer { padding: 20px 28px; background: #0a0b0e; border-top: 1px solid rgba(255,255,255,0.06); font-size: 12px; color: #9CA3AF; text-align: center; }
-    .btn { display: inline-block; margin-top: 12px; padding: 10px 22px; background: #D4AF37; color: #060608; text-decoration: none; font-weight: 700; border-radius: 8px; font-size: 13px; }
-  </style>
+  <title>CV Download Notification</title>
 </head>
-<body>
-  <div class="container">
-    <div class="header">
-      <span class="badge">Activity Alert</span>
-      <h1 class="title">📄 Someone Just Downloaded Your CV!</h1>
-    </div>
-    <div class="content">
-      <div class="highlight-box">
-        A visitor clicked the <strong>Download CV</strong> button on your portfolio website.
-      </div>
-      <table class="meta-table">
-        <tr>
-          <td class="meta-label">File Downloaded:</td>
-          <td class="meta-value"><strong>Carpio Rebienald2.pdf (CV.pdf)</strong></td>
-        </tr>
-        <tr>
-          <td class="meta-label">Date & Time:</td>
-          <td class="meta-value">${formattedDate} (Manila Time)</td>
-        </tr>
-        <tr>
-          <td class="meta-label">Estimated Location:</td>
-          <td class="meta-value">${sanitize(locationStr)}</td>
-        </tr>
-        <tr>
-          <td class="meta-label">IP Address:</td>
-          <td class="meta-value">${sanitize(clientIp)}</td>
-        </tr>
-        <tr>
-          <td class="meta-label">Referrer Page:</td>
-          <td class="meta-value"><a href="${sanitize(referer)}" style="color: #D4AF37; text-decoration: none;">${sanitize(referer)}</a></td>
-        </tr>
-        <tr>
-          <td class="meta-label">Browser / Device:</td>
-          <td class="meta-value" style="font-size: 12px; color: #9CA3AF;">${sanitize(userAgent)}</td>
-        </tr>
-      </table>
-
-      <div style="text-align: center; margin-top: 24px;">
-        <a href="https://rebkhei.vercel.app" class="btn">View Live Portfolio &rarr;</a>
-      </div>
-    </div>
-    <div class="footer">
-      Automated visitor alert from your Personal Portfolio (<a href="https://rebkhei.vercel.app" style="color: #D4AF37; text-decoration:none;">rebkhei.vercel.app</a>) via Resend.
+<body style="margin:0;padding:24px;background-color:#ffffff;font-family:Arial,Helvetica,sans-serif;color:#111111;font-size:14px;line-height:1.5;">
+  <div style="max-width:550px;margin:0 auto;border:1px solid #e0e0e0;border-radius:4px;padding:20px;">
+    <h3 style="margin-top:0;margin-bottom:16px;font-size:16px;font-weight:bold;color:#000000;border-bottom:1px solid #e0e0e0;padding-bottom:8px;">
+      CV Download Notification
+    </h3>
+    <p style="margin-top:0;margin-bottom:16px;color:#222222;font-size:14px;">
+      A visitor downloaded your CV from your portfolio.
+    </p>
+    <table style="width:100%;border-collapse:collapse;margin-bottom:16px;font-size:13px;">
+      <tr>
+        <td style="padding:8px 10px;border:1px solid #e0e0e0;background-color:#f8f9fa;font-weight:bold;width:120px;color:#333333;">File</td>
+        <td style="padding:8px 10px;border:1px solid #e0e0e0;color:#111111;">Carpio Rebienald2.pdf (CV.pdf)</td>
+      </tr>
+      <tr>
+        <td style="padding:8px 10px;border:1px solid #e0e0e0;background-color:#f8f9fa;font-weight:bold;color:#333333;">Date &amp; Time</td>
+        <td style="padding:8px 10px;border:1px solid #e0e0e0;color:#111111;">${formattedDate} (Manila Time)</td>
+      </tr>
+      <tr>
+        <td style="padding:8px 10px;border:1px solid #e0e0e0;background-color:#f8f9fa;font-weight:bold;color:#333333;">Location</td>
+        <td style="padding:8px 10px;border:1px solid #e0e0e0;color:#111111;">${sanitize(locationStr)}</td>
+      </tr>
+      <tr>
+        <td style="padding:8px 10px;border:1px solid #e0e0e0;background-color:#f8f9fa;font-weight:bold;color:#333333;">IP Address</td>
+        <td style="padding:8px 10px;border:1px solid #e0e0e0;color:#111111;">${sanitize(clientIp)}</td>
+      </tr>
+      <tr>
+        <td style="padding:8px 10px;border:1px solid #e0e0e0;background-color:#f8f9fa;font-weight:bold;color:#333333;">Referrer</td>
+        <td style="padding:8px 10px;border:1px solid #e0e0e0;color:#111111;">${sanitize(referer)}</td>
+      </tr>
+      <tr>
+        <td style="padding:8px 10px;border:1px solid #e0e0e0;background-color:#f8f9fa;font-weight:bold;color:#333333;">Device</td>
+        <td style="padding:8px 10px;border:1px solid #e0e0e0;color:#111111;">${sanitize(userAgent)}</td>
+      </tr>
+    </table>
+    <div style="font-size:12px;color:#666666;border-top:1px solid #eeeeee;padding-top:10px;">
+      Automated notification from rebkhei.vercel.app
     </div>
   </div>
 </body>
-</html>
-    `.trim();
+</html>`.trim();
 
-    const textContent = `📄 CV Download Alert: Someone just downloaded your CV!\n\nFile: Carpio Rebienald2.pdf (CV.pdf)\nDate: ${formattedDate}\nLocation: ${locationStr}\nIP: ${clientIp}\nReferrer: ${referer}\nDevice: ${userAgent}`;
+    const textContent = `CV Download Notification\n\nA visitor downloaded your CV from your portfolio.\n\nFile: Carpio Rebienald2.pdf (CV.pdf)\nDate & Time: ${formattedDate} (Manila Time)\nLocation: ${locationStr}\nIP Address: ${clientIp}\nReferrer: ${referer}\nDevice: ${userAgent}\n\nAutomated notification from rebkhei.vercel.app`;
 
     const payload = JSON.stringify({
         from: senderEmail,
         to: [recipientEmail],
-        subject: `📄 CV Download Alert: Someone downloaded your CV!`,
+        subject: `CV Download Notification - Carpio Rebienald2.pdf`,
         html: htmlContent,
-        text: textContent
+        text: textContent,
+        headers: {
+            "X-Priority": "1",
+            "Importance": "high"
+        }
     });
 
     return new Promise((resolve) => {
