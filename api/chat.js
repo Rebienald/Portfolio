@@ -6,7 +6,7 @@ Title: Full-Stack Web & Mobile Developer, Software Developer, IT Student
 Address: Evangelista St., Talaba IV, Bacoor, Cavite
 Email: rebkheicarpio@gmail.com
 Phone: 09628489009
-Portfolio: https://rebienald.vercel.app/ (alias: https://rebkhei.vercel.app/)
+Portfolio: https://rebkhei.vercel.app/
 GitHub: https://github.com/rebienalddev/Portfolio
 
 Summary:
@@ -102,7 +102,7 @@ Verified Projects & Technical Specifications (Scanned Source Code & Documentatio
   * AI Orchestration: Multi-LLM failover engine (Google Gemini 3.6 Flash & Groq LLaMA/Qwen) with prompt injection protection and thinking-token sanitization.
   * Database & RAG: Supabase Cloud PostgreSQL with portfolio_documents and portfolio_projects tables, keyword-assisted multi-table retrieval, and pgvector schema compatibility.
   * Infrastructure & Hosting: Vercel serverless hosting paired with GitHub Actions automated CI/CD pipeline.
-  * Live URL: https://rebienald.vercel.app/ (alias: https://rebkhei.vercel.app/)
+  * Live URL: https://rebkhei.vercel.app/
 
 Education:
 - Cavite State University - Imus: Bachelor of Science in Information Technology (2026 - Present) - Status: Active / Ongoing
@@ -270,6 +270,7 @@ async function getRAGContext(userQuery, history = []) {
                 ...(Array.isArray(infoRes.data) ? infoRes.data.map((i) => i.content) : []),
             ]
                 .filter(Boolean)
+                .map((chunk) => (typeof chunk === "string" ? chunk.replaceAll("rebienald.vercel.app", "rebkhei.vercel.app") : chunk))
                 .filter((chunk) => {
                     // Filter out legacy static mockup chunks for Cup Of Story that mention the old GitHub Pages URL or 2025 glassmorphism
                     if (chunk.includes("axionbytee.github.io/cupofstory") || chunk.includes("CUP OF STORY (2025)")) {
@@ -326,7 +327,7 @@ RESPONSE STYLE & BREVITY RULES (STRICT & ABSOLUTE):
    - Use bold text (**bold**) for key technologies, metrics, and achievements.
    - Use clean, short bullet points (- item) for scannability.
    - End with a quick 1-sentence prompt inviting them to explore a live demo or get in touch.
-   - Contact details when relevant: Email: rebkheicarpio@gmail.com | Phone: 09628489009 | Portfolio: https://rebienald.vercel.app/
+   - Contact details when relevant: Email: rebkheicarpio@gmail.com | Phone: 09628489009 | Portfolio: https://rebkhei.vercel.app/
    - NEVER output internal reasoning, <think> tags, or conversational fluff.
 
 Verified Portfolio Knowledge Base:
