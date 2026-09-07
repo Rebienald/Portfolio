@@ -1751,7 +1751,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     window.addEventListener('wheel', (e) => {
                         if (!snapEnabled || isMobileDevice()) return;
-                        if (e.target.closest(modalScrollSelector) || document.querySelector('.project-modal-overlay.active, .samai-modal-overlay.active, .guestbook-modal-overlay.active, .samai-lightbox-overlay.active, .chatbot-window.open')) {
+                        if (e.target.closest(modalScrollSelector) || document.querySelector('.project-modal-overlay.active, .samai-modal-overlay.active, .guestbook-modal-overlay.active, .samai-lightbox-overlay.active')) {
                             return;
                         }
 
@@ -1775,7 +1775,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     window.addEventListener('touchend', (e) => {
                         if (!snapEnabled || isMobileDevice()) return;
-                        if (e.target.closest(modalScrollSelector + ', .certs-marquee, .projects-marquee') || document.querySelector('.project-modal-overlay.active, .samai-modal-overlay.active, .guestbook-modal-overlay.active, .samai-lightbox-overlay.active, .chatbot-window.open')) {
+                        if (e.target.closest(modalScrollSelector + ', .certs-marquee, .projects-marquee') || document.querySelector('.project-modal-overlay.active, .samai-modal-overlay.active, .guestbook-modal-overlay.active, .samai-lightbox-overlay.active')) {
                             return;
                         }
                         if (isAnimating || !e.changedTouches || e.changedTouches.length === 0) return;
@@ -1795,7 +1795,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     window.addEventListener('keydown', (e) => {
                         if (!snapEnabled || isMobileDevice()) return;
-                        if (document.querySelector('.project-modal-overlay.active, .samai-modal-overlay.active, .guestbook-modal-overlay.active, .samai-lightbox-overlay.active, .chatbot-window.open')) {
+                        if (e.target.closest('input, textarea, select, .chatbot-window, #chatMessages') ||
+                            document.activeElement?.closest('input, textarea, select, .chatbot-window, #chatMessages') ||
+                            document.querySelector('.project-modal-overlay.active, .samai-modal-overlay.active, .guestbook-modal-overlay.active, .samai-lightbox-overlay.active')) {
                             return;
                         }
                         if (['ArrowDown', 'PageDown'].includes(e.key)) {
