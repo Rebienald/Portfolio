@@ -289,53 +289,52 @@
     }
 
     const LOCAL_KNOWLEDGE = {
-        best: `🏆 **InfoWhiz & SamAI** are Rebienald's ultimate **flagship, most challenging, and best projects**!
+        best: `🏆 **Rebienald's Top Flagship Projects**:
 
-👑 **InfoWhiz** (#1 Flagship Project):
-An AI-powered gamified learning platform for computer programming. Won **Best in Capstone Development** and **Best in System Development** among all SHS ICT students at STI College Bacoor!
+1. **InfoWhiz** - AI-powered gamified learning platform. Won **Best in Capstone Development** & **Best in System Development** at STI College Bacoor.
+2. **SamAI** - Advanced AI study companion with custom **RAG pipeline**, multi-LLM orchestration (Gemini/Groq), and PHP 8 PSR-4 SQLite architecture.
+3. **Cup Of Story** - Full-stack cafe ordering platform with dynamic cart state, responsive UI, and live ordering.`,
 
-🚀 **SamAI** (Flagship AI System - Developed July 2026):
-A Hello Kitty-themed AI study companion engineered with RAG (Retrieval-Augmented Generation), PDF handout analysis, automated quiz generation, multi-LLM orchestration (Gemini & Groq), and PHP 8 PSR-4 SQLite architecture.`,
+        samai: `🚀 **SamAI** (Flagship AI System - July 2026):
 
-        samai: `🔒 **SamAI Technical Architecture & System Overview** (Developed in July 2026 - Rebienald's Best & Hardest Project)
+A high-performance AI study companion and document tutor with full **RAG (Retrieval-Augmented Generation)**:
+- 🧠 **Multi-LLM Orchestration**: Custom API wrappers for **Google Gemini & Groq** with key rotation and rate-limit failover.
+- ⚡ **Production Architecture**: Strict **PHP 8 PSR-4 OOP** with embedded **SQLite FTS5 BM25 search** and PDF parsing.
+- 🔒 *Note: Source code is private for security.*`,
 
-*Note: Live web access to SamAI is restricted for privacy and security reasons.*
+        cupofstory: `☕ **Cup Of Story** (Full-Stack Cafe Ordering System):
 
-- 🎀 **Concept & Design**: A Hello Kitty-themed, AI-powered study companion and document tutoring web application engineered for interactive PDF analysis, automated quiz generation, and Retrieval-Augmented Generation (RAG) on uploaded learning materials.
-- 💻 **Backend Architecture**: Built on a PHP 8 backend following a structured PSR-4 object-oriented architecture (divided into Controllers, Services, Repositories, and Helpers) hosted on Apache.
-- 🗄️ **Database System**: Utilizes an embedded SQLite database via PDO to persist indexed document text chunks, cached AI summaries, generated quiz banks, and session states.
-- 🧠 **Multi-LLM Orchestration**: Integrates custom API wrappers for both Google Gemini and Groq with an automated key-rotation and rate-limit cooldown mechanism for high availability, token cost optimization, and intelligent model switching.
-- 📄 **Document Extraction Pipeline**: Combines a server-side extraction pipeline leveraging PHP PDF parsers and Tesseract OCR for scanned image documents with client-side JavaScript PDF parsing, feeding into a custom chunking engine and contextual search system for real-time AI tutoring.`,
+- 🎨 **Modern Experience**: Responsive UI with semantic HTML5, CSS3 glassmorphism, and Vanilla JavaScript.
+- 🛒 **Core Features**: Real-time cart state management, dynamic pricing, and modal-based order customization.
+- 🌐 **Live Demo**: [cupofstory.infinityfreeapp.com](http://cupofstory.infinityfreeapp.com/)`,
 
-        infowhiz: `**InfoWhiz** is one of Rebienald's **most challenging and best projects**!
+        infowhiz: `👑 **InfoWhiz** (Award-Winning Flagship Project):
 
-It is an AI-powered gamified learning platform for computer programming that won **Best in Capstone Development** and **Best in System Development** among all SHS ICT students at STI College Bacoor. It features real-time coding assistance, interactive AI feedback, and simulation-based learning.`,
+An AI-powered gamified learning platform for beginner programmers (Java, C#, PHP, JS):
+- 🏆 **Double Award Winner**: **Best in Capstone Development** & **Best in System Development** at STI College Bacoor.
+- 🎮 **Features**: Real-time coding games (CheeseWhiz, CodeDefuse), in-browser IDE sandbox, and interactive AI debugger.
+- 🌐 **Live Demo**: [infowhiz.hstn.me](https://infowhiz.hstn.me/Pages/index)`,
 
-        testimonials: `🌟 **Peer Testimonials & Endorsements (7 Endorsements - 10/10 Rating)**:
+        testimonials: `🌟 **Peer Testimonials & Endorsements** (100% 10/10 Rating across 7 Peers):
 
-1. **Charles** (10/10): *"Reb is a highly skilled back-end developer, a reliable teammate, and a great friend. He communicates clearly, takes initiative on projects like our Discord bot and website, and always delivers quality work on time."*
-2. **John** (10/10): *"Super smooth ng transaction and very easy to talk to. Maayos and mabilis yung service, and very transparent from start to finish. Highly recommended!"*
-3. **Nuñez** (10/10): *"Very efficient that makes me strive to be efficient as well."*
-4. **Engr. Jay** (10/10): *"Contributes majority of the ideas"*
-5. **Samantha** (10/10): *"Responsible and hardworking."*
-6. **Nicole** (10/10): *"Very productive."*
-7. **Eldrain** (10/10): *"Fantastic."*`,
+- **Charles**: *"Highly skilled back-end developer, reliable teammate... always delivers quality work on time."*
+- **John**: *"Super smooth transaction, mabilis ang service, very transparent. Highly recommended!"*
+- **Nuñez**: *"Very efficient that makes me strive to be efficient as well."*
+- **Engr. Jay**: *"Contributes majority of the ideas."*
+Reb consistently earns 10/10 marks for velocity, clear communication, and high-impact delivery.`,
 
-        portping: `⚡ **PortPing (Keep-Alive Sentinel & Automated Ping Service)**:
+        portping: `⚡ **PortPing** (Cloud Keep-Alive Sentinel):
 
-*(Formerly known as **Nas.IO** / **NAS.IO Bot**)*
+An automated keep-alive system ensuring 24/7 cloud database availability:
+- 📡 **Automation**: Scheduled **GitHub Actions** cron running a **Node.js** ping client against PostgreSQL/Supabase REST endpoints.
+- 🛡️ **Zero Downtime**: Prevents Supabase cloud projects from auto-pausing during idle periods.
+- 🔗 **Repo**: [rebienalddev.github.io/PortPing](https://rebienalddev.github.io/PortPing/)`,
 
-- 📡 **Description**: PortPing is an automated keep-alive sentinel built with Node.js and GitHub Actions. It sends scheduled PostgREST queries to PostgreSQL / Supabase Cloud DB to prevent project auto-pausing and maintain data layer availability for the Portfolio.
-- 🛠️ **Technologies**: Node.js, Supabase, PostgreSQL, GitHub Actions, PostgREST.
-- 🔗 **Live Project**: [https://rebienalddev.github.io/PortPing/](https://rebienalddev.github.io/PortPing/)`,
+        portfolio: `🎨 **Rebienald's Portfolio Architecture**:
 
-        portfolio: `🎨 **Rebienald's Portfolio Architecture & Tech Stack**:
-
-- 💻 **Frontend**: Built with **Semantic HTML5**, **Vanilla CSS3** (custom HSL design system, Glassmorphism, CSS Grid/Flexbox, dynamic micro-animations), and **JavaScript ES6+**.
-- ⚡ **Serverless Backend**: Powered by **Vercel Serverless Functions** (\`/api/chat\`, \`/api/guestbook\`) running Node.js.
-- 🧠 **AI & RAG Engine**: Multi-LLM orchestration combining **Google Gemini 3.6 Flash** and **Groq** (LLaMA/Qwen) with automatic model failover, prompt-injection defense, and thinking-token sanitization.
-- 🗄️ **Database & Search**: **Supabase Cloud PostgreSQL** with **pgvector** vector search (\`match_documents\` RPC) for real-time portfolio RAG context retrieval.
-- 🚀 **Infrastructure**: Deployed on **Vercel** connected to GitHub automated deployment pipelines.`
+- ⚡ **Zero Framework Bloat**: Pure **Vanilla JS ES6+** and **CSS3 Design Tokens** with 60 FPS Canvas 2D graphics.
+- 🧠 **Dual-Engine AI**: Multi-LLM failover (**Groq + Gemini**) with Supabase pgvector RAG and prompt sanitization.
+- 🚀 **Serverless Infrastructure**: Hosted on **Vercel Serverless Functions** with automated GitHub CI/CD.`
     };
 
     function getSmartLocalAnswer(query) {
@@ -344,6 +343,9 @@ It is an AI-powered gamified learning platform for computer programming that won
 
         if (q.includes('best') || q.includes('top project') || q.includes('flagship') || q.includes('most challenging') || q.includes('hardest')) {
             return LOCAL_KNOWLEDGE.best;
+        }
+        if (q.includes('cup of story') || q.includes('cupofstory') || q.includes('cup of coffee') || q.includes('coffee shop')) {
+            return LOCAL_KNOWLEDGE.cupofstory;
         }
         if (q.includes('samai') || (q.includes('sam') && q.includes('ai')) || q.includes('july 2026')) {
             return LOCAL_KNOWLEDGE.samai;
