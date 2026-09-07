@@ -397,6 +397,12 @@ It is an AI-powered gamified learning platform for computer programming that won
                 { label: '☕ Cup Of Story', query: 'Tell me about the Cup Of Story web app.' },
                 { label: '📬 Contact Info', query: 'What are Rebienald\'s contact details?' }
             ];
+        } else if (combined.includes('cup') || combined.includes('story') || combined.includes('coffee') || combined.includes('barista') || combined.includes('cafe')) {
+            chips = [
+                { label: '☕ 3-Tier Workflow', query: 'How does the customer, barista, and owner workflow work in Cup Of Story?' },
+                { label: '🧾 Receipt Engine', query: 'How does Cup Of Story generate client receipts with HTML2Canvas?' },
+                { label: '🌐 Live Web App', query: 'What is the live URL of Cup Of Story and how is its database set up?' }
+            ];
         } else {
             chips = [
                 { label: '🚀 Flagship Projects', query: 'What are Rebienald\'s top flagship projects?' },

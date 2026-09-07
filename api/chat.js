@@ -147,9 +147,13 @@ const ALIAS_MAP = {
     "printing": ["PrintPortal", "PrintHub"],
     "technobytes": ["TechnoBytes", "Photobooth"],
     "photobooth": ["TechnoBytes", "Photobooth"],
-    "cupofstory": ["Cup Of Story", "cupofstory"],
-    "cup": ["Cup Of Story"],
-    "story": ["Cup Of Story"],
+    "cupofstory": ["Cup Of Story", "cupofstory", "cupofcoffee", "barista"],
+    "cup": ["Cup Of Story", "cupofstory"],
+    "story": ["Cup Of Story", "cupofstory"],
+    "coffee": ["Cup Of Story", "cupofstory", "cupofcoffee"],
+    "cafe": ["Cup Of Story", "cupofstory"],
+    "barista": ["Cup Of Story", "cupofstory", "barista"],
+    "cupofcoffee": ["Cup Of Story", "cupofcoffee"],
     "clubhub": ["ClubHub", "Club Hub", "Club Management System"],
     "club": ["ClubHub", "Club Management System"],
     "portfolio": ["Portfolio", "Serverless RAG"],
@@ -250,17 +254,35 @@ async function getRAGContext(userQuery, history = []) {
                 });
             });
 
-            const [projRes, infoRes, docsRes] = await Promise.all([
+            const [docsRes, projRes, infoRes] = await Promise.all([
+                fetchTable(`${cleanUrl}/rest/v1/portfolio_documents?select=content&${filterQuery}&order=id.desc&limit=5`),
                 fetchTable(`${cleanUrl}/rest/v1/portfolio_projects?select=content&${filterQuery}&limit=4`),
-                fetchTable(`${cleanUrl}/rest/v1/personal_info?select=content&${filterQuery}&limit=4`),
-                fetchTable(`${cleanUrl}/rest/v1/portfolio_documents?select=content&${filterQuery}&limit=4`)
+                fetchTable(`${cleanUrl}/rest/v1/personal_info?select=content&${filterQuery}&limit=4`)
             ]);
 
+            const isCupOfStoryQuery = terms.some((t) =>
+                ["cup of story", "cupofstory", "cupofcoffee", "coffee", "cafe", "barista"].includes(String(t).toLowerCase())
+            );
+
             const allChunks = [
+                ...(Array.isArray(docsRes.data) ? docsRes.data.map((i) => i.content) : []),
                 ...(Array.isArray(projRes.data) ? projRes.data.map((i) => i.content) : []),
                 ...(Array.isArray(infoRes.data) ? infoRes.data.map((i) => i.content) : []),
-                ...(Array.isArray(docsRes.data) ? docsRes.data.map((i) => i.content) : []),
-            ].filter(Boolean);
+            ]
+                .filter(Boolean)
+                .filter((chunk) => {
+                    // Filter out legacy static mockup chunks for Cup Of Story that mention the old GitHub Pages URL or 2025 glassmorphism
+                    if (chunk.includes("axionbytee.github.io/cupofstory") || chunk.includes("CUP OF STORY (2025)")) {
+                        return false;
+                    }
+                    return true;
+                });
+
+            // Ensure updated 2026 Cup of Story specifications are available if asked
+            if (isCupOfStoryQuery && !allChunks.some((c) => c.includes("Cup Of Story (2026)") || c.includes("CUP OF STORY (2026)"))) {
+                const cupChunk = FALLBACK_KNOWLEDGE.split("\n\n").find((sec) => sec.includes("Cup Of Story"));
+                if (cupChunk) allChunks.unshift(cupChunk);
+            }
 
             const uniqueChunks = [...new Set(allChunks)];
             if (uniqueChunks.length > 0) {
