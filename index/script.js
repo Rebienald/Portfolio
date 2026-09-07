@@ -1221,85 +1221,78 @@ document.addEventListener('DOMContentLoaded', () => {
                     cupofstory: {
                         id: 'cupofstory',
                         title: 'Cup Of Story',
-                        titleSub: 'Artisan Coffee & Bakery Digital Storefront',
+                        titleSub: 'Full-Stack Cafe Ordering & Kitchen Operations System',
                         badges: [
-                            { text: 'FRONTEND ARCHITECTURE', class: 'primary', icon: 'fas fa-mug-hot' },
-                            { text: 'UI/UX & ANIMATION', class: 'secondary', icon: 'fas fa-magic' },
-                            { text: 'E-COMMERCE SHOWCASE', class: 'green', icon: 'fas fa-shopping-bag' }
+                            { text: 'FULL-STACK WEB SYSTEM', class: 'primary', icon: 'fas fa-mug-hot' },
+                            { text: '3-TIER ROLE WORKFLOW', class: 'secondary', icon: 'fas fa-user-shield' },
+                            { text: 'PHP & MYSQL PDO', class: 'green', icon: 'fas fa-database' }
                         ],
-                        subtitle: 'A modern e-commerce digital storefront and brand storytelling platform for an artisanal coffeehouse and bakery. Demonstrates advanced vanilla frontend architecture, rich micro-animations, glassmorphism, and responsive asset delivery.',
+                        subtitle: 'A full-stack cafe ordering, kitchen fulfillment, and business management system engineered for specialty coffee houses. Features a customer self-ordering POS with live order tracking, a real-time barista kitchen display system (KDS) with drink preparation workflows and refund handling, and an owner administration dashboard with product catalog controls and sales analytics.',
                         heroImage: 'projectimages/cupofstory.png',
                         heroTags: [
-                            { icon: 'fas fa-paint-brush', text: 'Fluid Micro-Animations & Glassmorphism' },
-                            { icon: 'fas fa-utensils', text: 'Interactive Menu & Digital Ordering UI' },
-                            { icon: 'fas fa-bolt', text: 'WebP Asset Delivery & Zero Framework Overhead' }
+                            { icon: 'fas fa-coffee', text: 'Customer POS & Live Order Lifecycle' },
+                            { icon: 'fas fa-clipboard-check', text: 'Real-Time Barista KDS & Refund Workflow' },
+                            { icon: 'fas fa-chart-line', text: 'Owner Product Catalog & Period Analytics' }
                         ],
                         apis: [
-                            { name: 'HTML5 Web Storage API', icon: 'fas fa-shopping-cart', color: '#60a5fa', desc: 'Client-side cart session state persistence across navigation' },
-                            { name: 'CSS Custom Properties API', icon: 'fas fa-palette', color: '#f59e0b', desc: 'HSL design tokenization for dynamic theme scaling and consistent brand palette' },
-                            { name: 'IntersectionObserver API', icon: 'fas fa-eye', color: '#34d399', desc: 'Hardware-accelerated viewport scroll reveals and lazy image loading' }
+                            { name: 'Device Fingerprint & Storage API', icon: 'fas fa-id-badge', color: '#60a5fa', desc: 'Hardware fingerprinting and client-side session state for continuous order recovery and polling' },
+                            { name: 'HTML2Canvas Rendering Engine', icon: 'fas fa-receipt', color: '#f59e0b', desc: 'Client-side thermal receipt image generation and instant customer download' },
+                            { name: 'PHP PDO Transactional Engine', icon: 'fas fa-database', color: '#34d399', desc: 'ACID-compliant order submission, state transitions, and audit-safe database transactions' }
                         ],
                         techStack: [
-                            { name: 'Semantic HTML5', icon: 'devicon-html5-plain colored' },
-                            { name: 'Vanilla CSS3 (HSL Tokens)', icon: 'devicon-css3-plain colored' },
+                            { name: 'PHP 8 (PDO)', icon: 'devicon-php-plain colored' },
+                            { name: 'MySQL / MariaDB', icon: 'devicon-mysql-plain colored' },
                             { name: 'JavaScript ES6+', icon: 'devicon-javascript-plain colored' },
+                            { name: 'Minimalist Paper UI (CSS3)', icon: 'devicon-css3-plain colored' },
                             { name: 'CSS Grid & Flexbox', icon: 'fas fa-th-large', color: '#38bdf8' },
-                            { name: 'WebP Image Optimization', icon: 'fas fa-image', color: '#a78bfa' },
-                            { name: 'Glassmorphism UI', icon: 'fas fa-sparkles', color: '#fb7185' }
+                            { name: 'Responsive Web Design', icon: 'fas fa-mobile-alt', color: '#a78bfa' }
                         ],
                         architecture: [
                             {
-                                icon: 'fas fa-mobile-alt',
-                                title: 'Fluid Responsive Layout Architecture',
-                                desc: 'Mobile-first layout engineered with CSS Grid, Flexbox, and CSS custom variables for seamless adaptability from mobile screens to 4K displays.'
+                                icon: 'fas fa-cash-register',
+                                title: 'Customer Self-Ordering POS Interface',
+                                desc: 'Dynamic cafe menu with category filtering (Espresso, Brewed, Iced, Bakery), tray calculation with taxes, counter pickup checkout, and live order polling (Pending, Brewing, Completed, Received, Refunded).'
                             },
                             {
-                                icon: 'fas fa-sparkles',
-                                title: 'Hardware-Accelerated Micro-Interactions',
-                                desc: 'Smooth CSS transitions, tactile card hovers, and animated navigation drawers that deliver a premium, responsive user experience.'
+                                icon: 'fas fa-utensils',
+                                title: 'Barista Live Kitchen Display System (KDS)',
+                                desc: 'Real-time order queue with status progression, recipe checklist verification for barista drink assembly, customer refund request approvals, and order completion clearance.'
                             },
                             {
-                                icon: 'fas fa-book-open',
-                                title: 'Categorized Menu Catalog Showcase',
-                                desc: 'Structured product catalog featuring artisan espresso blends, cold brews, artisanal pastries, and seasonal specialties with flavor profiles.'
+                                icon: 'fas fa-chart-bar',
+                                title: 'Owner Administration & Analytics Dashboard',
+                                desc: 'Inventory management to add and update products, pricing, and availability toggles, paired with period-based revenue statistics (daily, weekly, monthly) and CSV reporting export.'
                             },
                             {
-                                icon: 'fas fa-tachometer-alt',
-                                title: 'Optimized Asset Delivery & Zero Overhead',
-                                desc: 'High-definition WebP compressed imagery, asynchronous font rendering, and zero bulky framework dependencies for instant loading.'
+                                icon: 'fas fa-scroll',
+                                title: 'Paper Cafe Aesthetic & Anti-Vibe-Coded Design',
+                                desc: 'Built strictly around flat paper cafe styling with warm earth tones (#fbf9f5 canvas, #4a332a espresso accents, linen borders) focusing on extreme readability, zero visual clutter, and zero bloated frameworks.'
                             }
                         ],
                         features: [
                             {
-                                icon: 'fas fa-coffee',
-                                title: 'Artisan Brand Identity & Ambience',
-                                desc: 'Warm, cozy, and sophisticated color palette designed to evoke the comforting aroma and atmosphere of a specialty coffee shop.'
+                                icon: 'fas fa-sync-alt',
+                                title: 'End-to-End Order Lifecycle & State Synchronization',
+                                desc: 'Seamless, automated polling keeps the customer ticket tracker, kitchen queue, and business dashboard perfectly in sync across every order transition.'
                             },
                             {
-                                icon: 'fas fa-shopping-cart',
-                                title: 'Interactive Order Formulation UI',
-                                desc: 'Interactive item selection, customizable sweetness/milk preferences, and dynamic order tallying.'
+                                icon: 'fas fa-undo-alt',
+                                title: 'Customer-Initiated Refund Workflow',
+                                desc: 'Allows customers to request refunds directly from active order tickets with barista review and automated cart state clearing.'
                             },
                             {
-                                icon: 'fas fa-heart',
-                                title: 'Brand Storytelling & Heritage Sections',
-                                desc: 'Dedicated sections highlighting ethical bean sourcing, roasting philosophies, and master barista craftsmanship.'
+                                icon: 'fas fa-file-invoice-dollar',
+                                title: 'Instant Thermal Receipt Export',
+                                desc: 'Generates branded digital receipts client-side with ticket numbers, timestamped item breakdown, and instant download via HTML2Canvas.'
                             },
                             {
-                                icon: 'fas fa-universal-access',
-                                title: 'Accessibility & Semantic HTML5',
-                                desc: 'Built according to modern web accessibility standards with semantic structure, clean contrast ratios, and intuitive keyboard navigation.'
+                                icon: 'fas fa-server',
+                                title: 'Hybrid Local & Cloud Database Connectivity',
+                                desc: 'Engineered with environment auto-detection supporting local LAMPP development with automatic fallback to live cPanel MySQL clusters.'
                             }
                         ],
-                        techStack: [
-                            { name: 'HTML5 Semantic', icon: 'devicon-html5-plain colored' },
-                            { name: 'CSS3 Glassmorphism', icon: 'devicon-css3-plain colored' },
-                            { name: 'JavaScript ES6+', icon: 'devicon-javascript-plain colored' },
-                            { name: 'Responsive Web Design', icon: 'fas fa-mobile-alt', color: '#60a5fa' },
-                            { name: 'Web Performance Optimization', icon: 'fas fa-bolt', color: '#f59e0b' }
-                        ],
-                        liveUrl: 'https://axionbytee.github.io/cupofstory/',
-                        liveBtnText: 'View Live Storefront',
+                        liveUrl: 'https://cupofstory.hstn.me/cupofcoffee/user/index.php',
+                        liveBtnText: 'View Live Web App',
                         isPrivate: false
                     },
 

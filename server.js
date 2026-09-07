@@ -81,13 +81,13 @@ Verified Projects & Technical Specifications (Scanned Source Code & Documentatio
   * Frontend: JavaScript ES6+, HTML5, CSS3 micro-animations.
   * Live URL: https://rebienalddev.github.io/TechnoPhotobooth/
 
-6. Cup Of Story (2025):
-- Overview: Modern digital storefront showcasing advanced frontend web design, micro-animations, and responsive asset delivery for a coffee and pastry shop.
+6. Cup Of Story (2026):
+- Overview: Full-stack cafe ordering, barista kitchen fulfillment, and owner business management system engineered for specialty coffee shops.
 - Technical Specifications:
-  * Styling Architecture: Vanilla CSS3 utilizing custom HSL color tokens, Glassmorphism ('backdrop-filter: blur()'), CSS Grid/Flexbox layouts.
-  * Interactivity: JavaScript ES6+ (shopping cart calculations, dynamic modal dialogs, responsive navigation).
-  * Asset Optimization: WebP image formatting, semantic HTML5 structure.
-  * Live URL: https://axionbytee.github.io/cupofstory/
+  * Backend & Database: PHP 8, MySQL / MariaDB with PDO transactions and dual local/cloud environment connectivity.
+  * Role Architecture: Customer Self-Ordering POS with real-time order lifecycle polling, Barista Kitchen Display System (KDS) with drink checklists and refund handling, and Owner Dashboard with product catalog controls and sales analytics.
+  * Frontend & Styling: Vanilla JavaScript ES6+, HTML5, HTML2Canvas receipt engine, CSS3 Minimalist Paper Design System (#fbf9f5 canvas, #4a332a espresso accents, zero bloated frameworks or distracting gradients).
+  * Live URL: https://cupofstory.hstn.me/cupofcoffee/user/index.php
 
 7. Club Management System / Club Hub / ClubHub (April 2024):
 - Overview: PHP-based web platform for managing student organization operations, member directories, and campus event announcements.
