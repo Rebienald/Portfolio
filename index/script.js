@@ -1371,6 +1371,84 @@ document.addEventListener('DOMContentLoaded', () => {
                         liveUrl: 'https://spi-announcement-hub.free.nf/',
                         liveBtnText: 'View Live Club Hub',
                         isPrivate: false
+                    },
+
+                    kaido: {
+                        id: 'kaido',
+                        title: 'Kaido',
+                        titleSub: 'Minimalist Voice Input & Dictation Interface for AI Agents',
+                        badges: [
+                            { text: 'AI VOICE INTERFACE', class: 'primary', icon: 'fas fa-microphone' },
+                            { text: 'LOCAL NEURAL SPEECH', class: 'secondary', icon: 'fas fa-brain' },
+                            { text: 'PYTHON & GTK 3', class: 'green', icon: 'fab fa-python' }
+                        ],
+                        subtitle: 'A high-performance minimalist desktop voice dictation and agent interface. Built with Python, GTK 3, and faster-whisper, Kaido enables low-latency voice commanding, multi-request prompt batching, live screen capture via FreeDesktop ScreenCast portal, real-time LLM token monitoring, and seamless execution dispatch to Antigravity and Linux terminals.',
+                        heroImage: 'projectimages/kaido.png',
+                        heroTags: [
+                            { icon: 'fas fa-microphone-alt', text: 'Local Neural Speech-to-Text & VAD' },
+                            { icon: 'fas fa-desktop', text: 'ScreenCast Portal Display Context Integration' },
+                            { icon: 'fas fa-chart-pie', text: 'Live Token & Session Usage Gauges' }
+                        ],
+                        apis: [
+                            { name: 'Faster-Whisper Engine', icon: 'fas fa-wave-square', color: '#60a5fa', desc: 'CPU-optimized int8 neural inference delivering fast, accurate local speech transcription' },
+                            { name: 'FreeDesktop ScreenCast DBus API', icon: 'fas fa-camera', color: '#f59e0b', desc: 'Secure Wayland and X11 portal integration capturing active screens for multimodal context' },
+                            { name: 'Edge TTS Neural Synthesizer', icon: 'fas fa-volume-up', color: '#34d399', desc: 'Natural voice output for AI agent response playback with adjustable speaking rates' }
+                        ],
+                        techStack: [
+                            { name: 'Python 3', icon: 'devicon-python-plain colored' },
+                            { name: 'GTK 3 / PyGObject', icon: 'fas fa-window-restore', color: '#3b82f6' },
+                            { name: 'faster-whisper', icon: 'fas fa-brain', color: '#10b981' },
+                            { name: 'FFmpeg Audio Pipeline', icon: 'fas fa-sliders-h', color: '#ef4444' },
+                            { name: 'Edge-TTS & Speech-Dispatcher', icon: 'fas fa-headphones', color: '#8b5cf6' },
+                            { name: 'Linux DBus / FreeDesktop Portal', icon: 'fas fa-terminal', color: '#f59e0b' }
+                        ],
+                        architecture: [
+                            {
+                                icon: 'fas fa-layer-group',
+                                title: 'Dark Floating HUD & Always-On-Top Window',
+                                desc: 'Crafted with a sleek dark aesthetic (#0c0c0e canvas, zinc borders, monospace telemetry) designed to stay unobtrusively pinned above developer IDEs and terminals.'
+                            },
+                            {
+                                icon: 'fas fa-microphone',
+                                title: 'Dual Workflow: Interactive GUI & Global Shortcut Daemon',
+                                desc: 'Includes both a full-featured PyGObject control center and a lightweight global shortcut background daemon (Kaido Toggle) for instant push-to-talk workflows.'
+                            },
+                            {
+                                icon: 'fas fa-tachometer-alt',
+                                title: 'Live LLM Session Token Gauges',
+                                desc: 'Continuously monitors active Antigravity session transcripts and displays live context token counts, model tier limits, and visual warning bars.'
+                            },
+                            {
+                                icon: 'fas fa-paper-plane',
+                                title: 'Direct Antigravity & Terminal Dispatch',
+                                desc: 'Automatically routes speech commands and attached screenshot context into active agent sessions, headless worker processes, or system terminals.'
+                            }
+                        ],
+                        features: [
+                            {
+                                icon: 'fas fa-spell-check',
+                                title: 'Phonetic Developer Auto-Correction',
+                                desc: 'Equipped with custom regex vocabularies and phonetic replacements to reliably catch developer keywords, git commands, and project nomenclature.'
+                            },
+                            {
+                                icon: 'fas fa-camera-retro',
+                                title: 'One-Click Screen Attachment',
+                                desc: 'Attaches screen context with a single toggle, allowing users to ask queries about visible code, compiler errors, or designs seamlessly.'
+                            },
+                            {
+                                icon: 'fas fa-forward',
+                                title: 'Customizable TTS Speech Rate & Thinking Presets',
+                                desc: 'Cycle playback speeds (1x to 3x) and adjust agent thinking levels (Low, Med, High) on the fly with instantaneous visual feedback.'
+                            },
+                            {
+                                icon: 'fab fa-github',
+                                title: 'Open Source Codebase',
+                                desc: 'Source code publicly available on GitHub with clear documentation and setup instructions for Linux power users.'
+                            }
+                        ],
+                        liveUrl: 'https://github.com/Rebienald/Kaido',
+                        liveBtnText: 'View Source Code on GitHub',
+                        isPrivate: false
                     }
                 };
 
@@ -1592,6 +1670,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             else if (href.includes('TechnoPhotobooth') || text.includes('TechnoBytes') || text.includes('Photobooth')) projectId = 'technophotobooth';
                             else if (href.includes('cupofstory') || text.includes('Cup Of Story')) projectId = 'cupofstory';
                             else if (href.includes('club') || text.includes('Club Hub')) projectId = 'clubhub';
+                            else if (href.includes('Kaido') || href.includes('kaido') || text.includes('Kaido')) projectId = 'kaido';
                         }
 
                         if (projectId && window.openProjectModal) {
