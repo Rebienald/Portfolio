@@ -94,7 +94,16 @@ Verified Projects & Technical Specifications (Scanned Source Code & Documentatio
   * Frontend: HTML5, CSS3 (admin-style.css), JavaScript ES6+.
   * Live URL: https://spi-announcement-hub.free.nf/
 
-8. Personal Portfolio Website & Serverless RAG AI Assistant (August 2026):
+8. Kaido / OpenWhisper Desktop Voice Agent Interface (September 2026):
+- Overview: Minimalist Python and GTK 3 desktop voice dictation and AI assistant controller engineered for Linux desktop automation and Antigravity pair programming.
+- Technical Specifications:
+  * Speech Recognition & Audio Pipeline: faster-whisper neural STT (int8 quantized small.en model running with VAD and phonetic auto-correction for developer terminology), FFmpeg PulseAudio capture pipeline.
+  * Desktop Architecture: PyGObject / GTK 3 always-on-top dark floating window (#0c0c0e, zinc borders, monospace telemetry), background global shortcut daemon (Kaido Toggle) for instant push-to-talk workflows.
+  * Multimodal & Vision Context: FreeDesktop ScreenCast Portal via DBus for instant desktop screenshots attached directly to voice queries.
+  * Telemetry & Agent Dispatch: Live token monitoring reading active Antigravity session transcripts and visual warning gauges, Edge TTS speech synthesis for audio response playback, direct command routing to active CLI agents and system terminals.
+  * Live Repository: https://github.com/Rebienald/Kaido
+
+9. Personal Portfolio Website & Serverless RAG AI Assistant (August 2026):
 - Overview: High-performance personal portfolio website integrated with a multi-LLM serverless AI assistant.
 - Full Tech Stack & Architecture:
   * Frontend: Semantic HTML5, Vanilla CSS3 (custom HSL design system, Glassmorphism, CSS Grid/Flexbox, dynamic micro-interactions), Vanilla JavaScript ES6+. Zero heavy frontend framework dependencies for ultra-fast load times.
@@ -156,6 +165,11 @@ const ALIAS_MAP = {
     "cupofcoffee": ["Cup Of Story", "cupofcoffee"],
     "clubhub": ["ClubHub", "Club Hub", "Club Management System"],
     "club": ["ClubHub", "Club Management System"],
+    "kaido": ["Kaido", "faster-whisper", "voice dictation", "openwhisper"],
+    "whisper": ["Kaido", "faster-whisper", "voice dictation"],
+    "voice": ["Kaido", "faster-whisper", "voice dictation"],
+    "dictation": ["Kaido", "faster-whisper", "voice dictation"],
+    "openwhisper": ["Kaido", "faster-whisper"],
     "portfolio": ["Portfolio", "Serverless RAG"],
     "skills": ["Technical Skills", "Languages"],
     "education": ["Cavite State University", "STI College"],
