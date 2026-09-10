@@ -36,8 +36,37 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
         <link rel="stylesheet" href="chatbot/chatbot.css" />
-
         <link rel="stylesheet" href="index/styles.css" />
+
+        <style>
+            #cyberGridCanvas {
+                position: fixed !important;
+                top: 0 !important;
+                left: 0 !important;
+                width: 100vw !important;
+                height: 100vh !important;
+                pointer-events: none !important;
+                z-index: 0 !important;
+            }
+            body, html {
+                background-color: #060608 !important;
+            }
+            section,
+            .about-section,
+            .testimonials-section,
+            .edu-section,
+            .timeline-tree-section,
+            .guestbook-section,
+            .hero-name-section {
+                background: transparent !important;
+                background-color: transparent !important;
+                position: relative !important;
+                z-index: 1 !important;
+            }
+            .timeline-tree-section {
+                background: transparent !important;
+            }
+        </style>
 
         <script type="application/ld+json">
             {
@@ -109,6 +138,7 @@
         <div class="ambient-glow-2"></div>
         <div class="ambient-glow-3"></div>
         <div class="moving-orange-blob"></div>
+        <canvas id="cyberGridCanvas" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 0;"></canvas>
 
         <nav>
             <a href="#about" class="logo">Reb.Dev</a>
@@ -1476,7 +1506,94 @@
         </footer>
 
         <script src="index/script.js?v=20260907-1" defer></script>
-
         <script src="chatbot/chatbot.js" defer></script>
+
+        <script>
+            (function initCyberGrid() {
+                var canvas = document.getElementById('cyberGridCanvas');
+                if (!canvas) return;
+                var ctx = canvas.getContext('2d');
+                var w = 0, h = 0;
+                var offsetZ = 0;
+                var speed = 0.007;
+
+                function resize() {
+                    w = canvas.width = window.innerWidth;
+                    h = canvas.height = window.innerHeight;
+                }
+                resize();
+                window.addEventListener('resize', resize, { passive: true });
+
+                function draw() {
+                    ctx.clearRect(0, 0, w, h);
+
+                    var centerY = h * 0.5;
+                    var vanishX = w * 0.5;
+
+                    // Central ambient horizon gradient
+                    var grad = ctx.createRadialGradient(vanishX, centerY, 10, vanishX, centerY, Math.max(w, h) * 0.65);
+                    grad.addColorStop(0, 'rgba(255, 255, 255, 0.09)');
+                    grad.addColorStop(0.4, 'rgba(160, 180, 220, 0.03)');
+                    grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+                    ctx.fillStyle = grad;
+                    ctx.fillRect(0, 0, w, h);
+
+                    var numCols = 32;
+                    var spread = w * 2.2;
+                    ctx.lineWidth = 1;
+
+                    // Perspective vertical rays extending to top and bottom
+                    for (var i = -numCols; i <= numCols; i++) {
+                        var targetX = vanishX + (i * (spread / numCols));
+                        var alpha = Math.max(0.02, 0.16 - Math.abs(i) * 0.004);
+
+                        // Bottom floor rays
+                        ctx.beginPath();
+                        ctx.moveTo(vanishX, centerY);
+                        ctx.lineTo(targetX, h);
+                        ctx.strokeStyle = 'rgba(255, 255, 255, ' + alpha + ')';
+                        ctx.stroke();
+
+                        // Top ceiling rays
+                        ctx.beginPath();
+                        ctx.moveTo(vanishX, centerY);
+                        ctx.lineTo(targetX, 0);
+                        ctx.strokeStyle = 'rgba(255, 255, 255, ' + (alpha * 0.65) + ')';
+                        ctx.stroke();
+                    }
+
+                    // Forward scrolling perspective horizontal rings
+                    offsetZ = (offsetZ + speed) % 1;
+                    var numRows = 24;
+
+                    for (var j = 0; j < numRows; j++) {
+                        var progress = (j + offsetZ) / numRows;
+                        var eased = Math.pow(progress, 2.0);
+
+                        // Lower floor lines
+                        var pyBottom = centerY + eased * (h - centerY);
+                        var alphaBottom = Math.pow(progress, 1.6) * 0.22;
+                        ctx.beginPath();
+                        ctx.moveTo(0, pyBottom);
+                        ctx.lineTo(w, pyBottom);
+                        ctx.strokeStyle = 'rgba(255, 255, 255, ' + alphaBottom + ')';
+                        ctx.stroke();
+
+                        // Upper ceiling lines
+                        var pyTop = centerY - eased * centerY;
+                        var alphaTop = Math.pow(progress, 1.6) * 0.14;
+                        ctx.beginPath();
+                        ctx.moveTo(0, pyTop);
+                        ctx.lineTo(w, pyTop);
+                        ctx.strokeStyle = 'rgba(255, 255, 255, ' + alphaTop + ')';
+                        ctx.stroke();
+                    }
+
+                    requestAnimationFrame(draw);
+                }
+
+                draw();
+            })();
+        </script>
     </body>
 </html>
