@@ -1594,6 +1594,15 @@
                         }
                     }
 
+                    if (isMobile) {
+                        if (currentBg !== 'constellation') {
+                            currentBg = 'constellation';
+                            gridCanvas.style.opacity = '0';
+                            constCanvas.style.opacity = '1';
+                        }
+                        return;
+                    }
+
                     var shouldUseGrid = gridSectionIds.indexOf(activeSectionId) !== -1;
                     var targetBg = shouldUseGrid ? 'grid' : 'constellation';
 
@@ -1614,61 +1623,63 @@
                 updateActiveBackground();
 
                 function render() {
-                    // Draw Cyber Grid (adjust grid line count on mobile for high FPS)
-                    gridCtx.clearRect(0, 0, w, h);
-                    var centerY = h * 0.5;
-                    var vanishX = w * 0.5;
+                    // On desktop, render Cyber Grid when active
+                    if (!isMobile) {
+                        gridCtx.clearRect(0, 0, w, h);
+                        var centerY = h * 0.5;
+                        var vanishX = w * 0.5;
 
-                    var grad = gridCtx.createRadialGradient(vanishX, centerY, 10, vanishX, centerY, Math.max(w, h) * 0.65);
-                    grad.addColorStop(0, 'rgba(255, 255, 255, 0.08)');
-                    grad.addColorStop(0.4, 'rgba(160, 180, 220, 0.03)');
-                    grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
-                    gridCtx.fillStyle = grad;
-                    gridCtx.fillRect(0, 0, w, h);
+                        var grad = gridCtx.createRadialGradient(vanishX, centerY, 10, vanishX, centerY, Math.max(w, h) * 0.65);
+                        grad.addColorStop(0, 'rgba(255, 255, 255, 0.08)');
+                        grad.addColorStop(0.4, 'rgba(160, 180, 220, 0.03)');
+                        grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+                        gridCtx.fillStyle = grad;
+                        gridCtx.fillRect(0, 0, w, h);
 
-                    var numCols = isMobile ? 18 : 32;
-                    var spread = w * (isMobile ? 1.8 : 2.2);
-                    gridCtx.lineWidth = 1;
+                        var numCols = 32;
+                        var spread = w * 2.2;
+                        gridCtx.lineWidth = 1;
 
-                    for (var i = -numCols; i <= numCols; i++) {
-                        var targetX = vanishX + (i * (spread / numCols));
-                        var alpha = Math.max(0.02, (isMobile ? 0.13 : 0.16) - Math.abs(i) * 0.005);
+                        for (var i = -numCols; i <= numCols; i++) {
+                            var targetX = vanishX + (i * (spread / numCols));
+                            var alpha = Math.max(0.02, 0.16 - Math.abs(i) * 0.005);
 
-                        gridCtx.beginPath();
-                        gridCtx.moveTo(vanishX, centerY);
-                        gridCtx.lineTo(targetX, h);
-                        gridCtx.strokeStyle = 'rgba(255, 255, 255, ' + alpha + ')';
-                        gridCtx.stroke();
+                            gridCtx.beginPath();
+                            gridCtx.moveTo(vanishX, centerY);
+                            gridCtx.lineTo(targetX, h);
+                            gridCtx.strokeStyle = 'rgba(255, 255, 255, ' + alpha + ')';
+                            gridCtx.stroke();
 
-                        gridCtx.beginPath();
-                        gridCtx.moveTo(vanishX, centerY);
-                        gridCtx.lineTo(targetX, 0);
-                        gridCtx.strokeStyle = 'rgba(255, 255, 255, ' + (alpha * 0.65) + ')';
-                        gridCtx.stroke();
-                    }
+                            gridCtx.beginPath();
+                            gridCtx.moveTo(vanishX, centerY);
+                            gridCtx.lineTo(targetX, 0);
+                            gridCtx.strokeStyle = 'rgba(255, 255, 255, ' + (alpha * 0.65) + ')';
+                            gridCtx.stroke();
+                        }
 
-                    offsetZ = (offsetZ + gridSpeed) % 1;
-                    var numRows = isMobile ? 16 : 24;
+                        offsetZ = (offsetZ + gridSpeed) % 1;
+                        var numRows = 24;
 
-                    for (var j = 0; j < numRows; j++) {
-                        var progress = (j + offsetZ) / numRows;
-                        var eased = Math.pow(progress, 2.0);
+                        for (var j = 0; j < numRows; j++) {
+                            var progress = (j + offsetZ) / numRows;
+                            var eased = Math.pow(progress, 2.0);
 
-                        var pyBottom = centerY + eased * (h - centerY);
-                        var alphaBottom = Math.pow(progress, 1.6) * 0.22;
-                        gridCtx.beginPath();
-                        gridCtx.moveTo(0, pyBottom);
-                        gridCtx.lineTo(w, pyBottom);
-                        gridCtx.strokeStyle = 'rgba(255, 255, 255, ' + alphaBottom + ')';
-                        gridCtx.stroke();
+                            var pyBottom = centerY + eased * (h - centerY);
+                            var alphaBottom = Math.pow(progress, 1.6) * 0.22;
+                            gridCtx.beginPath();
+                            gridCtx.moveTo(0, pyBottom);
+                            gridCtx.lineTo(w, pyBottom);
+                            gridCtx.strokeStyle = 'rgba(255, 255, 255, ' + alphaBottom + ')';
+                            gridCtx.stroke();
 
-                        var pyTop = centerY - eased * centerY;
-                        var alphaTop = Math.pow(progress, 1.6) * 0.14;
-                        gridCtx.beginPath();
-                        gridCtx.moveTo(0, pyTop);
-                        gridCtx.lineTo(w, pyTop);
-                        gridCtx.strokeStyle = 'rgba(255, 255, 255, ' + alphaTop + ')';
-                        gridCtx.stroke();
+                            var pyTop = centerY - eased * centerY;
+                            var alphaTop = Math.pow(progress, 1.6) * 0.14;
+                            gridCtx.beginPath();
+                            gridCtx.moveTo(0, pyTop);
+                            gridCtx.lineTo(w, pyTop);
+                            gridCtx.strokeStyle = 'rgba(255, 255, 255, ' + alphaTop + ')';
+                            gridCtx.stroke();
+                        }
                     }
 
                     // Draw Constellation Particles
