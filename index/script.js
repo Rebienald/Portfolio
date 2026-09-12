@@ -1379,23 +1379,27 @@ document.addEventListener('DOMContentLoaded', () => {
                         titleSub: 'Minimalist Voice Input & Dictation Interface for AI Agents',
                         badges: [
                             { text: 'AI VOICE INTERFACE', class: 'primary', icon: 'fas fa-microphone' },
-                            { text: 'LOCAL NEURAL SPEECH', class: 'secondary', icon: 'fas fa-brain' },
-                            { text: 'PYTHON & GTK 3', class: 'green', icon: 'fab fa-python' }
+                            { text: 'KAIDO BRAIN MEMORY', class: 'green', icon: 'fas fa-brain' },
+                            { text: 'LOCAL NEURAL SPEECH', class: 'secondary', icon: 'fas fa-wave-square' },
+                            { text: 'PYTHON & GTK 3', class: 'blue', icon: 'fab fa-python' }
                         ],
-                        subtitle: 'A high-performance minimalist desktop voice dictation and agent interface. Built with Python, GTK 3, and faster-whisper, Kaido enables low-latency voice commanding, multi-request prompt batching, live screen capture via FreeDesktop ScreenCast portal, real-time LLM token monitoring, and seamless execution dispatch to Antigravity and Linux terminals.',
+                        subtitle: 'A high-performance minimalist desktop voice dictation and agent interface. Built with Python, GTK 3, and faster-whisper, Kaido integrates Kaido Brain for continuous context persistence, low-latency voice commanding, multi-request prompt batching, live screen capture via FreeDesktop ScreenCast portal, real-time LLM token monitoring, and seamless execution dispatch to AI agents and Linux terminals.',
                         heroImage: 'projectimages/kaido.png',
                         heroTags: [
+                            { icon: 'fas fa-brain', text: 'Kaido Brain Persistent Memory Engine' },
                             { icon: 'fas fa-microphone-alt', text: 'Local Neural Speech-to-Text & VAD' },
                             { icon: 'fas fa-desktop', text: 'ScreenCast Portal Display Context Integration' },
                             { icon: 'fas fa-chart-pie', text: 'Live Token & Session Usage Gauges' }
                         ],
                         apis: [
+                            { name: 'Kaido Brain Memory Engine', icon: 'fas fa-database', color: '#a855f7', desc: 'Embedded SQLite-backed memory architecture storing cross-session context, project decisions, and developer preferences with zero token bloat' },
                             { name: 'Faster-Whisper Engine', icon: 'fas fa-wave-square', color: '#60a5fa', desc: 'CPU-optimized int8 neural inference delivering fast, accurate local speech transcription' },
                             { name: 'FreeDesktop ScreenCast DBus API', icon: 'fas fa-camera', color: '#f59e0b', desc: 'Secure Wayland and X11 portal integration capturing active screens for multimodal context' },
                             { name: 'Edge TTS Neural Synthesizer', icon: 'fas fa-volume-up', color: '#34d399', desc: 'Natural voice output for AI agent response playback with adjustable speaking rates' }
                         ],
                         techStack: [
                             { name: 'Python 3', icon: 'devicon-python-plain colored' },
+                            { name: 'SQLite 3 (Kaido Brain)', icon: 'fas fa-database', color: '#a855f7' },
                             { name: 'GTK 3 / PyGObject', icon: 'fas fa-window-restore', color: '#3b82f6' },
                             { name: 'faster-whisper', icon: 'fas fa-brain', color: '#10b981' },
                             { name: 'FFmpeg Audio Pipeline', icon: 'fas fa-sliders-h', color: '#ef4444' },
@@ -1403,6 +1407,11 @@ document.addEventListener('DOMContentLoaded', () => {
                             { name: 'Linux DBus / FreeDesktop Portal', icon: 'fas fa-terminal', color: '#f59e0b' }
                         ],
                         architecture: [
+                            {
+                                icon: 'fas fa-brain',
+                                title: 'Kaido Brain Continuous Context Architecture',
+                                desc: 'Indexes conversations, project metadata, and session notes into an embedded SQLite database, providing continuous recall across coding sessions without token bloat.'
+                            },
                             {
                                 icon: 'fas fa-layer-group',
                                 title: 'Dark Floating HUD & Always-On-Top Window',

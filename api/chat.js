@@ -100,7 +100,8 @@ Verified Projects & Technical Specifications (Scanned Source Code & Documentatio
   * Speech Recognition & Audio Pipeline: faster-whisper neural STT (int8 quantized small.en model running with VAD and phonetic auto-correction for developer terminology), FFmpeg PulseAudio capture pipeline.
   * Desktop Architecture: PyGObject / GTK 3 always-on-top dark floating window (#0c0c0e, zinc borders, monospace telemetry), background global shortcut daemon (Kaido Toggle) for instant push-to-talk workflows.
   * Multimodal & Vision Context: FreeDesktop ScreenCast Portal via DBus for instant desktop screenshots attached directly to voice queries.
-  * Telemetry & Agent Dispatch: Live token monitoring reading active Antigravity session transcripts and visual warning gauges, Edge TTS speech synthesis for audio response playback, direct command routing to active CLI agents and system terminals.
+  * Kaido Brain Memory Engine: Embedded SQLite memory store with automated continuous synchronization, cross-session context persistence, developer preferences, and milestone audit logs with zero token bloat.
+  * Telemetry & Agent Dispatch: Live token monitoring reading active session transcripts and visual warning gauges, Edge TTS speech synthesis for audio response playback, direct command routing to active CLI agents and system terminals.
   * Live Repository: https://github.com/Rebienald/Kaido
 
 9. Personal Portfolio Website & Serverless RAG AI Assistant (August 2026):
@@ -165,7 +166,9 @@ const ALIAS_MAP = {
     "cupofcoffee": ["Cup Of Story", "cupofcoffee"],
     "clubhub": ["ClubHub", "Club Hub", "Club Management System"],
     "club": ["ClubHub", "Club Management System"],
-    "kaido": ["Kaido", "faster-whisper", "voice dictation", "openwhisper"],
+    "kaido": ["Kaido", "faster-whisper", "voice dictation", "openwhisper", "Kaido Brain"],
+    "kaidobrain": ["Kaido", "Kaido Brain", "SQLite memory"],
+    "brain": ["Kaido", "Kaido Brain", "SQLite memory"],
     "whisper": ["Kaido", "faster-whisper", "voice dictation"],
     "voice": ["Kaido", "faster-whisper", "voice dictation"],
     "dictation": ["Kaido", "faster-whisper", "voice dictation"],
