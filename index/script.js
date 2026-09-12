@@ -1435,6 +1435,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         ],
                         features: [
                             {
+                                icon: 'fas fa-brain',
+                                title: 'Kaido Brain Persistent Memory Engine',
+                                desc: 'Embedded SQLite-backed continuous context architecture (brain.db) that indexes conversations, developer preferences, project scopes, and milestone audit logs across sessions with zero token overhead.'
+                            },
+                            {
                                 icon: 'fas fa-spell-check',
                                 title: 'Phonetic Developer Auto-Correction',
                                 desc: 'Equipped with custom regex vocabularies and phonetic replacements to reliably catch developer keywords, git commands, and project nomenclature.'
