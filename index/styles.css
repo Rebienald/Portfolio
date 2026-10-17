@@ -4017,3 +4017,103 @@
         max-height: 180px !important;
     }
 }
+
+
+
+/* ==========================================================================
+   REMOVE MOVING AND ANIMATED BACKGROUNDS (CANVAS & GLOW BLOBS)
+   ========================================================================== */
+#cyberGridCanvas,
+#constellationCanvas,
+canvas#cyberGridCanvas,
+canvas#constellationCanvas,
+.ambient-glow,
+.ambient-glow-2,
+.ambient-glow-3,
+.moving-orange-blob {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+
+
+
+
+/* ==========================================================================
+   SELECTED WORKS NON-SCROLLING FLEX / BENTO GRID & SNAP SCROLL REMOVAL
+   ========================================================================== */
+
+/* 1. Eliminate Snap Scroll Globally */
+html, body {
+    scroll-snap-type: none !important;
+    -webkit-scroll-snap-type: none !important;
+    overflow-y: auto !important;
+}
+
+section, .container, .section {
+    scroll-snap-align: none !important;
+    scroll-snap-stop: normal !important;
+}
+
+#snapToggleBtn {
+    display: none !important;
+}
+
+/* 2. Selected Works: Fully Flexed / Multi-Column Grid (No Horizontal Scroll) */
+#work .projects-marquee {
+    overflow: visible !important;
+    width: 100% !important;
+    max-width: 1320px !important;
+    margin: 0 auto !important;
+    padding: 0 1.5rem !important;
+    display: block !important;
+    cursor: default !important;
+}
+
+#work .projects-marquee-track {
+    display: block !important;
+    width: 100% !important;
+    transform: none !important;
+    will-change: auto !important;
+}
+
+#work .projects-marquee-group {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 16px !important;
+    width: 100% !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    transform: none !important;
+    will-change: auto !important;
+}
+
+@media (max-width: 1200px) {
+    #work .projects-marquee-group {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+}
+
+@media (max-width: 640px) {
+    #work .projects-marquee-group {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+#work .project-card {
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 380px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    box-sizing: border-box !important;
+    transform: none !important;
+}
+
+#work .project-card:hover {
+    transform: translateY(-4px) !important;
+}
+

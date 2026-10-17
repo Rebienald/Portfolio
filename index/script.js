@@ -577,7 +577,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }, { passive: true, capture: true });
 
                 document.addEventListener('DOMContentLoaded', () => {
-                    const marquees = document.querySelectorAll('.projects-marquee, .certs-marquee');
+                    const marquees = document.querySelectorAll('.certs-marquee');
                     marquees.forEach(marquee => {
                         const track = marquee.querySelector('.projects-marquee-track, .certs-marquee-track');
                         if (!track) return;
@@ -1753,50 +1753,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
                 });
 
-                // STRICT SECTION-BY-SECTION SNAP SWITCHER & FLOATING CONTROLS ENGINE (DESKTOP ONLY / TOGGLEABLE)
+                // MUTE BUTTON & SOUND CONTROLS (SNAP SCROLL DISABLED)
                 (function() {
-                    let isAnimating = false;
-                    let currentIndex = 0;
-                    
-                    const isMobileDevice = () => window.innerWidth <= 768;
-                    // Locked section scrolling, with a short response cooldown.
-                    let snapEnabled = !isMobileDevice();
-                    
-                    const toggleBtn = document.getElementById('snapToggleBtn');
+                    document.documentElement.style.scrollSnapType = 'none';
+                    document.body.style.scrollSnapType = 'none';
+
                     const muteBtn = document.getElementById('muteToggleBtn');
-
-                    if (isMobileDevice()) {
-                        document.documentElement.style.scrollSnapType = 'none';
-                    }
-
-                    if (toggleBtn) {
-                        const updateSnapUI = () => {
-                            const icon = toggleBtn.querySelector('i');
-                            if (snapEnabled) {
-                                toggleBtn.classList.remove('snap-off');
-                                if (icon) icon.className = 'fas fa-lock';
-                                toggleBtn.setAttribute('title', 'Snap Scroll: ON (Click for Free Scroll)');
-                                toggleBtn.setAttribute('aria-label', 'Snap Scroll is ON');
-                                document.documentElement.style.scrollSnapType = 'y mandatory';
-                            } else {
-                                toggleBtn.classList.add('snap-off');
-                                if (icon) icon.className = 'fas fa-unlock';
-                                toggleBtn.setAttribute('title', 'Free Scroll: ON (Click for Snap Scroll)');
-                                toggleBtn.setAttribute('aria-label', 'Free Scroll is ON');
-                                document.documentElement.style.scrollSnapType = 'none';
-                            }
-                        };
-
-                        toggleBtn.addEventListener('click', (e) => {
-                            e.stopPropagation();
-                            snapEnabled = !snapEnabled;
-                            updateSnapUI();
-                            if (typeof playClickSound === 'function') playClickSound();
-                        });
-
-                        updateSnapUI();
-                    }
-
                     if (muteBtn) {
                         muteBtn.addEventListener('click', (e) => {
                             e.stopPropagation();
@@ -1811,159 +1773,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                     }
 
-                    const sections = Array.from(document.querySelectorAll('section, .contact-section'));
-                    if (sections.length === 0) return;
-
-                    function getActiveIndex() {
-                        const scrollPos = window.scrollY + 100;
-                        for (let i = sections.length - 1; i >= 0; i--) {
-                            if (scrollPos >= sections[i].offsetTop - 200) {
-                                return i;
-                            }
-                        }
-                        return 0;
+                    const snapBtn = document.getElementById('snapToggleBtn');
+                    if (snapBtn) {
+                        snapBtn.style.display = 'none';
                     }
-
-                    function scrollToSection(index) {
-                        if (index < 0 || index >= sections.length) return;
-                        isAnimating = true;
-                        currentIndex = index;
-                        const targetPos = sections[index].offsetTop;
-                        
-                        window.scrollTo({
-                            top: targetPos,
-                            behavior: 'smooth'
-                        });
-
-                        setTimeout(() => {
-                            isAnimating = false;
-                        }, 300);
-                    }
-
-                    const modalScrollSelector = '#projectModal, .project-modal-container, .project-modal-overlay, #samaiModal, .samai-modal-container, .samai-modal-overlay, #guestbookModal, .guestbook-modal-card, .guestbook-modal-overlay, #samaiLightbox, .samai-lightbox-overlay, #chatMessages, .chatbot-container, .chatbot-window, textarea, input, select';
-
-                    window.addEventListener('wheel', (e) => {
-                        if (!snapEnabled || isMobileDevice()) return;
-                        if (e.target.closest(modalScrollSelector) || document.querySelector('.project-modal-overlay.active, .samai-modal-overlay.active, .guestbook-modal-overlay.active, .samai-lightbox-overlay.active')) {
-                            return;
-                        }
-
-                        e.preventDefault();
-                        if (isAnimating) return;
-
-                        currentIndex = getActiveIndex();
-                        if (e.deltaY > 15) {
-                            scrollToSection(currentIndex + 1);
-                        } else if (e.deltaY < -15) {
-                            scrollToSection(currentIndex - 1);
-                        }
-                    }, { passive: false });
-
-                    let touchStartY = 0;
-                    window.addEventListener('touchstart', (e) => {
-                        if (e.touches && e.touches.length > 0) {
-                            touchStartY = e.touches[0].clientY;
-                        }
-                    }, { passive: true });
-
-                    window.addEventListener('touchend', (e) => {
-                        if (!snapEnabled || isMobileDevice()) return;
-                        if (e.target.closest(modalScrollSelector + ', .certs-marquee, .projects-marquee') || document.querySelector('.project-modal-overlay.active, .samai-modal-overlay.active, .guestbook-modal-overlay.active, .samai-lightbox-overlay.active')) {
-                            return;
-                        }
-                        if (isAnimating || !e.changedTouches || e.changedTouches.length === 0) return;
-
-                        const touchEndY = e.changedTouches[0].clientY;
-                        const diffY = touchStartY - touchEndY;
-
-                        if (Math.abs(diffY) > 40) {
-                            currentIndex = getActiveIndex();
-                            if (diffY > 0) {
-                                scrollToSection(currentIndex + 1);
-                            } else {
-                                scrollToSection(currentIndex - 1);
-                            }
-                        }
-                    }, { passive: true });
-
-                    window.addEventListener('keydown', (e) => {
-                        if (!snapEnabled || isMobileDevice()) return;
-                        if (e.target.closest('input, textarea, select, .chatbot-window, #chatMessages') ||
-                            document.activeElement?.closest('input, textarea, select, .chatbot-window, #chatMessages') ||
-                            document.querySelector('.project-modal-overlay.active, .samai-modal-overlay.active, .guestbook-modal-overlay.active, .samai-lightbox-overlay.active')) {
-                            return;
-                        }
-                        if (['ArrowDown', 'PageDown'].includes(e.key)) {
-                            e.preventDefault();
-                            if (!isAnimating) {
-                                currentIndex = getActiveIndex();
-                                scrollToSection(currentIndex + 1);
-                            }
-                        } else if (['ArrowUp', 'PageUp'].includes(e.key)) {
-                            e.preventDefault();
-                            if (!isAnimating) {
-                                currentIndex = getActiveIndex();
-                                scrollToSection(currentIndex - 1);
-                            }
-                        }
-                    });
-
-                    document.querySelectorAll('a[href^="#"]').forEach(link => {
-                        link.addEventListener('click', (e) => {
-                            if (!snapEnabled) return;
-                            const targetId = link.getAttribute('href');
-                            const targetSection = document.querySelector(targetId);
-                            if (targetSection) {
-                                const idx = sections.indexOf(targetSection);
-                                if (idx !== -1) {
-                                    e.preventDefault();
-                                    scrollToSection(idx);
-                                }
-                            }
-                        });
-                    });
                 })();
 
-                const loadingName = document.querySelector('.loading-name');
-                const introSplash = document.getElementById('introSplash');
-
-                if (introSplash) {
-                    const unlockSplashAudio = () => {
-                        initAudioContext();
-                    };
-                    introSplash.addEventListener('touchstart', unlockSplashAudio, { passive: true });
-                    introSplash.addEventListener('pointerdown', unlockSplashAudio, { passive: true });
-                    introSplash.addEventListener('click', unlockSplashAudio, { passive: true });
-                }
-
-                if (loadingName) {
-                    const name = loadingName.dataset.name || '';
-                    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-                        loadingName.textContent = name;
-                    } else {
-                        let letterIndex = 0;
-                        const typing = setInterval(() => {
-                            loadingName.textContent += name.charAt(letterIndex);
-                            playTypingSound();
-                            letterIndex += 1;
-                            if (letterIndex === name.length) clearInterval(typing);
-                        }, 65);
-                    }
-                }
-
-                setTimeout(() => {
-                    const introSplash = document.getElementById('introSplash');
-                    if (introSplash) {
-                        introSplash.classList.add('fade-out');
-                        setTimeout(() => {
-                            introSplash.style.display = 'none';
-                            document.body.style.overflow = '';
-                            window.scrollTo(0, 0);
-                        }, 800);
-                    }
-                }, 2200);
-
-                // TESTIMONIAL SPREAD CARD SHUFFLE ENGINE
+                // TESTIMONIAL SPREAD CARD SHUFFLE ENGINE// TESTIMONIAL SPREAD CARD SHUFFLE ENGINE
                 (function() {
                     let currentDeckOrder = [0, 1, 2, 3, 4, 5, 6];
                     let isShuffling = false;
