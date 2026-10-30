@@ -48,7 +48,8 @@
                 pointer-events: none !important;
                 z-index: 0 !important;
             }
-            body, html {
+            body,
+            html {
                 background-color: #060608 !important;
             }
             section,
@@ -86,20 +87,25 @@
                     var now = Date.now();
                     if (now - _lastCvSend < 1500) return;
 
-                    _cvClickTimes = _cvClickTimes.filter(function(t) { return now - t < 60000; });
+                    _cvClickTimes = _cvClickTimes.filter(function (t) {
+                        return now - t < 60000;
+                    });
                     if (_cvClickTimes.length >= 5) return;
                     _cvClickTimes.push(now);
                     _lastCvSend = now;
 
-                    var endpoint = (window.location.protocol.indexOf('http') === 0 && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1')
-                        ? '/api/cv-download'
-                        : 'https://rebkhei.vercel.app/api/cv-download';
+                    var endpoint =
+                        window.location.protocol.indexOf("http") === 0 &&
+                        window.location.hostname !== "localhost" &&
+                        window.location.hostname !== "127.0.0.1"
+                            ? "/api/cv-download"
+                            : "https://rebkhei.vercel.app/api/cv-download";
 
                     var payload = JSON.stringify({
                         timestamp: new Date().toISOString(),
                         page: window.location.href,
-                        screen: window.screen ? (window.screen.width + 'x' + window.screen.height) : 'unknown',
-                        ua: navigator.userAgent || 'unknown'
+                        screen: window.screen ? window.screen.width + "x" + window.screen.height : "unknown",
+                        ua: navigator.userAgent || "unknown",
                     });
 
                     if (navigator.sendBeacon) {
@@ -110,17 +116,17 @@
 
                     try {
                         fetch(endpoint, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
                             body: payload,
                             keepalive: true,
-                            mode: 'cors'
-                        }).catch(function() {});
+                            mode: "cors",
+                        }).catch(function () {});
                     } catch (e) {}
 
                     try {
                         var img = new Image();
-                        img.src = endpoint + '?t=' + now;
+                        img.src = endpoint + "?t=" + now;
                         window._cvAlertImg = img;
                     } catch (e) {}
                 } catch (err) {}
@@ -128,14 +134,42 @@
         </script>
     </head>
     <body>
-        
-
         <div class="ambient-glow"></div>
         <div class="ambient-glow-2"></div>
         <div class="ambient-glow-3"></div>
         <div class="moving-orange-blob"></div>
-        <canvas id="cyberGridCanvas" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 0; opacity: 0; transition: opacity 0.5s ease-in-out; will-change: opacity; transform: translateZ(0);"></canvas>
-        <canvas id="constellationCanvas" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 0; opacity: 1; transition: opacity 0.5s ease-in-out; will-change: opacity; transform: translateZ(0);"></canvas>
+        <canvas
+            id="cyberGridCanvas"
+            style="
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                pointer-events: none;
+                z-index: 0;
+                opacity: 0;
+                transition: opacity 0.5s ease-in-out;
+                will-change: opacity;
+                transform: translateZ(0);
+            "
+        ></canvas>
+        <canvas
+            id="constellationCanvas"
+            style="
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                pointer-events: none;
+                z-index: 0;
+                opacity: 1;
+                transition: opacity 0.5s ease-in-out;
+                will-change: opacity;
+                transform: translateZ(0);
+            "
+        ></canvas>
 
         <nav>
             <a href="#about" class="logo">Reb.Dev</a>
@@ -161,7 +195,7 @@
         </div>
 
         <section id="about" class="about-section">
-            <div class="container about-grid" style="position: relative; z-index: 2;">
+            <div class="container about-grid" style="position: relative; z-index: 2">
                 <div class="about-left reveal">
                     <div class="hero-visual">
                         <div class="hero-visual-inner">
@@ -293,13 +327,20 @@
                         <h2>Rebienald Khei Carpio</h2>
                     </div>
                     <p class="about-desc" style="margin-bottom: 1.25rem">
-                        IT student at Cavite State University with years of experience in website development, web app development, mobile development, Discord bot development, and AI integration.
+                        IT student at Cavite State University with years of experience in website development, web app
+                        development, mobile development, Discord bot development, and AI integration.
                     </p>
                     <div class="btn-group">
                         <a href="contacts/contact.html" class="btn-primary"
                             >Email Me <i class="fas fa-envelope" style="margin-left: 0.5rem; font-size: 0.85rem"></i
                         ></a>
-                        <a href="Carpio Rebienald2.pdf" download="CV.pdf" id="downloadCvBtn" rel="nofollow noindex" onclick="sendCvAlert()" class="btn-secondary"
+                        <a
+                            href="Carpio Rebienald Khei CV.pdf"
+                            download="CV.pdf"
+                            id="downloadCvBtn"
+                            rel="nofollow noindex"
+                            onclick="sendCvAlert()"
+                            class="btn-secondary"
                             >Download CV <i class="fas fa-download" style="margin-left: 0.5rem; font-size: 0.85rem"></i
                         ></a>
                     </div>
@@ -531,7 +572,13 @@
 
                     <div class="gb-form-group">
                         <label for="gbMessage">Your Message *</label>
-                        <textarea id="gbMessage" rows="3" placeholder="Enter your message here..." required maxlength="300"></textarea>
+                        <textarea
+                            id="gbMessage"
+                            rows="3"
+                            placeholder="Enter your message here..."
+                            required
+                            maxlength="300"
+                        ></textarea>
                     </div>
 
                     <button type="submit" class="btn-guestbook-submit" id="gbSubmitBtn">
@@ -747,8 +794,9 @@
                                 <h3>Kaido <i class="fas fa-arrow-up-right-from-square project-title-icon"></i></h3>
                                 <p>
                                     A minimalist Python and GTK 3 desktop voice dictation and agent interface powered by
-                                    faster-whisper neural STT, featuring Kaido Brain persistent memory, live token monitoring,
-                                    multimodal screen capture, and instant dispatch to AI agents and system terminals.
+                                    faster-whisper neural STT, featuring Kaido Brain persistent memory, live token
+                                    monitoring, multimodal screen capture, and instant dispatch to AI agents and system
+                                    terminals.
                                 </p>
                             </div>
                         </a>
@@ -1014,7 +1062,7 @@
             </div>
         </section>
         <section id="education" class="edu-section timeline-tree-section">
-            <div class="timeline-tree-container" style="position: relative; z-index: 2;">
+            <div class="timeline-tree-container" style="position: relative; z-index: 2">
                 <div class="section-header reveal">
                     <h2 class="text-gradient">Education & Milestones</h2>
                 </div>
@@ -1529,14 +1577,15 @@
         <script>
             (function initDualBackgrounds() {
                 return;
-                var gridCanvas = document.getElementById('cyberGridCanvas');
-                var constCanvas = document.getElementById('constellationCanvas');
+                var gridCanvas = document.getElementById("cyberGridCanvas");
+                var constCanvas = document.getElementById("constellationCanvas");
                 if (!gridCanvas || !constCanvas) return;
 
-                var gridCtx = gridCanvas.getContext('2d');
-                var constCtx = constCanvas.getContext('2d');
+                var gridCtx = gridCanvas.getContext("2d");
+                var constCtx = constCanvas.getContext("2d");
 
-                var w = 0, h = 0;
+                var w = 0,
+                    h = 0;
                 var offsetZ = 0;
                 var gridSpeed = 0.007;
 
@@ -1562,33 +1611,45 @@
                             vx: (Math.random() - 0.5) * (isMobile ? 0.35 : 0.5),
                             vy: (Math.random() - 0.5) * (isMobile ? 0.35 : 0.5),
                             radius: Math.random() * (isMobile ? 1.4 : 1.8) + 0.7,
-                            alpha: Math.random() * 0.45 + 0.3
+                            alpha: Math.random() * 0.45 + 0.3,
                         });
                     }
                 }
 
                 resize();
-                window.addEventListener('resize', resize, { passive: true });
+                window.addEventListener("resize", resize, { passive: true });
 
                 // Mouse & Touch interaction
-                window.addEventListener('mousemove', function(e) {
-                    mouse.x = e.clientX;
-                    mouse.y = e.clientY;
-                }, { passive: true });
+                window.addEventListener(
+                    "mousemove",
+                    function (e) {
+                        mouse.x = e.clientX;
+                        mouse.y = e.clientY;
+                    },
+                    { passive: true }
+                );
 
-                window.addEventListener('touchmove', function(e) {
-                    if (e.touches && e.touches[0]) {
-                        mouse.x = e.touches[0].clientX;
-                        mouse.y = e.touches[0].clientY;
-                    }
-                }, { passive: true });
+                window.addEventListener(
+                    "touchmove",
+                    function (e) {
+                        if (e.touches && e.touches[0]) {
+                            mouse.x = e.touches[0].clientX;
+                            mouse.y = e.touches[0].clientY;
+                        }
+                    },
+                    { passive: true }
+                );
 
-                window.addEventListener('touchend', function() {
-                    mouse.x = null;
-                    mouse.y = null;
-                }, { passive: true });
+                window.addEventListener(
+                    "touchend",
+                    function () {
+                        mouse.x = null;
+                        mouse.y = null;
+                    },
+                    { passive: true }
+                );
 
-                window.addEventListener('mouseleave', function() {
+                window.addEventListener("mouseleave", function () {
                     mouse.x = null;
                     mouse.y = null;
                 });
@@ -1596,14 +1657,14 @@
                 // Section background switcher:
                 // Grid sections (background 2): testimonials, work, expertise
                 // Constellation sections (background 1): about, education, certifications, guestbook
-                var gridSectionIds = ['testimonials', 'work', 'expertise'];
-                var currentBg = 'constellation';
+                var gridSectionIds = ["testimonials", "work", "expertise"];
+                var currentBg = "constellation";
 
                 function updateActiveBackground() {
                     var midScreen = window.innerHeight * 0.5;
                     var activeSectionId = null;
 
-                    var sections = document.querySelectorAll('section');
+                    var sections = document.querySelectorAll("section");
                     for (var s = 0; s < sections.length; s++) {
                         var rect = sections[s].getBoundingClientRect();
                         if (rect.top <= midScreen && rect.bottom >= midScreen) {
@@ -1613,31 +1674,31 @@
                     }
 
                     if (isMobile) {
-                        if (currentBg !== 'constellation') {
-                            currentBg = 'constellation';
-                            gridCanvas.style.opacity = '0';
-                            constCanvas.style.opacity = '1';
+                        if (currentBg !== "constellation") {
+                            currentBg = "constellation";
+                            gridCanvas.style.opacity = "0";
+                            constCanvas.style.opacity = "1";
                         }
                         return;
                     }
 
                     var shouldUseGrid = gridSectionIds.indexOf(activeSectionId) !== -1;
-                    var targetBg = shouldUseGrid ? 'grid' : 'constellation';
+                    var targetBg = shouldUseGrid ? "grid" : "constellation";
 
                     if (targetBg !== currentBg) {
                         currentBg = targetBg;
-                        if (currentBg === 'grid') {
-                            gridCanvas.style.opacity = '1';
-                            constCanvas.style.opacity = '0';
+                        if (currentBg === "grid") {
+                            gridCanvas.style.opacity = "1";
+                            constCanvas.style.opacity = "0";
                         } else {
-                            gridCanvas.style.opacity = '0';
-                            constCanvas.style.opacity = '1';
+                            gridCanvas.style.opacity = "0";
+                            constCanvas.style.opacity = "1";
                         }
                     }
                 }
 
-                window.addEventListener('scroll', updateActiveBackground, { passive: true });
-                window.addEventListener('touchmove', updateActiveBackground, { passive: true });
+                window.addEventListener("scroll", updateActiveBackground, { passive: true });
+                window.addEventListener("touchmove", updateActiveBackground, { passive: true });
                 updateActiveBackground();
 
                 function render() {
@@ -1647,10 +1708,17 @@
                         var centerY = h * 0.5;
                         var vanishX = w * 0.5;
 
-                        var grad = gridCtx.createRadialGradient(vanishX, centerY, 10, vanishX, centerY, Math.max(w, h) * 0.65);
-                        grad.addColorStop(0, 'rgba(255, 255, 255, 0.08)');
-                        grad.addColorStop(0.4, 'rgba(160, 180, 220, 0.03)');
-                        grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+                        var grad = gridCtx.createRadialGradient(
+                            vanishX,
+                            centerY,
+                            10,
+                            vanishX,
+                            centerY,
+                            Math.max(w, h) * 0.65
+                        );
+                        grad.addColorStop(0, "rgba(255, 255, 255, 0.08)");
+                        grad.addColorStop(0.4, "rgba(160, 180, 220, 0.03)");
+                        grad.addColorStop(1, "rgba(0, 0, 0, 0)");
                         gridCtx.fillStyle = grad;
                         gridCtx.fillRect(0, 0, w, h);
 
@@ -1659,19 +1727,19 @@
                         gridCtx.lineWidth = 1;
 
                         for (var i = -numCols; i <= numCols; i++) {
-                            var targetX = vanishX + (i * (spread / numCols));
+                            var targetX = vanishX + i * (spread / numCols);
                             var alpha = Math.max(0.02, 0.16 - Math.abs(i) * 0.005);
 
                             gridCtx.beginPath();
                             gridCtx.moveTo(vanishX, centerY);
                             gridCtx.lineTo(targetX, h);
-                            gridCtx.strokeStyle = 'rgba(255, 255, 255, ' + alpha + ')';
+                            gridCtx.strokeStyle = "rgba(255, 255, 255, " + alpha + ")";
                             gridCtx.stroke();
 
                             gridCtx.beginPath();
                             gridCtx.moveTo(vanishX, centerY);
                             gridCtx.lineTo(targetX, 0);
-                            gridCtx.strokeStyle = 'rgba(255, 255, 255, ' + (alpha * 0.65) + ')';
+                            gridCtx.strokeStyle = "rgba(255, 255, 255, " + alpha * 0.65 + ")";
                             gridCtx.stroke();
                         }
 
@@ -1687,7 +1755,7 @@
                             gridCtx.beginPath();
                             gridCtx.moveTo(0, pyBottom);
                             gridCtx.lineTo(w, pyBottom);
-                            gridCtx.strokeStyle = 'rgba(255, 255, 255, ' + alphaBottom + ')';
+                            gridCtx.strokeStyle = "rgba(255, 255, 255, " + alphaBottom + ")";
                             gridCtx.stroke();
 
                             var pyTop = centerY - eased * centerY;
@@ -1695,7 +1763,7 @@
                             gridCtx.beginPath();
                             gridCtx.moveTo(0, pyTop);
                             gridCtx.lineTo(w, pyTop);
-                            gridCtx.strokeStyle = 'rgba(255, 255, 255, ' + alphaTop + ')';
+                            gridCtx.strokeStyle = "rgba(255, 255, 255, " + alphaTop + ")";
                             gridCtx.stroke();
                         }
                     }
@@ -1727,7 +1795,7 @@
 
                         constCtx.beginPath();
                         constCtx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-                        constCtx.fillStyle = 'rgba(255, 255, 255, ' + p.alpha + ')';
+                        constCtx.fillStyle = "rgba(255, 255, 255, " + p.alpha + ")";
                         constCtx.fill();
 
                         for (var m = k + 1; m < particles.length; m++) {
@@ -1741,7 +1809,7 @@
                                 constCtx.beginPath();
                                 constCtx.moveTo(p.x, p.y);
                                 constCtx.lineTo(p2.x, p2.y);
-                                constCtx.strokeStyle = 'rgba(255, 255, 255, ' + lineAlpha + ')';
+                                constCtx.strokeStyle = "rgba(255, 255, 255, " + lineAlpha + ")";
                                 constCtx.lineWidth = isMobile ? 0.6 : 0.7;
                                 constCtx.stroke();
                             }
@@ -1757,7 +1825,7 @@
                                 constCtx.beginPath();
                                 constCtx.moveTo(p.x, p.y);
                                 constCtx.lineTo(mouse.x, mouse.y);
-                                constCtx.strokeStyle = 'rgba(255, 255, 255, ' + mAlpha + ')';
+                                constCtx.strokeStyle = "rgba(255, 255, 255, " + mAlpha + ")";
                                 constCtx.lineWidth = 0.9;
                                 constCtx.stroke();
                             }
