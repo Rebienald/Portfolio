@@ -28,7 +28,7 @@ Peer Testimonials & Endorsements (7 Teammates & Collaborators - All Rated 10/10)
 
 Verified Projects & Technical Specifications (Scanned Source Code & Documentation):
 
-1. InfoWhiz (September 2025 - Flagship Best Capstone & Best System Award Winner):
+1. AI Integrated Gamified Programming Learning Platform (September 2025 - Flagship Best Capstone & Best System Award Winner):
 - Overview: AI-powered gamified learning platform for computer programming education. Won Best in Capstone Development and Best in System Development among all SHS ICT students at STI College Bacoor.
 - Core Purpose: Lowers the learning curve for beginner programmers learning Java, C#, PHP, and JavaScript through interactive simulations, automated code review, and live AI tutoring.
 - Technical Architecture & Modules:
@@ -139,8 +139,8 @@ const STOPWORDS = new Set([
 ]);
 
 const ALIAS_MAP = {
-    "infowhiz": ["InfoWhiz", "CheeseWhiz", "CodeDefuse", "CodeQuest"],
-    "whiz": ["InfoWhiz", "CheeseWhiz"],
+    "infowhiz": ["AI Integrated Gamified Programming Learning Platform", "CheeseWhiz", "CodeDefuse", "CodeQuest"],
+    "whiz": ["AI Integrated Gamified Programming Learning Platform", "CheeseWhiz"],
     "samai": ["SamAI", "PDFChunker", "SearchService"],
     "sam": ["SamAI"],
     "portping": ["PortPing", "Sentinel", "Nas.IO", "ping.js"],
@@ -238,7 +238,7 @@ async function getRAGContext(userQuery, history = []) {
             const headers = { apikey: supabaseKey, Authorization: `Bearer ${supabaseKey}` };
 
             const orFilters = terms.slice(0, 6).map((t) => `content.ilike.*${encodeURIComponent(t)}*`).join(",");
-            const filterQuery = orFilters ? `or=(${orFilters})` : `content=ilike.*InfoWhiz*`;
+            const filterQuery = orFilters ? `or=(${orFilters})` : `content=ilike.*AI Integrated Gamified Programming Learning Platform*`;
 
             const fetchTable = (endpoint) => new Promise((resolve) => {
                 const req = https.get(endpoint, { headers }, (r) => {

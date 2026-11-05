@@ -635,7 +635,52 @@ document.addEventListener('DOMContentLoaded', () => {
                                 playSelectionTickSound();
                             }
                         }, { passive: true });
+                        function setupScrollFadeCards() {
+                            const projectCards = document.querySelectorAll('.project-card');
+                            if (!projectCards.length) return;
+
+                            const updateVisibleCards = () => {
+                                const marqueeRect = marquee.getBoundingClientRect();
+                                if (!marqueeRect.width) return;
+
+                                const focusCenter = marqueeRect.left + (marqueeRect.width / 2);
+                                const focusThreshold = Math.max(180, marqueeRect.width * 0.22);
+
+                                let focusedCard = null;
+                                let closestDistance = Number.POSITIVE_INFINITY;
+
+                                projectCards.forEach((card) => {
+                                    const rect = card.getBoundingClientRect();
+                                    const cardCenter = rect.left + (rect.width / 2);
+                                    const distance = Math.abs(cardCenter - focusCenter);
+                                    const isVisible = rect.right > marqueeRect.left && rect.left < marqueeRect.right;
+
+                                    if (isVisible && distance < closestDistance) {
+                                        closestDistance = distance;
+                                        focusedCard = card;
+                                    }
+                                });
+
+                                projectCards.forEach((card) => {
+                                    const rect = card.getBoundingClientRect();
+                                    const cardCenter = rect.left + (rect.width / 2);
+                                    const distance = Math.abs(cardCenter - focusCenter);
+                                    const isVisible = rect.right > marqueeRect.left && rect.left < marqueeRect.right;
+                                    const isFocused = focusedCard === card && distance <= focusThreshold;
+
+                                    card.classList.toggle('focused', isFocused);
+                                    card.classList.toggle('visible', isVisible && !isFocused);
+                                    card.classList.toggle('leaving', !isVisible);
+                                });
+                            };
+
+                            updateVisibleCards();
+                            marquee.addEventListener('scroll', updateVisibleCards, { passive: true });
+                            window.addEventListener('scroll', updateVisibleCards, { passive: true });
+                            window.addEventListener('resize', updateVisibleCards);
+                        }
                         requestAnimationFrame(step);
+                        setupScrollFadeCards();
                         function stopInertia() {
                             if (inertiaFrame) {
                                 cancelAnimationFrame(inertiaFrame);
@@ -788,7 +833,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const PROJECT_MODAL_DATA = {
                     infowhiz: {
                         id: 'infowhiz',
-                        title: 'InfoWhiz',
+                        title: 'AI Integrated Gamified Programming Learning Platform',
                         titleSub: 'AI-Powered Gamified Programming Learning Platform',
                         badges: [
                             { text: 'BEST IN CAPSTONE DEVELOPMENT', class: 'gold', icon: 'fas fa-trophy' },
@@ -869,8 +914,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     samai: {
                         id: 'samai',
-                        title: 'SamAI',
-                        titleSub: 'Smart Academic Mentor & AI Study Companion',
+                        title: 'AI Document Tutoring & Quiz Platform',
+                        titleSub: 'AI Document Tutoring & Quiz Platform',
                         badges: [
                             { text: 'FLAGSHIP AI SYSTEM', class: 'primary', icon: 'fas fa-crown' },
                             { text: 'JULY 2026', class: 'secondary', icon: 'fas fa-calendar-alt' },
@@ -982,8 +1027,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     portping: {
                         id: 'portping',
-                        title: 'PortPing',
-                        titleSub: 'Automated Cloud Database Keep-Alive Sentinel',
+                        title: 'Automated Cloud Database Keep-Alive System',
+                        titleSub: 'Automated Cloud Database Keep-Alive System',
                         badges: [
                             { text: 'DEVOPS & CLOUD AUTOMATION', class: 'green', icon: 'fas fa-server' },
                             { text: '100% UPTIME SENTINEL', class: 'primary', icon: 'fas fa-shield-alt' },
@@ -1061,8 +1106,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     printportal: {
                         id: 'printportal',
-                        title: 'Print Portal',
-                        titleSub: 'Web-Based Campus Printing & Queue Management System',
+                        title: 'Campus Printing & Queue Management System',
+                        titleSub: 'Campus Printing & Queue Management System',
                         badges: [
                             { text: 'FULL-STACK WEB SYSTEM', class: 'primary', icon: 'fas fa-print' },
                             { text: 'CAMPUS UTILITY', class: 'green', icon: 'fas fa-university' },
@@ -1141,15 +1186,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     technophotobooth: {
                         id: 'technophotobooth',
-                        title: 'TechnoBytes Photobooth',
-                        titleSub: 'Event Camera Capture & Custom Frame Printing System',
+                        title: 'Web-Based Digital Photobooth and Photo Customization System',
+                        titleSub: 'Web-Based Digital Photobooth and Photo Customization System',
                         badges: [
                             { text: 'EVENT APPLICATION', class: 'primary', icon: 'fas fa-camera-retro' },
                             { text: 'STI FOUNDATION WEEK', class: 'gold', icon: 'fas fa-calendar-check' },
                             { text: 'WEBRTC & CANVAS', class: 'green', icon: 'fas fa-layer-group' }
                         ],
                         subtitle: 'A custom web photobooth system developed for the TechnoBytes organization during STI College Bacoor Foundation Week. Features real-time WebRTC camera capture, audio-synchronized countdown sequences, custom event frame compositing, and instant thermal strip photo printing.',
-                        heroImage: 'projectimages/photobooth1.png',
+                        heroImage: 'projectimages/bitsbooth.png',
                         heroTags: [
                             { icon: 'fas fa-video', text: 'Zero-Latency WebRTC Camera Streaming' },
                             { icon: 'fas fa-layer-group', text: 'HTML5 Canvas Frame & Sticker Compositor' },
@@ -1220,8 +1265,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     cupofstory: {
                         id: 'cupofstory',
-                        title: 'Cup Of Story',
-                        titleSub: 'Full-Stack Cafe Ordering & Kitchen Operations System',
+                        title: 'Web-Based Ordering and Management System',
+                        titleSub: 'Web-Based Ordering and Management System',
                         badges: [
                             { text: 'FULL-STACK WEB SYSTEM', class: 'primary', icon: 'fas fa-mug-hot' },
                             { text: '3-TIER ROLE WORKFLOW', class: 'secondary', icon: 'fas fa-user-shield' },
@@ -1298,8 +1343,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     clubhub: {
                         id: 'clubhub',
-                        title: 'Club Hub',
-                        titleSub: 'Multi-Organization Student Club Management System',
+                        title: 'Student Organization and Announcement Portal',
+                        titleSub: 'Student Organization and Announcement Portal',
                         badges: [
                             { text: 'FULL-STACK WEB PLATFORM', class: 'primary', icon: 'fas fa-users' },
                             { text: '3-TIER ROLE-BASED ACCESS', class: 'secondary', icon: 'fas fa-user-shield' },
@@ -1375,8 +1420,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     kaido: {
                         id: 'kaido',
-                        title: 'Kaido',
-                        titleSub: 'Minimalist Voice Input & Dictation Interface for AI Agents',
+                        title: 'On-Device Intelligent Voice Assistant',
+                        titleSub: 'On-Device Intelligent Voice Assistant',
                         badges: [
                             { text: 'AI VOICE INTERFACE', class: 'primary', icon: 'fas fa-microphone' },
                             { text: 'KAIDO BRAIN MEMORY', class: 'green', icon: 'fas fa-brain' },
