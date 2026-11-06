@@ -945,32 +945,6 @@ document.addEventListener('DOMContentLoaded', () => {
                             { name: 'JavaScript ES6+ (NDJSON Stream)', icon: 'devicon-javascript-plain colored' },
                             { name: 'CSS3 Glassmorphism', icon: 'devicon-css3-plain colored' }
                         ],
-                        gallery: [
-                            {
-                                img: 'SamAI_Images/samai-preview-1.png',
-                                tag: 'STUDY BUDDY CHAT',
-                                title: 'Real-time AI Chat & Context Q&A',
-                                caption: 'SamAI Live Workspace — Interactive Study Buddy & Real-time Context-Aware Q&A'
-                            },
-                            {
-                                img: 'SamAI_Images/samai-preview-2.png',
-                                tag: 'RAG SUMMARIZER',
-                                title: 'Smart Multi-Level Summary Engine',
-                                caption: 'SamAI Live Workspace — Multi-Level Document Summarization & Handout Reader'
-                            },
-                            {
-                                img: 'SamAI_Images/samai-preview-3.png',
-                                tag: 'ASSESSMENT SYSTEM',
-                                title: 'Automated Quiz & Flashcard Engine',
-                                caption: 'SamAI Live Workspace — Automated Quiz Generator & Knowledge Assessment'
-                            },
-                            {
-                                img: 'SamAI_Images/samai-preview-4.png',
-                                tag: 'STUDENT DASHBOARD',
-                                title: 'Hello Kitty Companion & Library',
-                                caption: 'SamAI Live Workspace — Hello Kitty Companion Theme & Handout Library'
-                            }
-                        ],
                         architecture: [
                             {
                                 icon: 'fas fa-brain',
