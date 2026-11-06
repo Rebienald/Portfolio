@@ -2648,10 +2648,13 @@
                 }
                 .certs-marquee-group .cert-card {
                     width: min(190px, 52vw) !important;
+                    min-height: 0 !important;
+                    height: auto !important;
+                    justify-content: flex-start !important;
                     padding: 0.45rem !important;
-                    border-radius: 12px !important;
+                    border-radius: 0 !important;
                 }
-                .cert-img { height: 108px !important; border-radius: 8px !important; }
+                .cert-img { height: 108px !important; border-radius: 0 !important; }
                 .cert-info h4 { font-size: 0.78rem !important; margin-bottom: 0.1rem !important; }
                 .cert-info p { font-size: 0.68rem !important; }
                 .contact-section {
@@ -3455,7 +3458,7 @@
 
 @media (max-width: 768px) {
     .guestbook-section {
-        padding: 2rem 0 !important;
+        padding: 2rem 0 10rem !important;
     }
     .guestbook-header-row {
         flex-direction: column !important;
@@ -3475,8 +3478,9 @@
         scroll-snap-type: x mandatory !important;
         -webkit-overflow-scrolling: touch !important;
         gap: 0.85rem !important;
-        padding-bottom: 1rem !important;
-        width: 100% !important;
+        padding: 0 1rem 1rem !important;
+        width: auto !important;
+        margin: 0 0.5rem !important;
     }
     .guestbook-grid::-webkit-scrollbar {
         height: 4px;
@@ -3561,7 +3565,7 @@
     transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.25s !important;
     padding: 1.5rem !important;
     box-sizing: border-box !important;
-    overflow-y: auto !important;
+    overflow: hidden !important;
     -webkit-overflow-scrolling: touch !important;
     overscroll-behavior: contain !important;
 }
@@ -3571,25 +3575,58 @@
     visibility: visible !important;
 }
 
+html.modal-open,
+body.modal-open {
+    overflow: hidden !important;
+    height: 100% !important;
+}
+
+/* No-card floating description mode */
+.samai-modal-overlay.active .samai-modal-container,
+.project-modal-overlay.active .project-modal-container {
+    transform: scale(1) !important;
+}
+.samai-modal-container .proj-min-header,
+.project-modal-container .proj-min-header {
+    grid-column: 1 / -1;
+    text-align: left;
+}
+
 .samai-modal-container,
 .project-modal-container {
-    background: #09090B !important;
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
-    border-radius: 14px !important;
-    padding: 2.25rem !important;
-    width: 100% !important;
-    max-width: 740px !important;
-    max-height: 88vh !important;
-    overflow-y: auto !important;
-    -webkit-overflow-scrolling: touch !important;
-    overscroll-behavior-y: contain !important;
-    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.95), 0 0 30px rgba(255, 255, 255, 0.05) !important;
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    padding: 1rem !important;
+    width: 92vw !important;
+    max-width: 92vw !important;
+    max-height: none !important;
+    overflow: hidden !important;    box-shadow: none !important;
     position: relative !important;
     transform: scale(0.96);
     transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
     z-index: 10000001 !important;
     color: #FFFFFF !important;
     box-sizing: border-box !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    text-align: left !important;
+}
+#projectModalDynamicContent,
+#samaiModalDynamicContent {
+    display: grid !important;
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.1fr) !important;
+    grid-auto-rows: min-content !important;
+    gap: 0.5rem 2.5rem !important;
+    align-items: center !important;
+    width: 100% !important;
+}
+#projectModalDynamicContent .proj-min-header,
+#samaiModalDynamicContent .proj-min-header {
+    grid-column: 1 / -1;
+    text-align: left;
 }
 .samai-modal-overlay.active .samai-modal-container,
 .project-modal-overlay.active .project-modal-container {
@@ -3689,19 +3726,14 @@
 /* Minimalist Hero Showcase Frame */
 .proj-min-hero {
     width: 100%;
-    border-radius: 10px;
-    overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    background: #000000;
     margin-bottom: 1.75rem;
 }
 .proj-min-hero-img {
     width: 100%;
     height: auto;
-    max-height: 340px;
+    max-height: none;
     object-fit: contain;
     display: block;
-    background: #000000;
 }
 
 /* Minimalist Sections */
@@ -3973,12 +4005,58 @@
     .samai-modal-overlay, .project-modal-overlay {
         padding: 0.75rem !important;
         align-items: center !important;
+        overflow-y: auto !important;
     }
     .samai-modal-container, .project-modal-container {
         padding: 1.35rem 1.15rem !important;
         border-radius: 12px !important;
         max-height: 88vh !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        width: 92vw !important;
+        grid-template-columns: 1fr !important;
+        gap: 1.25rem 0 !important;
+        text-align: left !important;
+        justify-content: flex-start !important;
+        align-items: stretch !important;
+    }
+    #projectModalDynamicContent,
+    #samaiModalDynamicContent {
+        grid-template-columns: minmax(0, 1fr) !important;
+        gap: 1.25rem 0 !important;
+        margin: auto 0 !important;
+    }
+    #projectModalDynamicContent > *,
+    #samaiModalDynamicContent > * {
+        min-width: 0 !important;
+        max-width: 100% !important;
+    }
+    .proj-min-title {
+        word-break: break-word !important;
+    }
+    #projectModalDynamicContent .proj-min-hero,
+    #samaiModalDynamicContent .proj-min-hero {
         width: 100% !important;
+        margin: 0 !important;
+    }
+    #projectModalDynamicContent .proj-min-hero-img,
+    #samaiModalDynamicContent .proj-min-hero-img {
+        max-width: 100% !important;
+        width: 100% !important;
+        object-fit: contain !important;
+        max-height: 260px !important;
+    }
+    .proj-min-header {
+        grid-column: auto !important;
+    }
+    .proj-min-hero {
+        width: 100% !important;
+        margin: 0 !important;
+    }
+    .proj-min-hero-img {
+        width: 100% !important;
+        object-fit: contain !important;
+        max-height: 240px !important;
     }
     .samai-modal-close, .project-modal-close {
         top: 0.85rem !important;

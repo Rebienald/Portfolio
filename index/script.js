@@ -1619,8 +1619,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         projectModal.classList.add('active');
                         projectModal.setAttribute('aria-hidden', 'false');
                         document.body.style.overflow = 'hidden';
-                        const container = projectModal.querySelector('.samai-modal-container, .project-modal-container');
-                        if (container) container.scrollTop = 0;
+                        document.documentElement.classList.add('modal-open');
+                        document.body.classList.add('modal-open');
                         playClickSound();
                     };
 
@@ -1629,6 +1629,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         projectModal.classList.remove('active');
                         projectModal.setAttribute('aria-hidden', 'true');
                         document.body.style.overflow = '';
+                        document.documentElement.classList.remove('modal-open');
+                        document.body.classList.remove('modal-open');
                         playClickSound();
                     };
 
