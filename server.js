@@ -1,9 +1,12 @@
 const http = require("http");
+
 const fs = require("fs");
+
 const path = require("path");
+
 const https = require("https");
 
-const PORT = process.env.PORT || 10000;
+const PORT = process.env.PORT || 1e4;
 
 const FALLBACK_KNOWLEDGE = `
 Name: Carpio Rebienald Khei
@@ -131,55 +134,105 @@ Key Awards & Recognition:
 `;
 
 const STOPWORDS = new Set([
-    "what", "tell", "about", "your", "with", "from", "show", "help", "does", "have", "make",
-    "this", "that", "more", "some", "like", "know", "when", "where", "which", "could", "would",
-    "please", "describe", "explain", "give", "project", "details", "built", "the", "and", "for",
-    "are", "was", "were", "been", "being", "how", "who", "whom", "why", "his", "her", "their",
-    "its", "can", "will", "just", "any", "all", "each", "you", "they", "them", "our", "is"
+    "what",
+    "tell",
+    "about",
+    "your",
+    "with",
+    "from",
+    "show",
+    "help",
+    "does",
+    "have",
+    "make",
+    "this",
+    "that",
+    "more",
+    "some",
+    "like",
+    "know",
+    "when",
+    "where",
+    "which",
+    "could",
+    "would",
+    "please",
+    "describe",
+    "explain",
+    "give",
+    "project",
+    "details",
+    "built",
+    "the",
+    "and",
+    "for",
+    "are",
+    "was",
+    "were",
+    "been",
+    "being",
+    "how",
+    "who",
+    "whom",
+    "why",
+    "his",
+    "her",
+    "their",
+    "its",
+    "can",
+    "will",
+    "just",
+    "any",
+    "all",
+    "each",
+    "you",
+    "they",
+    "them",
+    "our",
+    "is",
 ]);
 
 const ALIAS_MAP = {
-    "infowhiz": ["AI Integrated Gamified Programming Learning Platform", "CheeseWhiz", "CodeDefuse", "CodeQuest"],
-    "whiz": ["AI Integrated Gamified Programming Learning Platform", "CheeseWhiz"],
-    "samai": ["SamAI", "PDFChunker", "SearchService"],
-    "sam": ["SamAI"],
-    "portping": ["PortPing", "Sentinel", "Nas.IO", "ping.js"],
-    "ping": ["PortPing", "Sentinel"],
-    "nas": ["Nas.IO", "PortPing"],
-    "printportal": ["PrintPortal", "PrintHub", "print_jobs"],
-    "printhub": ["PrintPortal", "PrintHub"],
-    "printer": ["PrintPortal", "PrintHub"],
-    "printing": ["PrintPortal", "PrintHub"],
-    "technobytes": ["TechnoBytes", "Photobooth"],
-    "photobooth": ["TechnoBytes", "Photobooth"],
-    "cupofstory": ["Cup Of Story", "cupofstory", "cupofcoffee", "barista"],
-    "cup": ["Cup Of Story", "cupofstory"],
-    "story": ["Cup Of Story", "cupofstory"],
-    "coffee": ["Cup Of Story", "cupofstory", "cupofcoffee"],
-    "cafe": ["Cup Of Story", "cupofstory"],
-    "barista": ["Cup Of Story", "cupofstory", "barista"],
-    "cupofcoffee": ["Cup Of Story", "cupofcoffee"],
-    "clubhub": ["ClubHub", "Club Hub", "Club Management System"],
-    "club": ["ClubHub", "Club Management System"],
-    "portfolio": ["Portfolio", "Serverless RAG"],
-    "skills": ["Technical Skills", "Languages"],
-    "education": ["Cavite State University", "STI College"],
-    "awards": ["Best in Capstone", "Best in System Development"],
-    "testimonials": ["Peer Testimonials", "Charles", "John"]
+    infowhiz: ["AI Integrated Gamified Programming Learning Platform", "CheeseWhiz", "CodeDefuse", "CodeQuest"],
+    whiz: ["AI Integrated Gamified Programming Learning Platform", "CheeseWhiz"],
+    samai: ["SamAI", "PDFChunker", "SearchService"],
+    sam: ["SamAI"],
+    portping: ["PortPing", "Sentinel", "Nas.IO", "ping.js"],
+    ping: ["PortPing", "Sentinel"],
+    nas: ["Nas.IO", "PortPing"],
+    printportal: ["PrintPortal", "PrintHub", "print_jobs"],
+    printhub: ["PrintPortal", "PrintHub"],
+    printer: ["PrintPortal", "PrintHub"],
+    printing: ["PrintPortal", "PrintHub"],
+    technobytes: ["TechnoBytes", "Photobooth"],
+    photobooth: ["TechnoBytes", "Photobooth"],
+    cupofstory: ["Cup Of Story", "cupofstory", "cupofcoffee", "barista"],
+    cup: ["Cup Of Story", "cupofstory"],
+    story: ["Cup Of Story", "cupofstory"],
+    coffee: ["Cup Of Story", "cupofstory", "cupofcoffee"],
+    cafe: ["Cup Of Story", "cupofstory"],
+    barista: ["Cup Of Story", "cupofstory", "barista"],
+    cupofcoffee: ["Cup Of Story", "cupofcoffee"],
+    clubhub: ["ClubHub", "Club Hub", "Club Management System"],
+    club: ["ClubHub", "Club Management System"],
+    portfolio: ["Portfolio", "Serverless RAG"],
+    skills: ["Technical Skills", "Languages"],
+    education: ["Cavite State University", "STI College"],
+    awards: ["Best in Capstone", "Best in System Development"],
+    testimonials: ["Peer Testimonials", "Charles", "John"],
 };
 
 function extractSearchTerms(userQuery) {
-    const clean = String(userQuery || "").toLowerCase().replace(/[^a-z0-9\s]/g, " ");
+    const clean = String(userQuery || "")
+        .toLowerCase()
+        .replace(/[^a-z0-9\s]/g, " ");
     const words = clean.split(/\s+/).filter((w) => w.length > 2 && !STOPWORDS.has(w));
     const terms = new Set();
-
-    // Add mapped aliases first (highest specificity)
     for (const w of words) {
         if (ALIAS_MAP[w]) {
             ALIAS_MAP[w].forEach((alias) => terms.add(alias));
         }
     }
-    // Then add raw keywords
     for (const w of words) {
         terms.add(w);
     }
@@ -195,7 +248,6 @@ function postJSON(urlStr, headers, bodyObj) {
             "Content-Length": Buffer.byteLength(postData),
             ...headers,
         };
-
         const options = {
             hostname: url.hostname,
             port: url.port || 443,
@@ -203,19 +255,23 @@ function postJSON(urlStr, headers, bodyObj) {
             method: "POST",
             headers: reqHeaders,
         };
-
         const req = https.request(options, (res) => {
             let data = "";
             res.on("data", (chunk) => (data += chunk));
             res.on("end", () => {
                 try {
-                    resolve({ status: res.statusCode, data: JSON.parse(data) });
+                    resolve({
+                        status: res.statusCode,
+                        data: JSON.parse(data),
+                    });
                 } catch (e) {
-                    resolve({ status: res.statusCode, raw: data });
+                    resolve({
+                        status: res.statusCode,
+                        raw: data,
+                    });
                 }
             });
         });
-
         req.on("error", (err) => reject(err));
         req.setTimeout(4500, () => {
             req.destroy();
@@ -229,67 +285,98 @@ function postJSON(urlStr, headers, bodyObj) {
 async function getRAGContext(userQuery, history = []) {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
-
     if (supabaseUrl && supabaseKey) {
         try {
             const cleanUrl = supabaseUrl.replace(/\/$/, "");
-            const recentHistoryText = history.slice(-2).map((h) => h.content || "").join(" ");
+            const recentHistoryText = history
+                .slice(-2)
+                .map((h) => h.content || "")
+                .join(" ");
             const terms = extractSearchTerms(`${recentHistoryText} ${userQuery}`);
-            const headers = { apikey: supabaseKey, Authorization: `Bearer ${supabaseKey}` };
-
-            const orFilters = terms.slice(0, 6).map((t) => `content.ilike.*${encodeURIComponent(t)}*`).join(",");
-            const filterQuery = orFilters ? `or=(${orFilters})` : `content=ilike.*AI Integrated Gamified Programming Learning Platform*`;
-
-            const fetchTable = (endpoint) => new Promise((resolve) => {
-                const req = https.get(endpoint, { headers }, (r) => {
-                    let data = "";
-                    r.on("data", (c) => (data += c));
-                    r.on("end", () => {
-                        try {
-                            resolve({ status: r.statusCode, data: JSON.parse(data) });
-                        } catch (e) {
-                            resolve({ status: r.statusCode, data: [] });
+            const headers = {
+                apikey: supabaseKey,
+                Authorization: `Bearer ${supabaseKey}`,
+            };
+            const orFilters = terms
+                .slice(0, 6)
+                .map((t) => `content.ilike.*${encodeURIComponent(t)}*`)
+                .join(",");
+            const filterQuery = orFilters
+                ? `or=(${orFilters})`
+                : `content=ilike.*AI Integrated Gamified Programming Learning Platform*`;
+            const fetchTable = (endpoint) =>
+                new Promise((resolve) => {
+                    const req = https.get(
+                        endpoint,
+                        {
+                            headers: headers,
+                        },
+                        (r) => {
+                            let data = "";
+                            r.on("data", (c) => (data += c));
+                            r.on("end", () => {
+                                try {
+                                    resolve({
+                                        status: r.statusCode,
+                                        data: JSON.parse(data),
+                                    });
+                                } catch (e) {
+                                    resolve({
+                                        status: r.statusCode,
+                                        data: [],
+                                    });
+                                }
+                            });
                         }
+                    );
+                    req.on("error", () =>
+                        resolve({
+                            status: 500,
+                            data: [],
+                        })
+                    );
+                    req.setTimeout(3e3, () => {
+                        req.destroy();
+                        resolve({
+                            status: 408,
+                            data: [],
+                        });
                     });
                 });
-                req.on("error", () => resolve({ status: 500, data: [] }));
-                req.setTimeout(3000, () => {
-                    req.destroy();
-                    resolve({ status: 408, data: [] });
-                });
-            });
-
             const [docsRes, projRes, infoRes] = await Promise.all([
-                fetchTable(`${cleanUrl}/rest/v1/portfolio_documents?select=content&${filterQuery}&order=id.desc&limit=5`),
+                fetchTable(
+                    `${cleanUrl}/rest/v1/portfolio_documents?select=content&${filterQuery}&order=id.desc&limit=5`
+                ),
                 fetchTable(`${cleanUrl}/rest/v1/portfolio_projects?select=content&${filterQuery}&limit=4`),
-                fetchTable(`${cleanUrl}/rest/v1/personal_info?select=content&${filterQuery}&limit=4`)
+                fetchTable(`${cleanUrl}/rest/v1/personal_info?select=content&${filterQuery}&limit=4`),
             ]);
-
             const isCupOfStoryQuery = terms.some((t) =>
-                ["cup of story", "cupofstory", "cupofcoffee", "coffee", "cafe", "barista"].includes(String(t).toLowerCase())
+                ["cup of story", "cupofstory", "cupofcoffee", "coffee", "cafe", "barista"].includes(
+                    String(t).toLowerCase()
+                )
             );
-
             const allChunks = [
                 ...(Array.isArray(docsRes.data) ? docsRes.data.map((i) => i.content) : []),
                 ...(Array.isArray(projRes.data) ? projRes.data.map((i) => i.content) : []),
                 ...(Array.isArray(infoRes.data) ? infoRes.data.map((i) => i.content) : []),
             ]
                 .filter(Boolean)
-                .map((chunk) => (typeof chunk === "string" ? chunk.replaceAll("rebienald.vercel.app", "rebkhei.vercel.app") : chunk))
+                .map((chunk) =>
+                    typeof chunk === "string" ? chunk.replaceAll("rebienald.vercel.app", "rebkhei.vercel.app") : chunk
+                )
                 .filter((chunk) => {
-                    // Filter out legacy static mockup chunks for Cup Of Story that mention the old GitHub Pages URL or 2025 glassmorphism
                     if (chunk.includes("axionbytee.github.io/cupofstory") || chunk.includes("CUP OF STORY (2025)")) {
                         return false;
                     }
                     return true;
                 });
-
-            // Ensure updated 2026 Cup of Story specifications are available if asked
-            if (isCupOfStoryQuery && !allChunks.some((c) => c.includes("Cup Of Story (2026)") || c.includes("CUP OF STORY (2026)"))) {
+            if (
+                isCupOfStoryQuery &&
+                !allChunks.some((c) => c.includes("Cup Of Story (2026)") || c.includes("CUP OF STORY (2026)"))
+            ) {
                 const cupChunk = FALLBACK_KNOWLEDGE.split("\n\n").find((sec) => sec.includes("Cup Of Story"));
                 if (cupChunk) allChunks.unshift(cupChunk);
             }
-
             const uniqueChunks = [...new Set(allChunks)];
             if (uniqueChunks.length > 0) {
                 return uniqueChunks.join("\n\n");
@@ -311,7 +398,6 @@ function cleanResponse(text) {
 async function queryAI(userMessage, ragContext, history = []) {
     const groqKey = process.env.GROQ_API_KEY;
     const geminiKey = process.env.GEMINI_API_KEY;
-
     const systemPrompt = `
 You are the official AI Portfolio Ambassador and technical advocate for Carpio Rebienald Khei (Reb).
 You represent an elite full-stack software engineer and IT student at Cavite State University with high charisma, deep technical precision, and confidence.
@@ -340,19 +426,20 @@ Verified Portfolio Knowledge Base:
 ${ragContext}
 --- END CONTEXT ---
 `;
-
-    // Sanitize multi-turn history
     const sanitizedHistory = Array.isArray(history)
         ? history
-              .filter((h) => h && (h.role === "user" || h.role === "assistant" || h.role === "model") && typeof h.content === "string")
+              .filter(
+                  (h) =>
+                      h &&
+                      (h.role === "user" || h.role === "assistant" || h.role === "model") &&
+                      typeof h.content === "string"
+              )
               .map((h) => ({
                   role: h.role === "model" ? "assistant" : h.role,
                   content: String(h.content).slice(0, 500),
               }))
               .slice(-6)
         : [];
-
-    // Try Groq API first (ultra-fast responses < 500ms)
     if (groqKey) {
         const groqModels = ["openai/gpt-oss-120b", "qwen/qwen3.6-27b", "openai/gpt-oss-20b"];
         for (const model of groqModels) {
@@ -360,19 +447,27 @@ ${ragContext}
                 const groqUrl = "https://api.groq.com/openai/v1/chat/completions";
                 const res = await postJSON(
                     groqUrl,
-                    { Authorization: `Bearer ${groqKey}`, "User-Agent": "Portfolio-AI-Backend/1.0" },
+                    {
+                        Authorization: `Bearer ${groqKey}`,
+                        "User-Agent": "Portfolio-AI-Backend/1.0",
+                    },
                     {
                         model: model,
                         messages: [
-                            { role: "system", content: systemPrompt },
+                            {
+                                role: "system",
+                                content: systemPrompt,
+                            },
                             ...sanitizedHistory,
-                            { role: "user", content: userMessage },
+                            {
+                                role: "user",
+                                content: userMessage,
+                            },
                         ],
                         temperature: 0.5,
                         max_tokens: 380,
                     }
                 );
-
                 if (res.status === 200 && res.data?.choices?.[0]?.message?.content) {
                     const rawText = res.data.choices[0].message.content;
                     const cleaned = cleanResponse(rawText);
@@ -383,18 +478,26 @@ ${ragContext}
             }
         }
     }
-
-    // Fallback to Gemini API
     if (geminiKey) {
         const geminiModels = ["gemini-1.5-flash", "gemini-1.5-pro"];
         const geminiContents = [
             ...sanitizedHistory.map((h) => ({
                 role: h.role === "assistant" ? "model" : "user",
-                parts: [{ text: h.content }],
+                parts: [
+                    {
+                        text: h.content,
+                    },
+                ],
             })),
-            { role: "user", parts: [{ text: userMessage }] },
+            {
+                role: "user",
+                parts: [
+                    {
+                        text: userMessage,
+                    },
+                ],
+            },
         ];
-
         for (const model of geminiModels) {
             try {
                 const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${geminiKey}`;
@@ -402,12 +505,20 @@ ${ragContext}
                     geminiUrl,
                     {},
                     {
-                        systemInstruction: { parts: [{ text: systemPrompt }] },
+                        systemInstruction: {
+                            parts: [
+                                {
+                                    text: systemPrompt,
+                                },
+                            ],
+                        },
                         contents: geminiContents,
-                        generationConfig: { temperature: 0.5, maxOutputTokens: 380 },
+                        generationConfig: {
+                            temperature: 0.5,
+                            maxOutputTokens: 380,
+                        },
                     }
                 );
-
                 if (res.status === 200 && res.data?.candidates?.[0]?.content?.parts?.[0]?.text) {
                     const rawText = res.data.candidates[0].content.parts[0].text;
                     const cleaned = cleanResponse(rawText);
@@ -418,7 +529,6 @@ ${ragContext}
             }
         }
     }
-
     return "I'm having a brief connection delay reaching the AI engine. Feel free to ask again or reach out to Reb directly at rebkheicarpio@gmail.com!";
 }
 
@@ -426,18 +536,14 @@ http.createServer(async (req, res) => {
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
     res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-
     if (req.method === "OPTIONS") {
         res.writeHead(200);
         return res.end();
     }
-
-    // GUESTBOOK STORAGE & SUPABASE CLOUD DB ENDPOINTS
     const GUESTBOOK_DIR = path.join(__dirname, "data");
     const GUESTBOOK_FILE = path.join(GUESTBOOK_DIR, "guestbook.json");
     const SUPABASE_GB_URL = "https://ngjckggjadtoevbnhjhi.supabase.co/rest/v1/comments";
     const SUPABASE_GB_KEY = "sb_publishable_zFd8VxxbMxpu7wFblnC36w_8Np8JVVf";
-
     const DEFAULT_GUESTBOOK = [
         {
             id: "gb_reb_1",
@@ -446,13 +552,15 @@ http.createServer(async (req, res) => {
             rating: 5,
             message: "Try leaving a note!",
             date: "Aug 16, 2026",
-            likes: 0
-        }
+            likes: 0,
+        },
     ];
-
     function getGuestbookData() {
         try {
-            if (!fs.existsSync(GUESTBOOK_DIR)) fs.mkdirSync(GUESTBOOK_DIR, { recursive: true });
+            if (!fs.existsSync(GUESTBOOK_DIR))
+                fs.mkdirSync(GUESTBOOK_DIR, {
+                    recursive: true,
+                });
             if (!fs.existsSync(GUESTBOOK_FILE)) {
                 fs.writeFileSync(GUESTBOOK_FILE, JSON.stringify(DEFAULT_GUESTBOOK, null, 2), "utf8");
                 return DEFAULT_GUESTBOOK;
@@ -463,14 +571,15 @@ http.createServer(async (req, res) => {
             return DEFAULT_GUESTBOOK;
         }
     }
-
     function saveGuestbookData(data) {
         try {
-            if (!fs.existsSync(GUESTBOOK_DIR)) fs.mkdirSync(GUESTBOOK_DIR, { recursive: true });
+            if (!fs.existsSync(GUESTBOOK_DIR))
+                fs.mkdirSync(GUESTBOOK_DIR, {
+                    recursive: true,
+                });
             fs.writeFileSync(GUESTBOOK_FILE, JSON.stringify(data, null, 2), "utf8");
         } catch (err) {}
     }
-
     function sanitizeInput(str) {
         if (!str) return "";
         return String(str)
@@ -480,43 +589,77 @@ http.createServer(async (req, res) => {
             .replace(/"/g, "&quot;")
             .replace(/'/g, "&#039;");
     }
-
     if (req.url === "/api/guestbook" && req.method === "GET") {
         try {
-            const reqClient = https.get(`${SUPABASE_GB_URL}?select=*&order=id.desc`, {
-                headers: {
-                    "apikey": SUPABASE_GB_KEY,
-                    "Authorization": `Bearer ${SUPABASE_GB_KEY}`
+            const reqClient = https.get(
+                `${SUPABASE_GB_URL}?select=*&order=id.desc`,
+                {
+                    headers: {
+                        apikey: SUPABASE_GB_KEY,
+                        Authorization: `Bearer ${SUPABASE_GB_KEY}`,
+                    },
+                },
+                (sbRes) => {
+                    let sbData = "";
+                    sbRes.on("data", (chunk) => (sbData += chunk));
+                    sbRes.on("end", () => {
+                        try {
+                            const parsed = JSON.parse(sbData);
+                            if (Array.isArray(parsed) && parsed.length > 0) {
+                                res.writeHead(200, {
+                                    "Content-Type": "application/json",
+                                });
+                                return res.end(
+                                    JSON.stringify({
+                                        status: "success",
+                                        entries: parsed,
+                                        source: "supabase",
+                                    })
+                                );
+                            }
+                        } catch (e) {}
+                        const entries = getGuestbookData();
+                        res.writeHead(200, {
+                            "Content-Type": "application/json",
+                        });
+                        return res.end(
+                            JSON.stringify({
+                                status: "success",
+                                entries: entries,
+                                source: "local",
+                            })
+                        );
+                    });
                 }
-            }, (sbRes) => {
-                let sbData = "";
-                sbRes.on("data", (chunk) => sbData += chunk);
-                sbRes.on("end", () => {
-                    try {
-                        const parsed = JSON.parse(sbData);
-                        if (Array.isArray(parsed) && parsed.length > 0) {
-                            res.writeHead(200, { "Content-Type": "application/json" });
-                            return res.end(JSON.stringify({ status: "success", entries: parsed, source: "supabase" }));
-                        }
-                    } catch (e) {}
-                    const entries = getGuestbookData();
-                    res.writeHead(200, { "Content-Type": "application/json" });
-                    return res.end(JSON.stringify({ status: "success", entries, source: "local" }));
-                });
-            });
+            );
             reqClient.on("error", () => {
                 const entries = getGuestbookData();
-                res.writeHead(200, { "Content-Type": "application/json" });
-                return res.end(JSON.stringify({ status: "success", entries, source: "local" }));
+                res.writeHead(200, {
+                    "Content-Type": "application/json",
+                });
+                return res.end(
+                    JSON.stringify({
+                        status: "success",
+                        entries: entries,
+                        source: "local",
+                    })
+                );
             });
         } catch (err) {
             const entries = getGuestbookData();
-            res.writeHead(200, { "Content-Type": "application/json" });
-            return res.end(JSON.stringify({ status: "success", entries, source: "local" }));
+            res.writeHead(200, {
+                "Content-Type": "application/json",
+            });
+            return res.end(
+                JSON.stringify({
+                    status: "success",
+                    entries: entries,
+                    source: "local",
+                })
+            );
         }
         return;
     }
-
     if (req.url === "/api/guestbook" && req.method === "POST") {
         let body = "";
         req.on("data", (chunk) => (body += chunk));
@@ -527,27 +670,32 @@ http.createServer(async (req, res) => {
                 const role = sanitizeInput((parsed.role || "Visitor").trim().slice(0, 50));
                 const message = sanitizeInput((parsed.message || "").trim().slice(0, 300));
                 const rating = Math.min(5, Math.max(1, parseInt(parsed.rating) || 5));
-
                 if (!name || !message) {
-                    res.writeHead(400, { "Content-Type": "application/json" });
-                    return res.end(JSON.stringify({ error: "Name and message are required." }));
+                    res.writeHead(400, {
+                        "Content-Type": "application/json",
+                    });
+                    return res.end(
+                        JSON.stringify({
+                            error: "Name and message are required.",
+                        })
+                    );
                 }
-
                 const newEntry = {
                     id: "gb_" + Date.now(),
-                    name,
+                    name: name,
                     role: role || "Visitor",
-                    rating,
-                    message,
-                    date: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
-                    likes: 0
+                    rating: rating,
+                    message: message,
+                    date: new Date().toLocaleDateString("en-US", {
+                        month: "short",
+                        day: "numeric",
+                        year: "numeric",
+                    }),
+                    likes: 0,
                 };
-
                 const entries = getGuestbookData();
                 entries.unshift(newEntry);
                 saveGuestbookData(entries);
-
-                // Post to Supabase Cloud DB
                 try {
                     const sbReqData = JSON.stringify(newEntry);
                     const parsedUrl = new URL(SUPABASE_GB_URL);
@@ -556,27 +704,39 @@ http.createServer(async (req, res) => {
                         path: parsedUrl.pathname,
                         method: "POST",
                         headers: {
-                            "apikey": SUPABASE_GB_KEY,
-                            "Authorization": `Bearer ${SUPABASE_GB_KEY}`,
+                            apikey: SUPABASE_GB_KEY,
+                            Authorization: `Bearer ${SUPABASE_GB_KEY}`,
                             "Content-Type": "application/json",
-                            "Content-Length": Buffer.byteLength(sbReqData)
-                        }
+                            "Content-Length": Buffer.byteLength(sbReqData),
+                        },
                     });
                     sbReq.on("error", () => {});
                     sbReq.write(sbReqData);
                     sbReq.end();
                 } catch (e) {}
-
-                res.writeHead(200, { "Content-Type": "application/json" });
-                res.end(JSON.stringify({ status: "success", entry: newEntry, entries }));
+                res.writeHead(200, {
+                    "Content-Type": "application/json",
+                });
+                res.end(
+                    JSON.stringify({
+                        status: "success",
+                        entry: newEntry,
+                        entries: entries,
+                    })
+                );
             } catch (err) {
-                res.writeHead(500, { "Content-Type": "application/json" });
-                res.end(JSON.stringify({ error: "Server Error" }));
+                res.writeHead(500, {
+                    "Content-Type": "application/json",
+                });
+                res.end(
+                    JSON.stringify({
+                        error: "Server Error",
+                    })
+                );
             }
         });
         return;
     }
-
     if (req.url === "/api/guestbook/like" && req.method === "POST") {
         let body = "";
         req.on("data", (chunk) => (body += chunk));
@@ -585,41 +745,53 @@ http.createServer(async (req, res) => {
                 const parsed = JSON.parse(body || "{}");
                 const id = parsed.id;
                 const entries = getGuestbookData();
-                const target = entries.find(e => e.id === id);
+                const target = entries.find((e) => e.id === id);
                 if (target) {
                     target.likes = (target.likes || 0) + 1;
                     saveGuestbookData(entries);
-
-                    // Update Supabase Cloud DB
                     try {
-                        const sbReqData = JSON.stringify({ likes: target.likes });
+                        const sbReqData = JSON.stringify({
+                            likes: target.likes,
+                        });
                         const parsedUrl = new URL(`${SUPABASE_GB_URL}?id=eq.${id}`);
                         const sbReq = https.request({
                             hostname: parsedUrl.hostname,
                             path: parsedUrl.pathname + parsedUrl.search,
                             method: "PATCH",
                             headers: {
-                                "apikey": SUPABASE_GB_KEY,
-                                "Authorization": `Bearer ${SUPABASE_GB_KEY}`,
+                                apikey: SUPABASE_GB_KEY,
+                                Authorization: `Bearer ${SUPABASE_GB_KEY}`,
                                 "Content-Type": "application/json",
-                                "Content-Length": Buffer.byteLength(sbReqData)
-                            }
+                                "Content-Length": Buffer.byteLength(sbReqData),
+                            },
                         });
                         sbReq.on("error", () => {});
                         sbReq.write(sbReqData);
                         sbReq.end();
                     } catch (e) {}
                 }
-                res.writeHead(200, { "Content-Type": "application/json" });
-                res.end(JSON.stringify({ status: "success", entries }));
+                res.writeHead(200, {
+                    "Content-Type": "application/json",
+                });
+                res.end(
+                    JSON.stringify({
+                        status: "success",
+                        entries: entries,
+                    })
+                );
             } catch (err) {
-                res.writeHead(500, { "Content-Type": "application/json" });
-                res.end(JSON.stringify({ error: "Server Error" }));
+                res.writeHead(500, {
+                    "Content-Type": "application/json",
+                });
+                res.end(
+                    JSON.stringify({
+                        error: "Server Error",
+                    })
+                );
             }
         });
         return;
     }
-
     if (req.url === "/api/chat" && req.method === "POST") {
         let body = "";
         req.on("data", (chunk) => (body += chunk));
@@ -628,81 +800,110 @@ http.createServer(async (req, res) => {
                 const parsed = JSON.parse(body || "{}");
                 const userMsg = (parsed.message || "").trim().slice(0, 300);
                 const history = Array.isArray(parsed.history) ? parsed.history : [];
-
                 if (!userMsg) {
-                    res.writeHead(400, { "Content-Type": "application/json" });
-                    return res.end(JSON.stringify({ error: "Message is required" }));
+                    res.writeHead(400, {
+                        "Content-Type": "application/json",
+                    });
+                    return res.end(
+                        JSON.stringify({
+                            error: "Message is required",
+                        })
+                    );
                 }
-
                 const ragContext = await getRAGContext(userMsg, history);
                 const reply = await queryAI(userMsg, ragContext, history);
-
-                res.writeHead(200, { "Content-Type": "application/json" });
-                res.end(JSON.stringify({ status: "success", response: reply }));
+                res.writeHead(200, {
+                    "Content-Type": "application/json",
+                });
+                res.end(
+                    JSON.stringify({
+                        status: "success",
+                        response: reply,
+                    })
+                );
             } catch (err) {
-                res.writeHead(500, { "Content-Type": "application/json" });
-                res.end(JSON.stringify({ error: "Server Error" }));
+                res.writeHead(500, {
+                    "Content-Type": "application/json",
+                });
+                res.end(
+                    JSON.stringify({
+                        error: "Server Error",
+                    })
+                );
             }
         });
         return;
     }
-
     if ((req.url === "/api/contact" || req.url === "/api/send") && req.method === "POST") {
         let body = "";
         req.on("data", (chunk) => (body += chunk));
         req.on("end", async () => {
             try {
                 req.body = body;
-                res.status = function(code) {
+                res.status = function (code) {
                     return {
                         json: (data) => {
-                            res.writeHead(code, { "Content-Type": "application/json" });
+                            res.writeHead(code, {
+                                "Content-Type": "application/json",
+                            });
                             res.end(JSON.stringify(data));
                         },
                         end: () => {
                             res.writeHead(code);
                             res.end();
-                        }
+                        },
                     };
                 };
                 const contactHandler = require("./api/contact.js");
                 await contactHandler(req, res);
             } catch (err) {
-                res.writeHead(500, { "Content-Type": "application/json" });
-                res.end(JSON.stringify({ error: "Server Error" }));
+                res.writeHead(500, {
+                    "Content-Type": "application/json",
+                });
+                res.end(
+                    JSON.stringify({
+                        error: "Server Error",
+                    })
+                );
             }
         });
         return;
     }
-
     if (req.url === "/api/cv-download" && req.method === "POST") {
         let body = "";
         req.on("data", (chunk) => (body += chunk));
         req.on("end", async () => {
             try {
                 req.body = body;
-                res.status = function(code) {
+                res.status = function (code) {
                     return {
                         json: (data) => {
-                            res.writeHead(code, { "Content-Type": "application/json" });
+                            res.writeHead(code, {
+                                "Content-Type": "application/json",
+                            });
                             res.end(JSON.stringify(data));
                         },
                         end: () => {
                             res.writeHead(code);
                             res.end();
-                        }
+                        },
                     };
                 };
                 const cvHandler = require("./api/cv-download.js");
                 await cvHandler(req, res);
             } catch (err) {
-                res.writeHead(500, { "Content-Type": "application/json" });
-                res.end(JSON.stringify({ error: "Server Error" }));
+                res.writeHead(500, {
+                    "Content-Type": "application/json",
+                });
+                res.end(
+                    JSON.stringify({
+                        error: "Server Error",
+                    })
+                );
             }
         });
         return;
     }
-
     const MIME_TYPES = {
         ".html": "text/html; charset=utf-8",
         ".css": "text/css; charset=utf-8",
@@ -711,17 +912,17 @@ http.createServer(async (req, res) => {
         ".jpg": "image/jpeg",
         ".svg": "image/svg+xml",
     };
-
     const safePath = path.normalize(req.url).replace(/^(\.\.[\/\\])+/, "");
     let filePath = path.join(__dirname, safePath === "/" ? "index.html" : safePath);
     const ext = path.extname(filePath).toLowerCase();
-
     fs.readFile(filePath, (err, content) => {
         if (err) {
             res.writeHead(404);
             res.end("Not Found");
         } else {
-            res.writeHead(200, { "Content-Type": MIME_TYPES[ext] || "text/plain" });
+            res.writeHead(200, {
+                "Content-Type": MIME_TYPES[ext] || "text/plain",
+            });
             res.end(content);
         }
     });

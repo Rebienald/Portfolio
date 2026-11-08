@@ -1,10 +1,8 @@
 (function () {
-    const CHAT_BACKEND_URL = '/api/chat';
-
+    const CHAT_BACKEND_URL = "/api/chat";
     const MAX_MESSAGES_PER_WINDOW = 8;
-    const RATE_LIMIT_WINDOW_MS = 60000;
+    const RATE_LIMIT_WINDOW_MS = 6e4;
     const chatTimestamps = [];
-
     function checkRateLimit() {
         const now = Date.now();
         while (chatTimestamps.length > 0 && chatTimestamps[0] < now - RATE_LIMIT_WINDOW_MS) {
@@ -16,32 +14,28 @@
         chatTimestamps.push(now);
         return true;
     }
-
     const PROMPT_INJECTION_PATTERNS = [
-    /ignore\s+(all\s+)?(previous\s+|prior\s+)?instructions/i,
-    /override\s+(system\s+)?prompt/i,
-    /disregard\s+(above|previous|all\s+rules)/i,
-    /reveal\s+(api\s+key|system\s+prompt|secret|token|password)/i,
-    /print\s+(system\s+)?prompt/i,
-    /show\s+me\s+(your\s+)?instructions/i,
-    /act\s+as\s+an?\s+(unrestricted|jailbroken|evil)/i,
-    /jailbreak/i,
-    /DAN\s+mode/i,
-    /developer\s+mode/i,
-    /forget\s+(your\s+)?rules/i,
-    /bypass\s+filter/i
+        /ignore\s+(all\s+)?(previous\s+|prior\s+)?instructions/i,
+        /override\s+(system\s+)?prompt/i,
+        /disregard\s+(above|previous|all\s+rules)/i,
+        /reveal\s+(api\s+key|system\s+prompt|secret|token|password)/i,
+        /print\s+(system\s+)?prompt/i,
+        /show\s+me\s+(your\s+)?instructions/i,
+        /act\s+as\s+an?\s+(unrestricted|jailbroken|evil)/i,
+        /jailbreak/i,
+        /DAN\s+mode/i,
+        /developer\s+mode/i,
+        /forget\s+(your\s+)?rules/i,
+        /bypass\s+filter/i,
     ];
-
     function isPromptInjection(text) {
         if (!text) return false;
-        return PROMPT_INJECTION_PATTERNS.some(pattern => pattern.test(text));
+        return PROMPT_INJECTION_PATTERNS.some((pattern) => pattern.test(text));
     }
-
     function initChatbotDOM() {
-        if (document.getElementById('chatbotTrigger')) return;
-
-        const container = document.createElement('div');
-        container.id = 'rag-chatbot-root';
+        if (document.getElementById("chatbotTrigger")) return;
+        const container = document.createElement("div");
+        container.id = "rag-chatbot-root";
         container.innerHTML = `
         <!-- Floating Trigger Button -->
         <button id="chatbotTrigger" class="chatbot-trigger" aria-label="Open Chatbot" title="Chat with Rebienald AI">
@@ -110,40 +104,31 @@
         `;
         document.body.appendChild(container);
     }
-
     function parseMarkdown(text) {
-        if (!text) return '';
-
+        if (!text) return "";
         let raw = text.trim();
-
         raw = raw
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
-
-        raw = raw.replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>');
-
-        raw = raw.replace(/`([^`]+)`/g, '<code>$1</code>');
-
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+        raw = raw.replace(/```([\s\S]*?)```/g, "<pre><code>$1</code></pre>");
+        raw = raw.replace(/`([^`]+)`/g, "<code>$1</code>");
         raw = raw.replace(/^###?\s+(.*)$/gm, '<h5 class="chat-heading">$1</h5>');
         raw = raw.replace(/^##\s+(.*)$/gm, '<h4 class="chat-heading">$1</h4>');
-
-        raw = raw.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
-
-        raw = raw.replace(/\*([^*]+)\*/g, '<em>$1</em>');
-
-        raw = raw.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
-
-        const lines = raw.split('\n');
+        raw = raw.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+        raw = raw.replace(/\*([^*]+)\*/g, "<em>$1</em>");
+        raw = raw.replace(
+            /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,
+            '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>'
+        );
+        const lines = raw.split("\n");
         let inList = false;
         let result = [];
-
-        lines.forEach(line => {
+        lines.forEach((line) => {
             const trimmed = line.trim();
             const listMatch = trimmed.match(/^[-•*+]\s+(.*)/);
-
             if (listMatch) {
                 if (!inList) {
                     result.push('<ul class="chat-list">');
@@ -152,11 +137,11 @@
                 result.push(`<li>${listMatch[1]}</li>`);
             } else {
                 if (inList) {
-                    result.push('</ul>');
+                    result.push("</ul>");
                     inList = false;
                 }
                 if (trimmed.length > 0) {
-                    if (trimmed.startsWith('<h') || trimmed.startsWith('<pre') || trimmed.startsWith('<ul')) {
+                    if (trimmed.startsWith("<h") || trimmed.startsWith("<pre") || trimmed.startsWith("<ul")) {
                         result.push(trimmed);
                     } else {
                         result.push(`<p>${trimmed}</p>`);
@@ -164,114 +149,90 @@
                 }
             }
         });
-
         if (inList) {
-            result.push('</ul>');
+            result.push("</ul>");
         }
-
-        return result.join('');
+        return result.join("");
     }
-
     function scrollToBottom() {
-        const messagesArea = document.getElementById('chatMessages');
+        const messagesArea = document.getElementById("chatMessages");
         if (messagesArea) {
             messagesArea.scrollTop = messagesArea.scrollHeight;
         }
     }
-
     let chatAudioCtx = null;
     function playChatbotReplySound() {
         try {
-            if (typeof window !== 'undefined') {
+            if (typeof window !== "undefined") {
                 if (window.isSoundMuted && window.isSoundMuted()) return;
-                if (localStorage.getItem('portfolio_sound_muted') === 'true') return;
+                if (localStorage.getItem("portfolio_sound_muted") === "true") return;
             }
             if (!chatAudioCtx) {
                 chatAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
             }
-            if (chatAudioCtx.state === 'suspended') {
+            if (chatAudioCtx.state === "suspended") {
                 chatAudioCtx.resume();
             }
-
             const t = chatAudioCtx.currentTime;
-
-            // Two-tone sleek digital message chime (1050Hz -> 1400Hz)
             const osc1 = chatAudioCtx.createOscillator();
             const gain1 = chatAudioCtx.createGain();
-
-            osc1.type = 'sine';
+            osc1.type = "sine";
             osc1.frequency.setValueAtTime(1050, t);
-
             gain1.gain.setValueAtTime(0.2, t);
             gain1.gain.exponentialRampToValueAtTime(0.001, t + 0.08);
-
             osc1.connect(gain1);
             gain1.connect(chatAudioCtx.destination);
-
             const osc2 = chatAudioCtx.createOscillator();
             const gain2 = chatAudioCtx.createGain();
-
-            osc2.type = 'sine';
+            osc2.type = "sine";
             osc2.frequency.setValueAtTime(1400, t + 0.06);
-
             gain2.gain.setValueAtTime(0.25, t + 0.06);
             gain2.gain.exponentialRampToValueAtTime(0.001, t + 0.16);
-
             osc2.connect(gain2);
             gain2.connect(chatAudioCtx.destination);
-
             osc1.start(t);
             osc1.stop(t + 0.08);
             osc2.start(t + 0.06);
             osc2.stop(t + 0.16);
         } catch (e) {}
     }
-
     function showChatbotBadge() {
-        const badge = document.getElementById('chatbotBadge');
-        const windowEl = document.getElementById('chatbotWindow');
-        if (badge && windowEl && !windowEl.classList.contains('open')) {
-            badge.style.display = 'flex';
+        const badge = document.getElementById("chatbotBadge");
+        const windowEl = document.getElementById("chatbotWindow");
+        if (badge && windowEl && !windowEl.classList.contains("open")) {
+            badge.style.display = "flex";
         }
     }
-
     function clearChatbotBadge() {
-        const badge = document.getElementById('chatbotBadge');
+        const badge = document.getElementById("chatbotBadge");
         if (badge) {
-            badge.style.display = 'none';
+            badge.style.display = "none";
         }
     }
-
     function appendMessage(sender, content) {
-        const messagesArea = document.getElementById('chatMessages');
+        const messagesArea = document.getElementById("chatMessages");
         if (!messagesArea) return;
-
-        const msgDiv = document.createElement('div');
+        const msgDiv = document.createElement("div");
         msgDiv.className = `chat-msg ${sender}`;
-
-        const bubbleDiv = document.createElement('div');
-        bubbleDiv.className = 'msg-bubble';
-
-        if (sender === 'user') {
+        const bubbleDiv = document.createElement("div");
+        bubbleDiv.className = "msg-bubble";
+        if (sender === "user") {
             bubbleDiv.textContent = content;
         } else {
             bubbleDiv.innerHTML = parseMarkdown(content);
             playChatbotReplySound();
             showChatbotBadge();
         }
-
         msgDiv.appendChild(bubbleDiv);
         messagesArea.appendChild(msgDiv);
         scrollToBottom();
     }
-
     function showTypingIndicator() {
-        const messagesArea = document.getElementById('chatMessages');
+        const messagesArea = document.getElementById("chatMessages");
         if (!messagesArea) return;
-
-        const indicator = document.createElement('div');
-        indicator.id = 'chatTypingIndicator';
-        indicator.className = 'chat-msg bot';
+        const indicator = document.createElement("div");
+        indicator.id = "chatTypingIndicator";
+        indicator.className = "chat-msg bot";
         indicator.innerHTML = `
         <div class="typing-indicator">
         <span class="typing-dot"></span>
@@ -282,39 +243,33 @@
         messagesArea.appendChild(indicator);
         scrollToBottom();
     }
-
     function removeTypingIndicator() {
-        const indicator = document.getElementById('chatTypingIndicator');
+        const indicator = document.getElementById("chatTypingIndicator");
         if (indicator) indicator.remove();
     }
-
     const LOCAL_KNOWLEDGE = {
         best: `🏆 **Rebienald's Top Flagship Projects**:
 
 1. **InfoWhiz** - AI-powered gamified learning platform. Won **Best in Capstone Development** & **Best in System Development** at STI College Bacoor.
 2. **SamAI** - Advanced AI study companion with custom **RAG pipeline**, multi-LLM orchestration (Gemini/Groq), and PHP 8 PSR-4 SQLite architecture.
 3. **Cup Of Story** - Full-stack cafe ordering platform with dynamic cart state, responsive UI, and live ordering.`,
-
         samai: `🚀 **SamAI** (Flagship AI System - July 2026):
 
 A high-performance AI study companion and document tutor with full **RAG (Retrieval-Augmented Generation)**:
 - 🧠 **Multi-LLM Orchestration**: Custom API wrappers for **Google Gemini & Groq** with key rotation and rate-limit failover.
 - ⚡ **Production Architecture**: Strict **PHP 8 PSR-4 OOP** with embedded **SQLite FTS5 BM25 search** and PDF parsing.
 - 🔒 *Note: Source code is private for security.*`,
-
         cupofstory: `☕ **Cup Of Story** (Full-Stack Cafe Ordering System):
 
 - 🎨 **Modern Experience**: Responsive UI with semantic HTML5, CSS3 glassmorphism, and Vanilla JavaScript.
 - 🛒 **Core Features**: Real-time cart state management, dynamic pricing, and modal-based order customization.
 - 🌐 **Live Demo**: [cupofstory.infinityfreeapp.com](http://cupofstory.infinityfreeapp.com/)`,
-
         infowhiz: `👑 **InfoWhiz** (Award-Winning Flagship Project):
 
 An AI-powered gamified learning platform for beginner programmers (Java, C#, PHP, JS):
 - 🏆 **Double Award Winner**: **Best in Capstone Development** & **Best in System Development** at STI College Bacoor.
 - 🎮 **Features**: Real-time coding games (CheeseWhiz, CodeDefuse), in-browser IDE sandbox, and interactive AI debugger.
 - 🌐 **Live Demo**: [infowhiz.hstn.me](https://infowhiz.hstn.me/Pages/index)`,
-
         testimonials: `🌟 **Peer Testimonials & Endorsements** (100% 10/10 Rating across 7 Peers):
 
 - **Charles**: *"Highly skilled back-end developer, reliable teammate... always delivers quality work on time."*
@@ -322,173 +277,262 @@ An AI-powered gamified learning platform for beginner programmers (Java, C#, PHP
 - **Nuñez**: *"Very efficient that makes me strive to be efficient as well."*
 - **Engr. Jay**: *"Contributes majority of the ideas."*
 Reb consistently earns 10/10 marks for velocity, clear communication, and high-impact delivery.`,
-
         portping: `⚡ **PortPing** (Cloud Keep-Alive Sentinel):
 
 An automated keep-alive system ensuring 24/7 cloud database availability:
 - 📡 **Automation**: Scheduled **GitHub Actions** cron running a **Node.js** ping client against PostgreSQL/Supabase REST endpoints.
 - 🛡️ **Zero Downtime**: Prevents Supabase cloud projects from auto-pausing during idle periods.
 - 🔗 **Repo**: [rebienalddev.github.io/PortPing](https://rebienalddev.github.io/PortPing/)`,
-
         portfolio: `🎨 **Rebienald's Portfolio Architecture**:
 
 - ⚡ **Zero Framework Bloat**: Pure **Vanilla JS ES6+** and **CSS3 Design Tokens** with 60 FPS Canvas 2D graphics.
 - 🧠 **Dual-Engine AI**: Multi-LLM failover (**Groq + Gemini**) with Supabase pgvector RAG and prompt sanitization.
-- 🚀 **Serverless Infrastructure**: Hosted on **Vercel Serverless Functions** with automated GitHub CI/CD.`
+- 🚀 **Serverless Infrastructure**: Hosted on **Vercel Serverless Functions** with automated GitHub CI/CD.`,
     };
-
     function getSmartLocalAnswer(query) {
         if (!query) return null;
         const q = query.toLowerCase();
-
-        if (q.includes('best') || q.includes('top project') || q.includes('flagship') || q.includes('most challenging') || q.includes('hardest')) {
+        if (
+            q.includes("best") ||
+            q.includes("top project") ||
+            q.includes("flagship") ||
+            q.includes("most challenging") ||
+            q.includes("hardest")
+        ) {
             return LOCAL_KNOWLEDGE.best;
         }
-        if (q.includes('cup of story') || q.includes('cupofstory') || q.includes('cup of coffee') || q.includes('coffee shop')) {
+        if (
+            q.includes("cup of story") ||
+            q.includes("cupofstory") ||
+            q.includes("cup of coffee") ||
+            q.includes("coffee shop")
+        ) {
             return LOCAL_KNOWLEDGE.cupofstory;
         }
-        if (q.includes('samai') || (q.includes('sam') && q.includes('ai')) || q.includes('july 2026')) {
+        if (q.includes("samai") || (q.includes("sam") && q.includes("ai")) || q.includes("july 2026")) {
             return LOCAL_KNOWLEDGE.samai;
         }
-        if (q.includes('infowhiz') || q.includes('info whiz') || q.includes('capstone')) {
+        if (q.includes("infowhiz") || q.includes("info whiz") || q.includes("capstone")) {
             return LOCAL_KNOWLEDGE.infowhiz;
         }
-        if (q.includes('portping') || q.includes('port ping') || q.includes('nas.io') || q.includes('nas io') || q.includes('nasio') || q.includes('keep-alive') || q.includes('sentinel')) {
+        if (
+            q.includes("portping") ||
+            q.includes("port ping") ||
+            q.includes("nas.io") ||
+            q.includes("nas io") ||
+            q.includes("nasio") ||
+            q.includes("keep-alive") ||
+            q.includes("sentinel")
+        ) {
             return LOCAL_KNOWLEDGE.portping;
         }
-        if (q.includes('portfolio tech stack') || q.includes('how was this portfolio made') || q.includes('how did you make this portfolio') || q.includes('portfolio stack') || q.includes('tech stack of this site') || q.includes('how this site was built')) {
+        if (
+            q.includes("portfolio tech stack") ||
+            q.includes("how was this portfolio made") ||
+            q.includes("how did you make this portfolio") ||
+            q.includes("portfolio stack") ||
+            q.includes("tech stack of this site") ||
+            q.includes("how this site was built")
+        ) {
             return LOCAL_KNOWLEDGE.portfolio;
         }
-        if (q.includes('testimonial') || q.includes('endorse') || q.includes('feedback') || q.includes('review') || q.includes('jay') || q.includes('charles') || q.includes('john') || q.includes('nuñez') || q.includes('samantha') || q.includes('nicole') || q.includes('eldrain')) {
+        if (
+            q.includes("testimonial") ||
+            q.includes("endorse") ||
+            q.includes("feedback") ||
+            q.includes("review") ||
+            q.includes("jay") ||
+            q.includes("charles") ||
+            q.includes("john") ||
+            q.includes("nuñez") ||
+            q.includes("samantha") ||
+            q.includes("nicole") ||
+            q.includes("eldrain")
+        ) {
             return LOCAL_KNOWLEDGE.testimonials;
         }
-
         return null;
     }
-
     const conversationHistory = [];
-
     function updateSuggestionChips(lastQuery, botReply) {
-        const suggestionsContainer = document.querySelector('.chat-suggestions');
+        const suggestionsContainer = document.querySelector(".chat-suggestions");
         if (!suggestionsContainer) return;
-
-        const combined = ((lastQuery || '') + ' ' + (botReply || '')).toLowerCase();
+        const combined = ((lastQuery || "") + " " + (botReply || "")).toLowerCase();
         let chips = [];
-
-        if (combined.includes('infowhiz') || combined.includes('cheesewiz') || combined.includes('codedefuse')) {
+        if (combined.includes("infowhiz") || combined.includes("cheesewiz") || combined.includes("codedefuse")) {
             chips = [
-                { label: '🎮 InfoWhiz Games', query: 'Tell me about the interactive games in InfoWhiz.' },
-                { label: '🤖 SamAI RAG Project', query: 'How does SamAI work and what is its RAG pipeline?' },
-                { label: '📬 Contact Rebienald', query: 'How can I reach out to hire or collaborate with Rebienald?' }
+                {
+                    label: "🎮 InfoWhiz Games",
+                    query: "Tell me about the interactive games in InfoWhiz.",
+                },
+                {
+                    label: "🤖 SamAI RAG Project",
+                    query: "How does SamAI work and what is its RAG pipeline?",
+                },
+                {
+                    label: "📬 Contact Rebienald",
+                    query: "How can I reach out to hire or collaborate with Rebienald?",
+                },
             ];
-        } else if (combined.includes('samai') || combined.includes('rag') || combined.includes('pdfchunker')) {
+        } else if (combined.includes("samai") || combined.includes("rag") || combined.includes("pdfchunker")) {
             chips = [
-                { label: '⚡ Multi-LLM Failover', query: 'How does SamAI handle key rotation and rate limits?' },
-                { label: '🏆 InfoWhiz Awards', query: 'What awards did InfoWhiz win at STI College?' },
-                { label: '💼 Tech Skills Matrix', query: 'What backend and database technologies does Rebienald master?' }
+                {
+                    label: "⚡ Multi-LLM Failover",
+                    query: "How does SamAI handle key rotation and rate limits?",
+                },
+                {
+                    label: "🏆 InfoWhiz Awards",
+                    query: "What awards did InfoWhiz win at STI College?",
+                },
+                {
+                    label: "💼 Tech Skills Matrix",
+                    query: "What backend and database technologies does Rebienald master?",
+                },
             ];
-        } else if (combined.includes('portping') || combined.includes('sentinel') || combined.includes('supabase')) {
+        } else if (combined.includes("portping") || combined.includes("sentinel") || combined.includes("supabase")) {
             chips = [
-                { label: '📜 PrintPortal System', query: 'How does PrintPortal calculate prices and detect color?' },
-                { label: '🌟 Peer Testimonials', query: 'What do teammates and clients say about Rebienald?' },
-                { label: '📬 Hire Rebienald', query: 'How can I get in touch with Rebienald for an opportunity?' }
+                {
+                    label: "📜 PrintPortal System",
+                    query: "How does PrintPortal calculate prices and detect color?",
+                },
+                {
+                    label: "🌟 Peer Testimonials",
+                    query: "What do teammates and clients say about Rebienald?",
+                },
+                {
+                    label: "📬 Hire Rebienald",
+                    query: "How can I get in touch with Rebienald for an opportunity?",
+                },
             ];
-        } else if (combined.includes('printportal') || combined.includes('pricing') || combined.includes('ghostscript')) {
+        } else if (
+            combined.includes("printportal") ||
+            combined.includes("pricing") ||
+            combined.includes("ghostscript")
+        ) {
             chips = [
-                { label: '📷 TechnoPhotobooth', query: 'What is TechnoBytes Photobooth?' },
-                { label: '☕ Cup Of Story', query: 'Tell me about the Cup Of Story web app.' },
-                { label: '📬 Contact Info', query: 'What are Rebienald\'s contact details?' }
+                {
+                    label: "📷 TechnoPhotobooth",
+                    query: "What is TechnoBytes Photobooth?",
+                },
+                {
+                    label: "☕ Cup Of Story",
+                    query: "Tell me about the Cup Of Story web app.",
+                },
+                {
+                    label: "📬 Contact Info",
+                    query: "What are Rebienald's contact details?",
+                },
             ];
-        } else if (combined.includes('cup') || combined.includes('story') || combined.includes('coffee') || combined.includes('barista') || combined.includes('cafe')) {
+        } else if (
+            combined.includes("cup") ||
+            combined.includes("story") ||
+            combined.includes("coffee") ||
+            combined.includes("barista") ||
+            combined.includes("cafe")
+        ) {
             chips = [
-                { label: '☕ 3-Tier Workflow', query: 'How does the customer, barista, and owner workflow work in Cup Of Story?' },
-                { label: '🧾 Receipt Engine', query: 'How does Cup Of Story generate client receipts with HTML2Canvas?' },
-                { label: '🌐 Live Web App', query: 'What is the live URL of Cup Of Story and how is its database set up?' }
+                {
+                    label: "☕ 3-Tier Workflow",
+                    query: "How does the customer, barista, and owner workflow work in Cup Of Story?",
+                },
+                {
+                    label: "🧾 Receipt Engine",
+                    query: "How does Cup Of Story generate client receipts with HTML2Canvas?",
+                },
+                {
+                    label: "🌐 Live Web App",
+                    query: "What is the live URL of Cup Of Story and how is its database set up?",
+                },
             ];
         } else {
             chips = [
-                { label: '🚀 Flagship Projects', query: 'What are Rebienald\'s top flagship projects?' },
-                { label: '💡 Core Skills', query: 'What are Rebienald\'s key technical skills and expertise?' },
-                { label: '📬 Hire / Contact', query: 'How can I get in touch to collaborate with Rebienald?' }
+                {
+                    label: "🚀 Flagship Projects",
+                    query: "What are Rebienald's top flagship projects?",
+                },
+                {
+                    label: "💡 Core Skills",
+                    query: "What are Rebienald's key technical skills and expertise?",
+                },
+                {
+                    label: "📬 Hire / Contact",
+                    query: "How can I get in touch to collaborate with Rebienald?",
+                },
             ];
         }
-
         suggestionsContainer.innerHTML = chips
-            .map(c => `<button class="suggestion-chip" data-query="${c.query}">${c.label}</button>`)
-            .join('');
-        suggestionsContainer.style.display = 'flex';
+            .map((c) => `<button class="suggestion-chip" data-query="${c.query}">${c.label}</button>`)
+            .join("");
+        suggestionsContainer.style.display = "flex";
     }
-
     async function handleSendMessage(messageText) {
-        const input = document.getElementById('chatInput');
-        const sendBtn = document.getElementById('chatSendBtn');
-        let query = (typeof messageText === 'string' ? messageText : '') || (input ? input.value.trim() : '');
-
+        const input = document.getElementById("chatInput");
+        const sendBtn = document.getElementById("chatSendBtn");
+        let query = (typeof messageText === "string" ? messageText : "") || (input ? input.value.trim() : "");
         if (!query) return;
-
         query = query.slice(0, 300);
-        if (input) input.value = '';
-
-        const suggestions = document.querySelector('.chat-suggestions');
-        if (suggestions) suggestions.style.display = 'none';
-
+        if (input) input.value = "";
+        const suggestions = document.querySelector(".chat-suggestions");
+        if (suggestions) suggestions.style.display = "none";
         if (!checkRateLimit()) {
-            appendMessage('user', query);
-            appendMessage('bot', "Rate limit reached. Please wait a minute before sending more messages.");
+            appendMessage("user", query);
+            appendMessage("bot", "Rate limit reached. Please wait a minute before sending more messages.");
             return;
         }
-
-        appendMessage('user', query);
-        conversationHistory.push({ role: 'user', content: query });
-
+        appendMessage("user", query);
+        conversationHistory.push({
+            role: "user",
+            content: query,
+        });
         if (isPromptInjection(query)) {
             showTypingIndicator();
             setTimeout(() => {
                 removeTypingIndicator();
-                const warning = "I am designed exclusively to assist with questions regarding Carpio Rebienald Khei's portfolio, skills, projects, and background.";
-                appendMessage('bot', warning);
-                conversationHistory.push({ role: 'assistant', content: warning });
+                const warning =
+                    "I am designed exclusively to assist with questions regarding Carpio Rebienald Khei's portfolio, skills, projects, and background.";
+                appendMessage("bot", warning);
+                conversationHistory.push({
+                    role: "assistant",
+                    content: warning,
+                });
             }, 400);
             return;
         }
-
         if (sendBtn) sendBtn.disabled = true;
         if (input) input.disabled = true;
-
         showTypingIndicator();
-
         try {
             const payload = {
                 message: query,
-                history: conversationHistory.slice(-8)
+                history: conversationHistory.slice(-8),
             };
-
             const response = await fetch(CHAT_BACKEND_URL, {
-                method: 'POST',
+                method: "POST",
                 headers: {
-                    'Content-Type': 'application/json'
+                    "Content-Type": "application/json",
                 },
-                body: JSON.stringify(payload)
+                body: JSON.stringify(payload),
             });
-
             removeTypingIndicator();
-
             if (response.ok) {
                 const data = await response.json();
                 const botReply = data.response || "No response received.";
-                appendMessage('bot', botReply);
-                conversationHistory.push({ role: 'assistant', content: botReply });
+                appendMessage("bot", botReply);
+                conversationHistory.push({
+                    role: "assistant",
+                    content: botReply,
+                });
                 if (conversationHistory.length > 16) {
                     conversationHistory.splice(0, conversationHistory.length - 16);
                 }
                 updateSuggestionChips(query, botReply);
             } else {
-                appendMessage('bot', "Sorry, unable to process your request at the moment. Please try again.");
+                appendMessage("bot", "Sorry, unable to process your request at the moment. Please try again.");
             }
         } catch (err) {
-            console.error('Chat API error:', err);
+            console.error("Chat API error:", err);
             removeTypingIndicator();
-            appendMessage('bot', "Connection issue contacting AI server. Please check your connection.");
+            appendMessage("bot", "Connection issue contacting AI server. Please check your connection.");
         } finally {
             if (sendBtn) sendBtn.disabled = false;
             if (input) {
@@ -497,136 +541,130 @@ An automated keep-alive system ensuring 24/7 cloud database availability:
             }
         }
     }
-
     function toggleExpandChatbot(forceState) {
-        const windowEl = document.getElementById('chatbotWindow');
-        const expandBtn = document.getElementById('chatExpandBtn');
+        const windowEl = document.getElementById("chatbotWindow");
+        const expandBtn = document.getElementById("chatExpandBtn");
         if (!windowEl) return;
-
-        const isCurrentlyExpanded = windowEl.classList.contains('expanded');
-        const nextExpanded = typeof forceState === 'boolean' ? forceState : !isCurrentlyExpanded;
-
+        const isCurrentlyExpanded = windowEl.classList.contains("expanded");
+        const nextExpanded = typeof forceState === "boolean" ? forceState : !isCurrentlyExpanded;
         if (nextExpanded) {
-            windowEl.classList.add('expanded');
-            try { localStorage.setItem('reb_chatbot_expanded', 'true'); } catch (e) {}
+            windowEl.classList.add("expanded");
+            try {
+                localStorage.setItem("reb_chatbot_expanded", "true");
+            } catch (e) {}
             if (expandBtn) {
-                expandBtn.setAttribute('title', 'Restore normal size (or double-click header)');
-                const maxIcon = expandBtn.querySelector('.icon-maximize');
-                const minIcon = expandBtn.querySelector('.icon-minimize');
-                if (maxIcon) maxIcon.style.display = 'none';
-                if (minIcon) minIcon.style.display = 'block';
+                expandBtn.setAttribute("title", "Restore normal size (or double-click header)");
+                const maxIcon = expandBtn.querySelector(".icon-maximize");
+                const minIcon = expandBtn.querySelector(".icon-minimize");
+                if (maxIcon) maxIcon.style.display = "none";
+                if (minIcon) minIcon.style.display = "block";
             }
         } else {
-            windowEl.classList.remove('expanded');
-            try { localStorage.setItem('reb_chatbot_expanded', 'false'); } catch (e) {}
+            windowEl.classList.remove("expanded");
+            try {
+                localStorage.setItem("reb_chatbot_expanded", "false");
+            } catch (e) {}
             if (expandBtn) {
-                expandBtn.setAttribute('title', 'Enlarge window (or double-click header)');
-                const maxIcon = expandBtn.querySelector('.icon-maximize');
-                const minIcon = expandBtn.querySelector('.icon-minimize');
-                if (maxIcon) maxIcon.style.display = 'block';
-                if (minIcon) minIcon.style.display = 'none';
+                expandBtn.setAttribute("title", "Enlarge window (or double-click header)");
+                const maxIcon = expandBtn.querySelector(".icon-maximize");
+                const minIcon = expandBtn.querySelector(".icon-minimize");
+                if (maxIcon) maxIcon.style.display = "block";
+                if (minIcon) minIcon.style.display = "none";
             }
         }
     }
-
     function attachEventListeners() {
-        const trigger = document.getElementById('chatbotTrigger');
-        const windowEl = document.getElementById('chatbotWindow');
-        const closeBtn = document.getElementById('chatCloseBtn');
-        const expandBtn = document.getElementById('chatExpandBtn');
-        const headerEl = document.querySelector('.chat-header');
-        const form = document.getElementById('chatInputForm');
-
+        const trigger = document.getElementById("chatbotTrigger");
+        const windowEl = document.getElementById("chatbotWindow");
+        const closeBtn = document.getElementById("chatCloseBtn");
+        const expandBtn = document.getElementById("chatExpandBtn");
+        const headerEl = document.querySelector(".chat-header");
+        const form = document.getElementById("chatInputForm");
         if (trigger && windowEl) {
-            trigger.addEventListener('click', () => {
-                const isOpen = windowEl.classList.contains('open');
+            trigger.addEventListener("click", () => {
+                const isOpen = windowEl.classList.contains("open");
                 if (isOpen) {
-                    windowEl.classList.remove('open');
-                    trigger.classList.remove('active');
+                    windowEl.classList.remove("open");
+                    trigger.classList.remove("active");
                 } else {
-                    windowEl.classList.add('open');
-                    trigger.classList.add('active');
+                    windowEl.classList.add("open");
+                    trigger.classList.add("active");
                     clearChatbotBadge();
-                    document.getElementById('chatInput')?.focus();
+                    document.getElementById("chatInput")?.focus();
                 }
             });
         }
-
         if (closeBtn && windowEl && trigger) {
-            closeBtn.addEventListener('click', () => {
-                windowEl.classList.remove('open');
-                trigger.classList.remove('active');
+            closeBtn.addEventListener("click", () => {
+                windowEl.classList.remove("open");
+                trigger.classList.remove("active");
             });
         }
-
         if (expandBtn) {
-            expandBtn.addEventListener('click', (e) => {
+            expandBtn.addEventListener("click", (e) => {
                 e.stopPropagation();
                 toggleExpandChatbot();
             });
         }
-
         if (headerEl) {
-            headerEl.addEventListener('dblclick', (e) => {
-                if (e.target.closest('button')) return;
+            headerEl.addEventListener("dblclick", (e) => {
+                if (e.target.closest("button")) return;
                 if (window.innerWidth >= 600) {
                     toggleExpandChatbot();
                 }
             });
         }
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && windowEl && windowEl.classList.contains('open')) {
-                windowEl.classList.remove('open');
-                trigger?.classList.remove('active');
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape" && windowEl && windowEl.classList.contains("open")) {
+                windowEl.classList.remove("open");
+                trigger?.classList.remove("active");
             }
         });
-
-        // Restore previously saved size preference on desktop screens
         try {
-            if (window.innerWidth >= 600 && localStorage.getItem('reb_chatbot_expanded') === 'true') {
+            if (window.innerWidth >= 600 && localStorage.getItem("reb_chatbot_expanded") === "true") {
                 toggleExpandChatbot(true);
             }
         } catch (e) {}
-
         if (form) {
-            form.addEventListener('submit', (e) => {
+            form.addEventListener("submit", (e) => {
                 e.preventDefault();
                 handleSendMessage();
             });
         }
-
-        document.addEventListener('click', (e) => {
-            if (e.target && e.target.classList.contains('suggestion-chip')) {
-                const text = e.target.getAttribute('data-query');
+        document.addEventListener("click", (e) => {
+            if (e.target && e.target.classList.contains("suggestion-chip")) {
+                const text = e.target.getAttribute("data-query");
                 if (text) handleSendMessage(text);
             }
         });
     }
-
-    window.openChatbotWithMessage = function(projectName, isPrivacyRestricted) {
-        const tooltip = document.getElementById('techTooltip');
-        if (tooltip) tooltip.classList.remove('visible');
-
-        const windowEl = document.getElementById('chatbotWindow');
-        const trigger = document.getElementById('chatbotTrigger');
+    window.openChatbotWithMessage = function (projectName, isPrivacyRestricted) {
+        const tooltip = document.getElementById("techTooltip");
+        if (tooltip) tooltip.classList.remove("visible");
+        const windowEl = document.getElementById("chatbotWindow");
+        const trigger = document.getElementById("chatbotTrigger");
         if (windowEl) {
-            windowEl.classList.add('open');
-            if (trigger) trigger.classList.add('active');
+            windowEl.classList.add("open");
+            if (trigger) trigger.classList.add("active");
         }
-        if (isPrivacyRestricted || projectName === 'SamAI') {
-            appendMessage('bot', LOCAL_KNOWLEDGE.samai);
-            conversationHistory.push({ role: 'assistant', content: LOCAL_KNOWLEDGE.samai });
-            updateSuggestionChips('samai', LOCAL_KNOWLEDGE.samai);
+        if (isPrivacyRestricted || projectName === "SamAI") {
+            appendMessage("bot", LOCAL_KNOWLEDGE.samai);
+            conversationHistory.push({
+                role: "assistant",
+                content: LOCAL_KNOWLEDGE.samai,
+            });
+            updateSuggestionChips("samai", LOCAL_KNOWLEDGE.samai);
         } else {
             const notice = `💻 **Desktop Required**: In order to view and experience **${projectName}**, you need to be on a PC or Desktop computer for full resolution and interactive capabilities.`;
-            appendMessage('bot', notice);
-            conversationHistory.push({ role: 'assistant', content: notice });
+            appendMessage("bot", notice);
+            conversationHistory.push({
+                role: "assistant",
+                content: notice,
+            });
         }
     };
-
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => {
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", () => {
             initChatbotDOM();
             attachEventListeners();
         });

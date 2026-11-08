@@ -136,62 +136,112 @@ Key Awards & Recognition:
 `;
 
 const STOPWORDS = new Set([
-    "what", "tell", "about", "your", "with", "from", "show", "help", "does", "have", "make",
-    "this", "that", "more", "some", "like", "know", "when", "where", "which", "could", "would",
-    "please", "describe", "explain", "give", "project", "details", "built", "the", "and", "for",
-    "are", "was", "were", "been", "being", "how", "who", "whom", "why", "his", "her", "their",
-    "its", "can", "will", "just", "any", "all", "each", "you", "they", "them", "our", "is"
+    "what",
+    "tell",
+    "about",
+    "your",
+    "with",
+    "from",
+    "show",
+    "help",
+    "does",
+    "have",
+    "make",
+    "this",
+    "that",
+    "more",
+    "some",
+    "like",
+    "know",
+    "when",
+    "where",
+    "which",
+    "could",
+    "would",
+    "please",
+    "describe",
+    "explain",
+    "give",
+    "project",
+    "details",
+    "built",
+    "the",
+    "and",
+    "for",
+    "are",
+    "was",
+    "were",
+    "been",
+    "being",
+    "how",
+    "who",
+    "whom",
+    "why",
+    "his",
+    "her",
+    "their",
+    "its",
+    "can",
+    "will",
+    "just",
+    "any",
+    "all",
+    "each",
+    "you",
+    "they",
+    "them",
+    "our",
+    "is",
 ]);
 
 const ALIAS_MAP = {
-    "infowhiz": ["AI Integrated Gamified Programming Learning Platform", "CheeseWhiz", "CodeDefuse", "CodeQuest"],
-    "whiz": ["AI Integrated Gamified Programming Learning Platform", "CheeseWhiz"],
-    "samai": ["SamAI", "PDFChunker", "SearchService"],
-    "sam": ["SamAI"],
-    "portping": ["PortPing", "Sentinel", "Nas.IO", "ping.js"],
-    "ping": ["PortPing", "Sentinel"],
-    "nas": ["Nas.IO", "PortPing"],
-    "printportal": ["PrintPortal", "PrintHub", "print_jobs"],
-    "printhub": ["PrintPortal", "PrintHub"],
-    "printer": ["PrintPortal", "PrintHub"],
-    "printing": ["PrintPortal", "PrintHub"],
-    "technobytes": ["TechnoBytes", "Photobooth"],
-    "photobooth": ["TechnoBytes", "Photobooth"],
-    "cupofstory": ["Cup Of Story", "cupofstory", "cupofcoffee", "barista"],
-    "cup": ["Cup Of Story", "cupofstory"],
-    "story": ["Cup Of Story", "cupofstory"],
-    "coffee": ["Cup Of Story", "cupofstory", "cupofcoffee"],
-    "cafe": ["Cup Of Story", "cupofstory"],
-    "barista": ["Cup Of Story", "cupofstory", "barista"],
-    "cupofcoffee": ["Cup Of Story", "cupofcoffee"],
-    "clubhub": ["ClubHub", "Club Hub", "Club Management System"],
-    "club": ["ClubHub", "Club Management System"],
-    "kaido": ["Kaido", "faster-whisper", "voice dictation", "openwhisper", "Kaido Brain"],
-    "kaidobrain": ["Kaido", "Kaido Brain", "SQLite memory"],
-    "brain": ["Kaido", "Kaido Brain", "SQLite memory"],
-    "whisper": ["Kaido", "faster-whisper", "voice dictation"],
-    "voice": ["Kaido", "faster-whisper", "voice dictation"],
-    "dictation": ["Kaido", "faster-whisper", "voice dictation"],
-    "openwhisper": ["Kaido", "faster-whisper"],
-    "portfolio": ["Portfolio", "Serverless RAG"],
-    "skills": ["Technical Skills", "Languages"],
-    "education": ["Cavite State University", "STI College"],
-    "awards": ["Best in Capstone", "Best in System Development"],
-    "testimonials": ["Peer Testimonials", "Charles", "John"]
+    infowhiz: ["AI Integrated Gamified Programming Learning Platform", "CheeseWhiz", "CodeDefuse", "CodeQuest"],
+    whiz: ["AI Integrated Gamified Programming Learning Platform", "CheeseWhiz"],
+    samai: ["SamAI", "PDFChunker", "SearchService"],
+    sam: ["SamAI"],
+    portping: ["PortPing", "Sentinel", "Nas.IO", "ping.js"],
+    ping: ["PortPing", "Sentinel"],
+    nas: ["Nas.IO", "PortPing"],
+    printportal: ["PrintPortal", "PrintHub", "print_jobs"],
+    printhub: ["PrintPortal", "PrintHub"],
+    printer: ["PrintPortal", "PrintHub"],
+    printing: ["PrintPortal", "PrintHub"],
+    technobytes: ["TechnoBytes", "Photobooth"],
+    photobooth: ["TechnoBytes", "Photobooth"],
+    cupofstory: ["Cup Of Story", "cupofstory", "cupofcoffee", "barista"],
+    cup: ["Cup Of Story", "cupofstory"],
+    story: ["Cup Of Story", "cupofstory"],
+    coffee: ["Cup Of Story", "cupofstory", "cupofcoffee"],
+    cafe: ["Cup Of Story", "cupofstory"],
+    barista: ["Cup Of Story", "cupofstory", "barista"],
+    cupofcoffee: ["Cup Of Story", "cupofcoffee"],
+    clubhub: ["ClubHub", "Club Hub", "Club Management System"],
+    club: ["ClubHub", "Club Management System"],
+    kaido: ["Kaido", "faster-whisper", "voice dictation", "openwhisper", "Kaido Brain"],
+    kaidobrain: ["Kaido", "Kaido Brain", "SQLite memory"],
+    brain: ["Kaido", "Kaido Brain", "SQLite memory"],
+    whisper: ["Kaido", "faster-whisper", "voice dictation"],
+    voice: ["Kaido", "faster-whisper", "voice dictation"],
+    dictation: ["Kaido", "faster-whisper", "voice dictation"],
+    openwhisper: ["Kaido", "faster-whisper"],
+    portfolio: ["Portfolio", "Serverless RAG"],
+    skills: ["Technical Skills", "Languages"],
+    education: ["Cavite State University", "STI College"],
+    awards: ["Best in Capstone", "Best in System Development"],
+    testimonials: ["Peer Testimonials", "Charles", "John"],
 };
 
 function extractSearchTerms(userQuery) {
-    const clean = String(userQuery || "").toLowerCase().replace(/[^a-z0-9\s]/g, " ");
+    const clean = String(userQuery || "")
+        .toLowerCase()
+        .replace(/[^a-z0-9\s]/g, " ");
     const words = clean.split(/\s+/).filter((w) => w.length > 2 && !STOPWORDS.has(w));
     const terms = new Set();
-
-    // Add mapped aliases first (highest specificity)
     for (const w of words) {
         if (ALIAS_MAP[w]) {
             ALIAS_MAP[w].forEach((alias) => terms.add(alias));
         }
     }
-    // Then add raw keywords
     for (const w of words) {
         terms.add(w);
     }
@@ -207,7 +257,6 @@ function postJSON(urlStr, headers, bodyObj) {
             "Content-Length": Buffer.byteLength(postData),
             ...headers,
         };
-
         const options = {
             hostname: url.hostname,
             port: url.port || 443,
@@ -215,19 +264,23 @@ function postJSON(urlStr, headers, bodyObj) {
             method: "POST",
             headers: reqHeaders,
         };
-
         const req = https.request(options, (res) => {
             let data = "";
             res.on("data", (chunk) => (data += chunk));
             res.on("end", () => {
                 try {
-                    resolve({ status: res.statusCode, data: JSON.parse(data) });
+                    resolve({
+                        status: res.statusCode,
+                        data: JSON.parse(data),
+                    });
                 } catch (e) {
-                    resolve({ status: res.statusCode, raw: data });
+                    resolve({
+                        status: res.statusCode,
+                        raw: data,
+                    });
                 }
             });
         });
-
         req.on("error", (err) => reject(err));
         req.setTimeout(4500, () => {
             req.destroy();
@@ -241,67 +294,98 @@ function postJSON(urlStr, headers, bodyObj) {
 async function getRAGContext(userQuery, history = []) {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
-
     if (supabaseUrl && supabaseKey) {
         try {
             const cleanUrl = supabaseUrl.replace(/\/$/, "");
-            const recentHistoryText = history.slice(-2).map((h) => h.content || "").join(" ");
+            const recentHistoryText = history
+                .slice(-2)
+                .map((h) => h.content || "")
+                .join(" ");
             const terms = extractSearchTerms(`${recentHistoryText} ${userQuery}`);
-            const headers = { apikey: supabaseKey, Authorization: `Bearer ${supabaseKey}` };
-
-            const orFilters = terms.slice(0, 6).map((t) => `content.ilike.*${encodeURIComponent(t)}*`).join(",");
-            const filterQuery = orFilters ? `or=(${orFilters})` : `content=ilike.*AI Integrated Gamified Programming Learning Platform*`;
-
-            const fetchTable = (endpoint) => new Promise((resolve) => {
-                const req = https.get(endpoint, { headers }, (r) => {
-                    let data = "";
-                    r.on("data", (c) => (data += c));
-                    r.on("end", () => {
-                        try {
-                            resolve({ status: r.statusCode, data: JSON.parse(data) });
-                        } catch (e) {
-                            resolve({ status: r.statusCode, data: [] });
+            const headers = {
+                apikey: supabaseKey,
+                Authorization: `Bearer ${supabaseKey}`,
+            };
+            const orFilters = terms
+                .slice(0, 6)
+                .map((t) => `content.ilike.*${encodeURIComponent(t)}*`)
+                .join(",");
+            const filterQuery = orFilters
+                ? `or=(${orFilters})`
+                : `content=ilike.*AI Integrated Gamified Programming Learning Platform*`;
+            const fetchTable = (endpoint) =>
+                new Promise((resolve) => {
+                    const req = https.get(
+                        endpoint,
+                        {
+                            headers: headers,
+                        },
+                        (r) => {
+                            let data = "";
+                            r.on("data", (c) => (data += c));
+                            r.on("end", () => {
+                                try {
+                                    resolve({
+                                        status: r.statusCode,
+                                        data: JSON.parse(data),
+                                    });
+                                } catch (e) {
+                                    resolve({
+                                        status: r.statusCode,
+                                        data: [],
+                                    });
+                                }
+                            });
                         }
+                    );
+                    req.on("error", () =>
+                        resolve({
+                            status: 500,
+                            data: [],
+                        })
+                    );
+                    req.setTimeout(3e3, () => {
+                        req.destroy();
+                        resolve({
+                            status: 408,
+                            data: [],
+                        });
                     });
                 });
-                req.on("error", () => resolve({ status: 500, data: [] }));
-                req.setTimeout(3000, () => {
-                    req.destroy();
-                    resolve({ status: 408, data: [] });
-                });
-            });
-
             const [docsRes, projRes, infoRes] = await Promise.all([
-                fetchTable(`${cleanUrl}/rest/v1/portfolio_documents?select=content&${filterQuery}&order=id.desc&limit=5`),
+                fetchTable(
+                    `${cleanUrl}/rest/v1/portfolio_documents?select=content&${filterQuery}&order=id.desc&limit=5`
+                ),
                 fetchTable(`${cleanUrl}/rest/v1/portfolio_projects?select=content&${filterQuery}&limit=4`),
-                fetchTable(`${cleanUrl}/rest/v1/personal_info?select=content&${filterQuery}&limit=4`)
+                fetchTable(`${cleanUrl}/rest/v1/personal_info?select=content&${filterQuery}&limit=4`),
             ]);
-
             const isCupOfStoryQuery = terms.some((t) =>
-                ["cup of story", "cupofstory", "cupofcoffee", "coffee", "cafe", "barista"].includes(String(t).toLowerCase())
+                ["cup of story", "cupofstory", "cupofcoffee", "coffee", "cafe", "barista"].includes(
+                    String(t).toLowerCase()
+                )
             );
-
             const allChunks = [
                 ...(Array.isArray(docsRes.data) ? docsRes.data.map((i) => i.content) : []),
                 ...(Array.isArray(projRes.data) ? projRes.data.map((i) => i.content) : []),
                 ...(Array.isArray(infoRes.data) ? infoRes.data.map((i) => i.content) : []),
             ]
                 .filter(Boolean)
-                .map((chunk) => (typeof chunk === "string" ? chunk.replaceAll("rebienald.vercel.app", "rebkhei.vercel.app") : chunk))
+                .map((chunk) =>
+                    typeof chunk === "string" ? chunk.replaceAll("rebienald.vercel.app", "rebkhei.vercel.app") : chunk
+                )
                 .filter((chunk) => {
-                    // Filter out legacy static mockup chunks for Cup Of Story that mention the old GitHub Pages URL or 2025 glassmorphism
                     if (chunk.includes("axionbytee.github.io/cupofstory") || chunk.includes("CUP OF STORY (2025)")) {
                         return false;
                     }
                     return true;
                 });
-
-            // Ensure updated 2026 Cup of Story specifications are available if asked
-            if (isCupOfStoryQuery && !allChunks.some((c) => c.includes("Cup Of Story (2026)") || c.includes("CUP OF STORY (2026)"))) {
+            if (
+                isCupOfStoryQuery &&
+                !allChunks.some((c) => c.includes("Cup Of Story (2026)") || c.includes("CUP OF STORY (2026)"))
+            ) {
                 const cupChunk = FALLBACK_KNOWLEDGE.split("\n\n").find((sec) => sec.includes("Cup Of Story"));
                 if (cupChunk) allChunks.unshift(cupChunk);
             }
-
             const uniqueChunks = [...new Set(allChunks)];
             if (uniqueChunks.length > 0) {
                 return uniqueChunks.join("\n\n");
@@ -323,7 +407,6 @@ function cleanResponse(text) {
 async function queryAI(userMessage, ragContext, history = []) {
     const groqKey = process.env.GROQ_API_KEY;
     const geminiKey = process.env.GEMINI_API_KEY;
-
     const systemPrompt = `
 You are the official AI Portfolio Ambassador and technical advocate for Carpio Rebienald Khei (Reb).
 You represent an elite full-stack software engineer and IT student at Cavite State University with high charisma, deep technical precision, and confidence.
@@ -354,19 +437,20 @@ Verified Portfolio Knowledge Base:
 ${ragContext}
 --- END CONTEXT ---
 `;
-
-    // Sanitize multi-turn history
     const sanitizedHistory = Array.isArray(history)
         ? history
-              .filter((h) => h && (h.role === "user" || h.role === "assistant" || h.role === "model") && typeof h.content === "string")
+              .filter(
+                  (h) =>
+                      h &&
+                      (h.role === "user" || h.role === "assistant" || h.role === "model") &&
+                      typeof h.content === "string"
+              )
               .map((h) => ({
                   role: h.role === "model" ? "assistant" : h.role,
                   content: String(h.content).slice(0, 500),
               }))
               .slice(-6)
         : [];
-
-    // Try Groq API first (ultra-fast responses < 500ms)
     if (groqKey) {
         const groqModels = ["openai/gpt-oss-120b", "qwen/qwen3.6-27b", "openai/gpt-oss-20b"];
         for (const model of groqModels) {
@@ -374,19 +458,27 @@ ${ragContext}
                 const groqUrl = "https://api.groq.com/openai/v1/chat/completions";
                 const res = await postJSON(
                     groqUrl,
-                    { Authorization: `Bearer ${groqKey}`, "User-Agent": "Portfolio-AI-Backend/1.0" },
+                    {
+                        Authorization: `Bearer ${groqKey}`,
+                        "User-Agent": "Portfolio-AI-Backend/1.0",
+                    },
                     {
                         model: model,
                         messages: [
-                            { role: "system", content: systemPrompt },
+                            {
+                                role: "system",
+                                content: systemPrompt,
+                            },
                             ...sanitizedHistory,
-                            { role: "user", content: userMessage },
+                            {
+                                role: "user",
+                                content: userMessage,
+                            },
                         ],
                         temperature: 0.5,
                         max_tokens: 380,
                     }
                 );
-
                 if (res.status === 200 && res.data?.choices?.[0]?.message?.content) {
                     const rawText = res.data.choices[0].message.content;
                     const cleaned = cleanResponse(rawText);
@@ -397,18 +489,26 @@ ${ragContext}
             }
         }
     }
-
-    // Fallback to Gemini API
     if (geminiKey) {
         const geminiModels = ["gemini-1.5-flash", "gemini-1.5-pro"];
         const geminiContents = [
             ...sanitizedHistory.map((h) => ({
                 role: h.role === "assistant" ? "model" : "user",
-                parts: [{ text: h.content }],
+                parts: [
+                    {
+                        text: h.content,
+                    },
+                ],
             })),
-            { role: "user", parts: [{ text: userMessage }] },
+            {
+                role: "user",
+                parts: [
+                    {
+                        text: userMessage,
+                    },
+                ],
+            },
         ];
-
         for (const model of geminiModels) {
             try {
                 const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${geminiKey}`;
@@ -416,12 +516,20 @@ ${ragContext}
                     geminiUrl,
                     {},
                     {
-                        systemInstruction: { parts: [{ text: systemPrompt }] },
+                        systemInstruction: {
+                            parts: [
+                                {
+                                    text: systemPrompt,
+                                },
+                            ],
+                        },
                         contents: geminiContents,
-                        generationConfig: { temperature: 0.5, maxOutputTokens: 380 },
+                        generationConfig: {
+                            temperature: 0.5,
+                            maxOutputTokens: 380,
+                        },
                     }
                 );
-
                 if (res.status === 200 && res.data?.candidates?.[0]?.content?.parts?.[0]?.text) {
                     const rawText = res.data.candidates[0].content.parts[0].text;
                     const cleaned = cleanResponse(rawText);
@@ -432,7 +540,6 @@ ${ragContext}
             }
         }
     }
-
     return "I'm having a brief connection delay reaching the AI engine. Feel free to ask again or reach out to Reb directly at rebkheicarpio@gmail.com!";
 }
 
@@ -440,19 +547,17 @@ module.exports = async function handler(req, res) {
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
     res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-
     if (req.method === "OPTIONS") {
         return res.status(200).end();
     }
-
     if (req.method !== "POST") {
-        return res.status(405).json({ error: "Method not allowed" });
+        return res.status(405).json({
+            error: "Method not allowed",
+        });
     }
-
     try {
         let userMsg = "";
         let history = [];
-
         if (typeof req.body === "string") {
             try {
                 const parsed = JSON.parse(req.body);
@@ -465,19 +570,22 @@ module.exports = async function handler(req, res) {
             userMsg = req.body.message || "";
             history = Array.isArray(req.body.history) ? req.body.history : [];
         }
-
         userMsg = String(userMsg).trim().slice(0, 300);
-
         if (!userMsg) {
-            return res.status(400).json({ error: "Message is required" });
+            return res.status(400).json({
+                error: "Message is required",
+            });
         }
-
         const ragContext = await getRAGContext(userMsg, history);
         const reply = await queryAI(userMsg, ragContext, history);
-
-        return res.status(200).json({ status: "success", response: reply });
+        return res.status(200).json({
+            status: "success",
+            response: reply,
+        });
     } catch (err) {
         console.error("Vercel Chat API error:", err);
-        return res.status(500).json({ error: "Server Error" });
+        return res.status(500).json({
+            error: "Server Error",
+        });
     }
 };

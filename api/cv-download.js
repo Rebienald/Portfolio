@@ -1,22 +1,28 @@
 const https = require("https");
 
-// In-memory rate limiting store (IP -> array of timestamps)
 const rateLimitMap = new Map();
-const RATE_LIMIT_WINDOW_MS = 60 * 1000;      // 1 minute window
-const MAX_ALERTS_PER_WINDOW = 5;             // Maximum 5 downloads per minute
-const MIN_COOLDOWN_MS = 1000;                // 1 second minimum cooldown
 
-const cleanupTimer = setInterval(() => {
-    const now = Date.now();
-    for (const [ip, timestamps] of rateLimitMap.entries()) {
-        const valid = timestamps.filter(t => now - t < RATE_LIMIT_WINDOW_MS);
-        if (valid.length === 0) {
-            rateLimitMap.delete(ip);
-        } else {
-            rateLimitMap.set(ip, valid);
+const RATE_LIMIT_WINDOW_MS = 60 * 1e3;
+
+const MAX_ALERTS_PER_WINDOW = 5;
+
+const MIN_COOLDOWN_MS = 1e3;
+
+const cleanupTimer = setInterval(
+    () => {
+        const now = Date.now();
+        for (const [ip, timestamps] of rateLimitMap.entries()) {
+            const valid = timestamps.filter((t) => now - t < RATE_LIMIT_WINDOW_MS);
+            if (valid.length === 0) {
+                rateLimitMap.delete(ip);
+            } else {
+                rateLimitMap.set(ip, valid);
+            }
         }
-    }
-}, 15 * 60 * 1000);
+    },
+    15 * 60 * 1e3
+);
+
 if (cleanupTimer && cleanupTimer.unref) {
     cleanupTimer.unref();
 }
@@ -32,22 +38,27 @@ function getClientIp(req) {
 function checkRateLimit(ip) {
     const now = Date.now();
     let timestamps = rateLimitMap.get(ip) || [];
-    timestamps = timestamps.filter(t => now - t < RATE_LIMIT_WINDOW_MS);
-
+    timestamps = timestamps.filter((t) => now - t < RATE_LIMIT_WINDOW_MS);
     if (timestamps.length > 0) {
         const lastSent = timestamps[timestamps.length - 1];
         if (now - lastSent < MIN_COOLDOWN_MS) {
-            return { allowed: false, reason: "Cooldown active" };
+            return {
+                allowed: false,
+                reason: "Cooldown active",
+            };
         }
     }
-
     if (timestamps.length >= MAX_ALERTS_PER_WINDOW) {
-        return { allowed: false, reason: "Rate limit reached. Maximum 5 downloads per minute." };
+        return {
+            allowed: false,
+            reason: "Rate limit reached. Maximum 5 downloads per minute.",
+        };
     }
-
     timestamps.push(now);
     rateLimitMap.set(ip, timestamps);
-    return { allowed: true };
+    return {
+        allowed: true,
+    };
 }
 
 function sanitize(str) {
@@ -60,7 +71,8 @@ function sanitize(str) {
         .replace(/'/g, "&#039;");
 }
 
-const BOT_REGEX = /bot|crawl|spider|slurp|facebookexternalhit|whatsapp|telegrambot|discordbot|googlebot|bingbot|yandex|duckduckbot|baiduspider|twitterbot|linkedinbot|embedly|quora link preview|showyoubot|outbrain|pinterest|slackbot|vkshare|w3c_validator|headlesschrome|phantomjs|selenium|puppeteer|playwright|curl|wget|python|urllib|requests|axios|go-http-client|java/i;
+const BOT_REGEX =
+    /bot|crawl|spider|slurp|facebookexternalhit|whatsapp|telegrambot|discordbot|googlebot|bingbot|yandex|duckduckbot|baiduspider|twitterbot|linkedinbot|embedly|quora link preview|showyoubot|outbrain|pinterest|slackbot|vkshare|w3c_validator|headlesschrome|phantomjs|selenium|puppeteer|playwright|curl|wget|python|urllib|requests|axios|go-http-client|java/i;
 
 function isBot(ua) {
     if (!ua || ua === "Unknown Browser / Device") return false;
@@ -68,62 +80,58 @@ function isBot(ua) {
 }
 
 module.exports = async function handler(req, res) {
-    // Enable CORS
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
     res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-
     if (req.method === "OPTIONS") {
         return res.status(200).end();
     }
-
     if (req.method !== "POST" && req.method !== "GET") {
-        return res.status(405).json({ error: "Method not allowed. Use GET or POST." });
+        return res.status(405).json({
+            error: "Method not allowed. Use GET or POST.",
+        });
     }
-
-    // Ignore browser prefetch and link preview requests
     const purpose = req.headers["purpose"] || req.headers["x-purpose"] || req.headers["sec-purpose"] || "";
     if (/prefetch|preview/i.test(purpose)) {
-        return res.status(200).json({ status: "ignored", reason: "Prefetch ignored" });
+        return res.status(200).json({
+            status: "ignored",
+            reason: "Prefetch ignored",
+        });
     }
-
-    // Ignore web crawlers, search engine indexers, and automated scrapers
     const userAgent = req.headers["user-agent"] || "Unknown Browser / Device";
     if (isBot(userAgent)) {
-        return res.status(200).json({ status: "ignored", reason: "Automated crawler ignored" });
+        return res.status(200).json({
+            status: "ignored",
+            reason: "Automated crawler ignored",
+        });
     }
-
     const clientIp = getClientIp(req);
     const rateCheck = checkRateLimit(clientIp);
     if (!rateCheck.allowed) {
-        return res.status(200).json({ status: "ignored", reason: rateCheck.reason });
+        return res.status(200).json({
+            status: "ignored",
+            reason: rateCheck.reason,
+        });
     }
-
     const resendApiKey = process.env.RESEND_API_KEY;
     if (!resendApiKey) {
         console.error("Missing RESEND_API_KEY environment variable");
         return res.status(500).json({
-            error: "Email service not configured. RESEND_API_KEY missing."
+            error: "Email service not configured. RESEND_API_KEY missing.",
         });
     }
-
     const recipientEmail = process.env.CONTACT_EMAIL || "rebkheicarpio@gmail.com";
     const senderEmail = process.env.RESEND_FROM || "Reb Portfolio <onboarding@resend.dev>";
-
-    // Extract geo & request information
     const city = req.headers["x-vercel-ip-city"] || "";
     const country = req.headers["x-vercel-ip-country"] || "";
     const region = req.headers["x-vercel-ip-country-region"] || "";
     const referer = req.headers["referer"] || "https://rebkhei.vercel.app/";
-
     const locationStr = [city, region, country].filter(Boolean).join(", ") || "Location Unavailable";
-
     const formattedDate = new Date().toLocaleString("en-US", {
         timeZone: "Asia/Manila",
         dateStyle: "full",
-        timeStyle: "short"
+        timeStyle: "short",
     });
-
     const htmlContent = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -170,9 +178,18 @@ module.exports = async function handler(req, res) {
   </div>
 </body>
 </html>`.trim();
+    const textContent = `CV Download Notification
 
-    const textContent = `CV Download Notification\n\nA visitor downloaded your CV from your portfolio.\n\nFile: Carpio Rebienald2.pdf (CV.pdf)\nDate & Time: ${formattedDate} (Manila Time)\nLocation: ${locationStr}\nIP Address: ${clientIp}\nReferrer: ${referer}\nDevice: ${userAgent}\n\nAutomated notification from rebkhei.vercel.app`;
+A visitor downloaded your CV from your portfolio.
 
+File: Carpio Rebienald2.pdf (CV.pdf)
+Date & Time: ${formattedDate} (Manila Time)
+Location: ${locationStr}
+IP Address: ${clientIp}
+Referrer: ${referer}
+Device: ${userAgent}
+
+Automated notification from rebkhei.vercel.app`;
     const payload = JSON.stringify({
         from: senderEmail,
         to: [recipientEmail],
@@ -181,45 +198,54 @@ module.exports = async function handler(req, res) {
         text: textContent,
         headers: {
             "X-Priority": "1",
-            "Importance": "high"
-        }
+            Importance: "high",
+        },
     });
-
     return new Promise((resolve) => {
-        const apiReq = https.request({
-            hostname: "api.resend.com",
-            path: "/emails",
-            method: "POST",
-            headers: {
-                "Authorization": `Bearer ${resendApiKey}`,
-                "Content-Type": "application/json",
-                "Content-Length": Buffer.byteLength(payload)
-            }
-        }, (apiRes) => {
-            let responseData = "";
-            apiRes.on("data", chunk => (responseData += chunk));
-            apiRes.on("end", () => {
-                try {
-                    const parsed = JSON.parse(responseData);
-                    if (apiRes.statusCode >= 200 && apiRes.statusCode < 300) {
-                        res.status(200).json({ success: true, id: parsed.id });
-                    } else {
-                        console.error("Resend API error:", parsed);
-                        res.status(apiRes.statusCode || 500).json({ error: parsed.message || "Email send failed" });
+        const apiReq = https.request(
+            {
+                hostname: "api.resend.com",
+                path: "/emails",
+                method: "POST",
+                headers: {
+                    Authorization: `Bearer ${resendApiKey}`,
+                    "Content-Type": "application/json",
+                    "Content-Length": Buffer.byteLength(payload),
+                },
+            },
+            (apiRes) => {
+                let responseData = "";
+                apiRes.on("data", (chunk) => (responseData += chunk));
+                apiRes.on("end", () => {
+                    try {
+                        const parsed = JSON.parse(responseData);
+                        if (apiRes.statusCode >= 200 && apiRes.statusCode < 300) {
+                            res.status(200).json({
+                                success: true,
+                                id: parsed.id,
+                            });
+                        } else {
+                            console.error("Resend API error:", parsed);
+                            res.status(apiRes.statusCode || 500).json({
+                                error: parsed.message || "Email send failed",
+                            });
+                        }
+                    } catch (e) {
+                        res.status(500).json({
+                            error: "Failed to parse email service response",
+                        });
                     }
-                } catch (e) {
-                    res.status(500).json({ error: "Failed to parse email service response" });
-                }
-                resolve();
-            });
-        });
-
+                    resolve();
+                });
+            }
+        );
         apiReq.on("error", (err) => {
             console.error("Resend connection error:", err);
-            res.status(500).json({ error: "Connection error" });
+            res.status(500).json({
+                error: "Connection error",
+            });
             resolve();
         });
-
         apiReq.write(payload);
         apiReq.end();
     });

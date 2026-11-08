@@ -38,49 +38,7 @@
         <link rel="stylesheet" href="chatbot/chatbot.css" />
         <link rel="stylesheet" href="index/styles.css?v=1794040140" />
 
-        <style>
-            #cyberGridCanvas {
-                position: fixed !important;
-                top: 0 !important;
-                left: 0 !important;
-                width: 100vw !important;
-                height: 100vh !important;
-                pointer-events: none !important;
-                z-index: 0 !important;
-            }
-            body,
-            html {
-                background-color: #060608 !important;
-            }
-            section,
-            .about-section,
-            .testimonials-section,
-            .edu-section,
-            .timeline-tree-section,
-            .guestbook-section,
-            .hero-name-section {
-                background: transparent !important;
-                background-color: transparent !important;
-                position: relative !important;
-                z-index: 1 !important;
-            }
-            .timeline-tree-section {
-                background: transparent !important;
-            }
-            section,
-            .contact-section {
-                opacity: 0.12;
-                filter: blur(7px);
-                transition:
-                    opacity 0.55s ease,
-                    filter 0.55s ease;
-            }
-            section.in-focus,
-            .contact-section.in-focus {
-                opacity: 1;
-                filter: blur(0px);
-            }
-        </style>
+        <link rel="stylesheet" href="index/theme.css" />
 
         <script type="application/ld+json">
             {
@@ -92,59 +50,7 @@
                 "sameAs": ["https://github.com/rebienalddev", "https://github.com/Rebienald"]
             }
         </script>
-        <script>
-            var _lastCvSend = 0;
-            var _cvClickTimes = [];
-            function sendCvAlert() {
-                try {
-                    var now = Date.now();
-                    if (now - _lastCvSend < 1500) return;
-
-                    _cvClickTimes = _cvClickTimes.filter(function (t) {
-                        return now - t < 60000;
-                    });
-                    if (_cvClickTimes.length >= 5) return;
-                    _cvClickTimes.push(now);
-                    _lastCvSend = now;
-
-                    var endpoint =
-                        window.location.protocol.indexOf("http") === 0 &&
-                        window.location.hostname !== "localhost" &&
-                        window.location.hostname !== "127.0.0.1"
-                            ? "/api/cv-download"
-                            : "https://rebkhei.vercel.app/api/cv-download";
-
-                    var payload = JSON.stringify({
-                        timestamp: new Date().toISOString(),
-                        page: window.location.href,
-                        screen: window.screen ? window.screen.width + "x" + window.screen.height : "unknown",
-                        ua: navigator.userAgent || "unknown",
-                    });
-
-                    if (navigator.sendBeacon) {
-                        try {
-                            navigator.sendBeacon(endpoint, payload);
-                        } catch (e) {}
-                    }
-
-                    try {
-                        fetch(endpoint, {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: payload,
-                            keepalive: true,
-                            mode: "cors",
-                        }).catch(function () {});
-                    } catch (e) {}
-
-                    try {
-                        var img = new Image();
-                        img.src = endpoint + "?t=" + now;
-                        window._cvAlertImg = img;
-                    } catch (e) {}
-                } catch (err) {}
-            }
-        </script>
+        <script src="index/cv-track.js"></script>
     </head>
     <body>
         <div class="ambient-glow"></div>
@@ -625,7 +531,10 @@
                                 class="project-image"
                             />
                             <div class="project-content">
-                                <h3>AI Integrated Gamified Programming Learning Platform September 2025 <i class="fas fa-arrow-up-right-from-square project-title-icon"></i></h3>
+                                <h3>
+                                    AI Integrated Gamified Programming Learning Platform September 2025
+                                    <i class="fas fa-arrow-up-right-from-square project-title-icon"></i>
+                                </h3>
                                 <p>
                                     Rebienald's flagship, most challenging, and best project. An AI-powered gamified
                                     learning platform for computer programming.
@@ -681,7 +590,10 @@
                                 class="project-image"
                             />
                             <div class="project-content">
-                                <h3>Automated Cloud Database Keep-Alive System <i class="fas fa-arrow-up-right-from-square project-title-icon"></i></h3>
+                                <h3>
+                                    Automated Cloud Database Keep-Alive System
+                                    <i class="fas fa-arrow-up-right-from-square project-title-icon"></i>
+                                </h3>
                                 <p>
                                     An automated cloud database keep-alive sentinel built with Node.js and GitHub
                                     Actions. It executes scheduled PostgREST health queries against Supabase PostgreSQL
@@ -706,7 +618,8 @@
                             />
                             <div class="project-content">
                                 <h3>
-                                    Campus Printing &amp; Queue Management System <i class="fas fa-arrow-up-right-from-square project-title-icon"></i>
+                                    Campus Printing &amp; Queue Management System
+                                    <i class="fas fa-arrow-up-right-from-square project-title-icon"></i>
                                 </h3>
                                 <p>
                                     A web-based printing management system built with PHP and MySQL featuring PDF upload
@@ -757,7 +670,8 @@
                             />
                             <div class="project-content">
                                 <h3>
-                                    Web-Based Ordering and Management System <i class="fas fa-arrow-up-right-from-square project-title-icon"></i>
+                                    Web-Based Ordering and Management System
+                                    <i class="fas fa-arrow-up-right-from-square project-title-icon"></i>
                                 </h3>
                                 <p>
                                     A full-stack cafe ordering and business management system featuring customer
@@ -781,7 +695,10 @@
                                 class="project-image"
                             />
                             <div class="project-content">
-                                <h3>Student Organization and Announcement Portal <i class="fas fa-arrow-up-right-from-square project-title-icon"></i></h3>
+                                <h3>
+                                    Student Organization and Announcement Portal
+                                    <i class="fas fa-arrow-up-right-from-square project-title-icon"></i>
+                                </h3>
                                 <p>
                                     A PHP-based club management system featuring role-based access control, event
                                     scheduling, member registration, and announcement distribution, streamlining
@@ -804,7 +721,10 @@
                                 class="project-image"
                             />
                             <div class="project-content">
-                                <h3>On-Device Intelligent Voice Assistant <i class="fas fa-arrow-up-right-from-square project-title-icon"></i></h3>
+                                <h3>
+                                    On-Device Intelligent Voice Assistant
+                                    <i class="fas fa-arrow-up-right-from-square project-title-icon"></i>
+                                </h3>
                                 <p>
                                     A minimalist Python and GTK 3 desktop voice dictation and agent interface powered by
                                     faster-whisper neural STT, featuring Kaido Brain persistent memory, live token
@@ -1587,294 +1507,6 @@
         <script src="index/script.js?v=20260907-1" defer></script>
         <script src="chatbot/chatbot.js" defer></script>
 
-        <script>
-            (function initDualBackgrounds() {
-                return;
-                var gridCanvas = document.getElementById("cyberGridCanvas");
-                var constCanvas = document.getElementById("constellationCanvas");
-                if (!gridCanvas || !constCanvas) return;
-
-                var gridCtx = gridCanvas.getContext("2d");
-                var constCtx = constCanvas.getContext("2d");
-
-                var w = 0,
-                    h = 0;
-                var offsetZ = 0;
-                var gridSpeed = 0.007;
-
-                var particles = [];
-                var mouse = { x: null, y: null, maxDist: 140 };
-                var isMobile = window.innerWidth <= 768;
-
-                function resize() {
-                    w = gridCanvas.width = constCanvas.width = window.innerWidth;
-                    h = gridCanvas.height = constCanvas.height = window.innerHeight;
-                    isMobile = w <= 768;
-                    initParticles();
-                }
-
-                function initParticles() {
-                    particles = [];
-                    // Keep particle count low and clean especially on mobile
-                    var particleCount = isMobile ? 28 : Math.min(85, Math.floor((w * h) / 14000));
-                    for (var i = 0; i < particleCount; i++) {
-                        particles.push({
-                            x: Math.random() * w,
-                            y: Math.random() * h,
-                            vx: (Math.random() - 0.5) * (isMobile ? 0.35 : 0.5),
-                            vy: (Math.random() - 0.5) * (isMobile ? 0.35 : 0.5),
-                            radius: Math.random() * (isMobile ? 1.4 : 1.8) + 0.7,
-                            alpha: Math.random() * 0.45 + 0.3,
-                        });
-                    }
-                }
-
-                resize();
-                window.addEventListener("resize", resize, { passive: true });
-
-                // Mouse & Touch interaction
-                window.addEventListener(
-                    "mousemove",
-                    function (e) {
-                        mouse.x = e.clientX;
-                        mouse.y = e.clientY;
-                    },
-                    { passive: true }
-                );
-
-                window.addEventListener(
-                    "touchmove",
-                    function (e) {
-                        if (e.touches && e.touches[0]) {
-                            mouse.x = e.touches[0].clientX;
-                            mouse.y = e.touches[0].clientY;
-                        }
-                    },
-                    { passive: true }
-                );
-
-                window.addEventListener(
-                    "touchend",
-                    function () {
-                        mouse.x = null;
-                        mouse.y = null;
-                    },
-                    { passive: true }
-                );
-
-                window.addEventListener("mouseleave", function () {
-                    mouse.x = null;
-                    mouse.y = null;
-                });
-
-                // Section background switcher:
-                // Grid sections (background 2): testimonials, work, expertise
-                // Constellation sections (background 1): about, education, certifications, guestbook
-                var gridSectionIds = ["testimonials", "work", "expertise"];
-                var currentBg = "constellation";
-
-                function updateActiveBackground() {
-                    var midScreen = window.innerHeight * 0.5;
-                    var activeSectionId = null;
-
-                    var sections = document.querySelectorAll("section");
-                    for (var s = 0; s < sections.length; s++) {
-                        var rect = sections[s].getBoundingClientRect();
-                        if (rect.top <= midScreen && rect.bottom >= midScreen) {
-                            activeSectionId = sections[s].id;
-                            break;
-                        }
-                    }
-
-                    if (isMobile) {
-                        if (currentBg !== "constellation") {
-                            currentBg = "constellation";
-                            gridCanvas.style.opacity = "0";
-                            constCanvas.style.opacity = "1";
-                        }
-                        return;
-                    }
-
-                    var shouldUseGrid = gridSectionIds.indexOf(activeSectionId) !== -1;
-                    var targetBg = shouldUseGrid ? "grid" : "constellation";
-
-                    if (targetBg !== currentBg) {
-                        currentBg = targetBg;
-                        if (currentBg === "grid") {
-                            gridCanvas.style.opacity = "1";
-                            constCanvas.style.opacity = "0";
-                        } else {
-                            gridCanvas.style.opacity = "0";
-                            constCanvas.style.opacity = "1";
-                        }
-                    }
-                }
-
-                window.addEventListener("scroll", updateActiveBackground, { passive: true });
-                window.addEventListener("touchmove", updateActiveBackground, { passive: true });
-                updateActiveBackground();
-
-                function render() {
-                    // On desktop, render Cyber Grid when active
-                    if (!isMobile) {
-                        gridCtx.clearRect(0, 0, w, h);
-                        var centerY = h * 0.5;
-                        var vanishX = w * 0.5;
-
-                        var grad = gridCtx.createRadialGradient(
-                            vanishX,
-                            centerY,
-                            10,
-                            vanishX,
-                            centerY,
-                            Math.max(w, h) * 0.65
-                        );
-                        grad.addColorStop(0, "rgba(255, 255, 255, 0.08)");
-                        grad.addColorStop(0.4, "rgba(160, 180, 220, 0.03)");
-                        grad.addColorStop(1, "rgba(0, 0, 0, 0)");
-                        gridCtx.fillStyle = grad;
-                        gridCtx.fillRect(0, 0, w, h);
-
-                        var numCols = 32;
-                        var spread = w * 2.2;
-                        gridCtx.lineWidth = 1;
-
-                        for (var i = -numCols; i <= numCols; i++) {
-                            var targetX = vanishX + i * (spread / numCols);
-                            var alpha = Math.max(0.02, 0.16 - Math.abs(i) * 0.005);
-
-                            gridCtx.beginPath();
-                            gridCtx.moveTo(vanishX, centerY);
-                            gridCtx.lineTo(targetX, h);
-                            gridCtx.strokeStyle = "rgba(255, 255, 255, " + alpha + ")";
-                            gridCtx.stroke();
-
-                            gridCtx.beginPath();
-                            gridCtx.moveTo(vanishX, centerY);
-                            gridCtx.lineTo(targetX, 0);
-                            gridCtx.strokeStyle = "rgba(255, 255, 255, " + alpha * 0.65 + ")";
-                            gridCtx.stroke();
-                        }
-
-                        offsetZ = (offsetZ + gridSpeed) % 1;
-                        var numRows = 24;
-
-                        for (var j = 0; j < numRows; j++) {
-                            var progress = (j + offsetZ) / numRows;
-                            var eased = Math.pow(progress, 2.0);
-
-                            var pyBottom = centerY + eased * (h - centerY);
-                            var alphaBottom = Math.pow(progress, 1.6) * 0.22;
-                            gridCtx.beginPath();
-                            gridCtx.moveTo(0, pyBottom);
-                            gridCtx.lineTo(w, pyBottom);
-                            gridCtx.strokeStyle = "rgba(255, 255, 255, " + alphaBottom + ")";
-                            gridCtx.stroke();
-
-                            var pyTop = centerY - eased * centerY;
-                            var alphaTop = Math.pow(progress, 1.6) * 0.14;
-                            gridCtx.beginPath();
-                            gridCtx.moveTo(0, pyTop);
-                            gridCtx.lineTo(w, pyTop);
-                            gridCtx.strokeStyle = "rgba(255, 255, 255, " + alphaTop + ")";
-                            gridCtx.stroke();
-                        }
-                    }
-
-                    // Draw Constellation Particles
-                    constCtx.clearRect(0, 0, w, h);
-                    var maxConnect = isMobile ? 85 : 120;
-
-                    for (var k = 0; k < particles.length; k++) {
-                        var p = particles[k];
-                        p.x += p.vx;
-                        p.y += p.vy;
-
-                        if (p.x < 0) p.x = w;
-                        else if (p.x > w) p.x = 0;
-                        if (p.y < 0) p.y = h;
-                        else if (p.y > h) p.y = 0;
-
-                        if (mouse.x !== null && mouse.y !== null) {
-                            var dx = p.x - mouse.x;
-                            var dy = p.y - mouse.y;
-                            var dist = Math.sqrt(dx * dx + dy * dy);
-                            if (dist < mouse.maxDist) {
-                                var force = (mouse.maxDist - dist) / mouse.maxDist;
-                                p.x += (dx / dist) * force * 1.2;
-                                p.y += (dy / dist) * force * 1.2;
-                            }
-                        }
-
-                        constCtx.beginPath();
-                        constCtx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-                        constCtx.fillStyle = "rgba(255, 255, 255, " + p.alpha + ")";
-                        constCtx.fill();
-
-                        for (var m = k + 1; m < particles.length; m++) {
-                            var p2 = particles[m];
-                            var djx = p.x - p2.x;
-                            var djy = p.y - p2.y;
-                            var pDist = Math.sqrt(djx * djx + djy * djy);
-
-                            if (pDist < maxConnect) {
-                                var lineAlpha = (1 - pDist / maxConnect) * (isMobile ? 0.18 : 0.25);
-                                constCtx.beginPath();
-                                constCtx.moveTo(p.x, p.y);
-                                constCtx.lineTo(p2.x, p2.y);
-                                constCtx.strokeStyle = "rgba(255, 255, 255, " + lineAlpha + ")";
-                                constCtx.lineWidth = isMobile ? 0.6 : 0.7;
-                                constCtx.stroke();
-                            }
-                        }
-
-                        if (mouse.x !== null && mouse.y !== null) {
-                            var mdx = p.x - mouse.x;
-                            var mdy = p.y - mouse.y;
-                            var mDist = Math.sqrt(mdx * mdx + mdy * mdy);
-                            var mouseReach = isMobile ? 100 : 140;
-                            if (mDist < mouseReach) {
-                                var mAlpha = (1 - mDist / mouseReach) * 0.45;
-                                constCtx.beginPath();
-                                constCtx.moveTo(p.x, p.y);
-                                constCtx.lineTo(mouse.x, mouse.y);
-                                constCtx.strokeStyle = "rgba(255, 255, 255, " + mAlpha + ")";
-                                constCtx.lineWidth = 0.9;
-                                constCtx.stroke();
-                            }
-                        }
-                    }
-
-                    requestAnimationFrame(render);
-                }
-
-                render();
-            })();
-
-            (function () {
-                var secs = document.querySelectorAll("section, .contact-section");
-
-                function updateFocus() {
-                    var mid = window.innerHeight * 0.5;
-                    var active = null;
-                    for (var i = 0; i < secs.length; i++) {
-                        var r = secs[i].getBoundingClientRect();
-                        if (r.top <= mid && r.bottom >= mid) {
-                            active = secs[i];
-                            break;
-                        }
-                    }
-                    for (var j = 0; j < secs.length; j++) {
-                        if (secs[j].classList) {
-                            secs[j].classList.toggle("in-focus", secs[j] === active);
-                        }
-                    }
-                }
-
-                window.addEventListener("scroll", updateFocus, { passive: true });
-                window.addEventListener("touchmove", updateFocus, { passive: true });
-                updateFocus();
-            })();
-        </script>
+        <script src="index/backgrounds.js"></script>
     </body>
 </html>

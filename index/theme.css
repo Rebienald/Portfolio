@@ -1,0 +1,41 @@
+#cyberGridCanvas {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    pointer-events: none !important;
+    z-index: 0 !important;
+}
+body,
+html {
+    background-color: #060608 !important;
+}
+section,
+.about-section,
+.testimonials-section,
+.edu-section,
+.timeline-tree-section,
+.guestbook-section,
+.hero-name-section {
+    background: transparent !important;
+    background-color: transparent !important;
+    position: relative !important;
+    z-index: 1 !important;
+}
+.timeline-tree-section {
+    background: transparent !important;
+}
+section,
+.contact-section {
+    opacity: 0.12;
+    filter: blur(7px);
+    transition:
+        opacity 0.55s ease,
+        filter 0.55s ease;
+}
+section.in-focus,
+.contact-section.in-focus {
+    opacity: 1;
+    filter: blur(0px);
+}
