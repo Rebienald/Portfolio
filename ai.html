@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Rebienald Khei Carpio</title>
+        <meta name="robots" content="noindex, nofollow" />
+        <link rel="icon" type="image/png" href="images/logo.png" />
+
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800;900&family=Great+Vibes&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+        <link rel="stylesheet" href="index/styles.css" />
+        <link rel="stylesheet" href="index/theme.css" />
+        <link rel="stylesheet" href="chatbot/chatbot.css" />
+    </head>
+    <body class="ai-page">
+        <nav>
+            <a href="index.html" class="logo">Reb.Dev</a>
+            <ul class="nav-links">
+                <li><a href="index.html#about">About</a></li>
+                <li><a href="index.html#testimonials">Testimonials</a></li>
+                <li><a href="index.html#work">Projects</a></li>
+                <li><a href="index.html#expertise">Expertise</a></li>
+                <li><a href="index.html#education">Education</a></li>
+                <li><a href="index.html#certifications">Certificates</a></li>
+                <li class="nav-divider" aria-hidden="true"></li>
+                <li>
+                    <a href="ai.html" class="nav-ai-link active">AI Assistant</a>
+                </li>
+            </ul>
+            <div class="hamburger" onclick="toggleMobileMenu()"><i class="fas fa-bars"></i></div>
+        </nav>
+
+        <div class="mobile-menu" id="mobileMenu">
+            <div class="close-menu" onclick="toggleMobileMenu()"><i class="fas fa-times"></i></div>
+            <a href="index.html#about" onclick="toggleMobileMenu()">About</a>
+            <a href="index.html#testimonials" onclick="toggleMobileMenu()">Testimonials</a>
+            <a href="index.html#work" onclick="toggleMobileMenu()">Projects</a>
+            <a href="index.html#expertise" onclick="toggleMobileMenu()">Expertise</a>
+            <a href="index.html#education" onclick="toggleMobileMenu()">Education</a>
+            <a href="index.html#certifications" onclick="toggleMobileMenu()">Certificates</a>
+            <div class="mobile-menu-divider" aria-hidden="true"></div>
+            <a href="ai.html" onclick="toggleMobileMenu()">AI Assistant</a>
+        </div>
+
+        <script>
+            function toggleMobileMenu() {
+                const menu = document.getElementById("mobileMenu");
+                const isActive = menu.classList.toggle("active");
+                document.body.style.overflow = isActive ? "hidden" : "";
+            }
+        </script>
+        <script src="chatbot/chatbot.js" defer></script>
+    </body>
+</html>

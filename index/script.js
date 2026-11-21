@@ -2391,6 +2391,18 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
     });
+    document.addEventListener("click", (e) => {
+        const certCard = e.target.closest(".cert-card");
+        if (!certCard) return;
+        const certImg = certCard.querySelector(".cert-img");
+        if (!certImg || !certImg.getAttribute("src")) return;
+        const title = certCard.querySelector(".cert-info h4");
+        const issuer = certCard.querySelector(".cert-info p");
+        const caption = [title && title.textContent.trim(), issuer && issuer.textContent.trim()]
+            .filter(Boolean)
+            .join(" — ");
+        window.openSamaiLightbox(certImg.src, caption);
+    });
     window.addEventListener("keydown", (e) => {
         if (e.key === "Escape") {
             if (lightbox && lightbox.classList.contains("active")) {

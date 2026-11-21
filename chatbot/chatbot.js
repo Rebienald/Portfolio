@@ -1,5 +1,8 @@
 (function () {
-    const CHAT_BACKEND_URL = "/api/chat";
+    const CHAT_BACKEND_URL =
+        location.hostname === "localhost" || location.hostname === "127.0.0.1"
+            ? "https://rebkhei.vercel.app/api/chat"
+            : "/api/chat";
     const MAX_MESSAGES_PER_WINDOW = 8;
     const RATE_LIMIT_WINDOW_MS = 6e4;
     const chatTimestamps = [];
@@ -48,15 +51,8 @@
         <div id="chatbotWindow" class="chatbot-window" role="dialog" aria-labelledby="chatHeaderTitle">
         <div class="chat-header">
         <div class="chat-header-info">
-        <div class="chat-avatar">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"></rect><circle cx="12" cy="5" r="2"></circle><path d="M12 7v4"></path><line x1="8" y1="16" x2="8.01" y2="16"></line><line x1="16" y1="16" x2="16.01" y2="16"></line></svg>
-        </div>
         <div class="chat-title-group">
         <h4 id="chatHeaderTitle">Rebienald AI Assistant</h4>
-        <div class="chat-status">
-        <span class="status-dot"></span>
-        <span>Online</span>
-        </div>
         </div>
         </div>
         <div class="chat-header-actions">
@@ -86,12 +82,6 @@
         Hi! I'm Rebienald's AI Assistant. Ask me anything about Rebienald's projects, experience, education, or contact info!
         </div>
         </div>
-        </div>
-
-        <div class="chat-suggestions">
-        <button class="suggestion-chip" data-query="What are Rebienald's key skills?">💡 Key Skills</button>
-        <button class="suggestion-chip" data-query="Tell me about SamAI and PrintHub.">🚀 Projects</button>
-        <button class="suggestion-chip" data-query="How can I contact Rebienald?">📬 Contact Info</button>
         </div>
 
         <form id="chatInputForm" class="chat-input-form">

@@ -142,7 +142,7 @@ module.exports = async function handler(req, res) {
   <title>New Contact Form Message</title>
 </head>
 <body style="margin:0;padding:24px;background-color:#ffffff;font-family:Arial,Helvetica,sans-serif;color:#111111;font-size:14px;line-height:1.5;">
-  <div style="max-width:550px;margin:0 auto;border:1px solid #e0e0e0;border-radius:4px;padding:20px;">
+  <div style="max-width:550px;margin:0 auto;border:1px solid #e0e0e0;border-radius: 0;padding:20px;">
     <h3 style="margin-top:0;margin-bottom:16px;font-size:16px;font-weight:bold;color:#000000;border-bottom:1px solid #e0e0e0;padding-bottom:8px;">
       New Contact Form Message
     </h3>
@@ -161,7 +161,7 @@ module.exports = async function handler(req, res) {
       </tr>
     </table>
     <div style="font-weight:bold;font-size:13px;margin-bottom:6px;color:#333333;">Message:</div>
-    <div style="padding:12px;border:1px solid #e0e0e0;background-color:#fafafa;border-radius:4px;white-space:pre-wrap;font-size:13px;color:#111111;margin-bottom:16px;line-height:1.5;">${safeMessage}</div>
+    <div style="padding:12px;border:1px solid #e0e0e0;background-color:#fafafa;border-radius: 0;white-space:pre-wrap;font-size:13px;color:#111111;margin-bottom:16px;line-height:1.5;">${safeMessage}</div>
     <div style="font-size:12px;color:#666666;border-top:1px solid #eeeeee;padding-top:10px;">
       Automated notification from rebkhei.vercel.app
     </div>

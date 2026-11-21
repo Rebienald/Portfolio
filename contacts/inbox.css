@@ -24,7 +24,7 @@
 }
 ::-webkit-scrollbar-thumb {
     background: rgba(212, 175, 55, 0.3);
-    border-radius: 4px;
+    border-radius: 0;
 }
 body {
     background-color: var(--bg);
@@ -88,7 +88,7 @@ body {
     background: var(--card-bg);
     border: 1px solid var(--border);
     cursor: pointer;
-    border-radius: 6px;
+    border-radius: 0;
     transition: all 0.2s ease;
     white-space: nowrap;
 }
@@ -138,7 +138,7 @@ body {
     color: #060608;
     background: #d4af37;
     padding: 0.25rem 0.65rem;
-    border-radius: 100px;
+    border-radius: 0;
     white-space: nowrap;
 }
 .toolbar {
@@ -155,7 +155,7 @@ body {
     border: 1px solid var(--border);
     padding: 0 0.75rem;
     flex: 1 1 200px;
-    border-radius: 100px;
+    border-radius: 0;
     height: 34px;
 }
 .search-box i {
@@ -183,7 +183,7 @@ body {
     background: var(--card-bg);
     color: var(--text-secondary);
     border: 1px solid var(--border);
-    border-radius: 100px;
+    border-radius: 0;
     cursor: pointer;
     transition: all 0.2s ease;
     white-space: nowrap;
@@ -200,7 +200,7 @@ body {
     margin-left: auto;
 }
 .action-group .btn-sharp {
-    border-radius: 100px;
+    border-radius: 0;
     height: 34px;
     padding: 0 0.85rem;
     font-size: 0.8rem;
@@ -213,7 +213,7 @@ body {
 .msg-card {
     background: var(--card-bg);
     border: 1px solid var(--border);
-    border-radius: 12px;
+    border-radius: 0;
     padding: 1.1rem 1.25rem;
     transition: all 0.2s ease;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
@@ -269,7 +269,7 @@ body {
     font-size: 0.68rem;
     font-weight: 800;
     padding: 0.15rem 0.5rem;
-    border-radius: 4px;
+    border-radius: 0;
     letter-spacing: 0.03em;
     text-transform: uppercase;
 }
@@ -312,7 +312,7 @@ body {
 .empty-state {
     background: var(--card-bg);
     border: 1px dashed var(--border);
-    border-radius: 12px;
+    border-radius: 0;
     padding: 3rem 1.5rem;
     text-align: center;
     color: var(--muted);
