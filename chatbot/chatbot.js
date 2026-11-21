@@ -94,7 +94,74 @@
         `;
         document.body.appendChild(container);
     }
+    
+    const BANNED_PROJECT_MAPPINGS = [
+        ["Kaido / OpenWhisper Desktop Voice Agent Interface", "On-Device Intelligent Voice Assistant"],
+        ["OpenWhisper Desktop Voice Agent Interface", "On-Device Intelligent Voice Assistant"],
+        ["Kaido Toggle", "Toggle"],
+        ["Kaido Brain Memory Engine", "Persistent Memory Engine"],
+        ["Kaido Brain", "Persistent Memory Engine"],
+        ["Kaido", "On-Device Intelligent Voice Assistant"],
+        ["Club Management System / Club Hub / ClubHub", "Student Organization and Announcement Portal"],
+        ["Club Management System", "Student Organization and Announcement Portal"],
+        ["Club Hub", "Student Organization and Announcement Portal"],
+        ["ClubHub", "Student Organization and Announcement Portal"],
+        ["PortPing / Keep-Alive Sentinel", "Automated Cloud Database Keep-Alive System"],
+        ["Keep-Alive Sentinel", "Automated Cloud Database Keep-Alive System"],
+        ["PortPing", "Automated Cloud Database Keep-Alive System"],
+        ["Port Ping", "Automated Cloud Database Keep-Alive System"],
+        ["PrintHub / Print Portal / PrintPortal", "Campus Printing & Queue Management System"],
+        ["Print Portal", "Campus Printing & Queue Management System"],
+        ["PrintPortal", "Campus Printing & Queue Management System"],
+        ["PrintHub", "Campus Printing & Queue Management System"],
+        ["TechnoBytes Photobooth", "Web-Based Digital Photobooth and Photo Customization System"],
+        ["TechnoBytes", "Web-Based Digital Photobooth and Photo Customization System"],
+        ["TechnoPhotobooth", "Web-Based Digital Photobooth and Photo Customization System"],
+        ["Cup Of Story", "Web-Based Ordering and Management System"],
+        ["Cup of Story", "Web-Based Ordering and Management System"],
+        ["CupOfStory", "Web-Based Ordering and Management System"],
+        ["cupofstory", "Web-Based Ordering and Management System"],
+        ["Cup Of Coffee", "Web-Based Ordering and Management System"],
+        ["Cup of Coffee", "Web-Based Ordering and Management System"],
+        ["CupOfCoffee", "Web-Based Ordering and Management System"],
+        ["cupofcoffee", "Web-Based Ordering and Management System"],
+        ["AI Document Tutoring & Quiz Platform (SamAI)", "AI Document Tutoring & Quiz Platform"],
+        ["AI Integrated Gamified Programming Learning Platform (InfoWhiz)", "AI Integrated Gamified Programming Learning Platform"],
+        ["SAM AI", "AI Document Tutoring & Quiz Platform"],
+        ["Sam AI", "AI Document Tutoring & Quiz Platform"],
+        ["SamAI", "AI Document Tutoring & Quiz Platform"],
+        ["InfoWhiz", "AI Integrated Gamified Programming Learning Platform"],
+        ["Info Whiz", "AI Integrated Gamified Programming Learning Platform"],
+        ["Nas.IO Bot", "Automated Cloud Database Keep-Alive System"],
+        ["Nas.IO", "Automated Cloud Database Keep-Alive System"],
+        ["NAS.IO", "Automated Cloud Database Keep-Alive System"],
+        ["nas.io", "Automated Cloud Database Keep-Alive System"],
+        ["OpenWhisper", "On-Device Intelligent Voice Assistant"],
+        ["openwhisper", "On-Device Intelligent Voice Assistant"],
+    ].sort((a, b) => b[0].length - a[0].length);
+
+    function sanitizeOutgoingAndIncomingText(text) {
+        let normalized = String(text || "");
+        for (const [legacyName, exactTitle] of BANNED_PROJECT_MAPPINGS) {
+            const pattern = legacyName
+                .replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+                .replace(/\//g, "\\s*\\/\\s*");
+            normalized = normalized.replace(new RegExp(pattern, "gi"), exactTitle);
+        }
+        return normalized
+            .replace(/\s*\([^)]*(?:Kaido|OpenWhisper|SamAI|Sam\\s*AI|InfoWhiz|Info\\s*Whiz|PortPing|Sentinel|Keep-Alive|PrintHub|Print\\s*Portal|ClubHub|Club\\s*Hub|Cup\\s*Of\\s*Story|cupofstory|Cup\\s*Of\\s*Coffee|cupofcoffee|TechnoBytes|Nas\\.IO)[^)]*\)/gi, "")
+            .replace(/\s*\(formerly[^)]*\)/gi, "")
+            .replace(/\b7\s+testimonials?\b/gi, "6 testimonials")
+            .replace(/\bseven\s+testimonials?\b/gi, "6 testimonials")
+            .replace(/\ban\s+(?:software\s+)?engineers?\b/gi, (m) => m[0] === m[0].toUpperCase() ? "A developer" : "a developer")
+            .replace(/\ban\s+developer\b/gi, "a developer")
+            .replace(/\bsoftware\s+engineers?\b/gi, (m) => m[0] === m[0].toUpperCase() ? "Developer" : "developer")
+            .replace(/\bengineers?\b/gi, (m) => m[0] === m[0].toUpperCase() ? "Developer" : "developer")
+            .replace(/\bengineering\b/gi, (m) => m[0] === m[0].toUpperCase() ? "Development" : "development");
+    }
+
     function parseMarkdown(text) {
+        text = sanitizeOutgoingAndIncomingText(text);
         if (!text) return "";
         let raw = text.trim();
         raw = raw
@@ -207,7 +274,7 @@
         const bubbleDiv = document.createElement("div");
         bubbleDiv.className = "msg-bubble";
         if (sender === "user") {
-            bubbleDiv.textContent = content;
+            bubbleDiv.textContent = sanitizeOutgoingAndIncomingText(content);
         } else {
             bubbleDiv.innerHTML = parseMarkdown(content);
             playChatbotReplySound();
@@ -240,39 +307,39 @@
     const LOCAL_KNOWLEDGE = {
         best: `🏆 **Rebienald's Top Flagship Projects**:
 
-1. **InfoWhiz** - AI-powered gamified learning platform. Won **Best in Capstone Development** & **Best in System Development** at STI College Bacoor.
-2. **SamAI** - Advanced AI study companion with custom **RAG pipeline**, multi-LLM orchestration (Gemini/Groq), and PHP 8 PSR-4 SQLite architecture.
-3. **Cup Of Story** - Full-stack cafe ordering platform with dynamic cart state, responsive UI, and live ordering.`,
-        samai: `🚀 **SamAI** (Flagship AI System - July 2026):
+1. **AI Integrated Gamified Programming Learning Platform** - AI-powered gamified learning platform. Won **Best in Capstone Development** & **Best in System Development** at STI College Bacoor.
+2. **AI Document Tutoring & Quiz Platform** - Advanced AI study companion with custom **RAG pipeline**, multi-LLM orchestration (Gemini/Groq), and PHP 8 PSR-4 SQLite architecture.
+3. **Web-Based Ordering and Management System** - Full-stack cafe ordering platform with dynamic cart state, responsive UI, and live ordering.`,
+        samai: `🚀 **AI Document Tutoring & Quiz Platform** (Flagship AI System - July 2026):
 
 A high-performance AI study companion and document tutor with full **RAG (Retrieval-Augmented Generation)**:
 - 🧠 **Multi-LLM Orchestration**: Custom API wrappers for **Google Gemini & Groq** with key rotation and rate-limit failover.
 - ⚡ **Production Architecture**: Strict **PHP 8 PSR-4 OOP** with embedded **SQLite FTS5 BM25 search** and PDF parsing.
 - 🔒 *Note: Source code is private for security.*`,
-        cupofstory: `☕ **Cup Of Story** (Full-Stack Cafe Ordering System):
+        cupofstory: `☕ **Web-Based Ordering and Management System** (Full-Stack Cafe Ordering System):
 
 - 🎨 **Modern Experience**: Responsive UI with semantic HTML5, CSS3 glassmorphism, and Vanilla JavaScript.
 - 🛒 **Core Features**: Real-time cart state management, dynamic pricing, and modal-based order customization.
-- 🌐 **Live Demo**: [cupofstory.infinityfreeapp.com](http://cupofstory.infinityfreeapp.com/)`,
-        infowhiz: `👑 **InfoWhiz** (Award-Winning Flagship Project):
+- 🌐 **Live Demo**: [Open Demo](http://cupofstory.infinityfreeapp.com/)`,
+        infowhiz: `👑 **AI Integrated Gamified Programming Learning Platform** (Award-Winning Flagship Project):
 
 An AI-powered gamified learning platform for beginner programmers (Java, C#, PHP, JS):
 - 🏆 **Double Award Winner**: **Best in Capstone Development** & **Best in System Development** at STI College Bacoor.
 - 🎮 **Features**: Real-time coding games (CheeseWhiz, CodeDefuse), in-browser IDE sandbox, and interactive AI debugger.
-- 🌐 **Live Demo**: [infowhiz.hstn.me](https://infowhiz.hstn.me/Pages/index)`,
-        testimonials: `🌟 **Peer Testimonials & Endorsements** (100% 10/10 Rating across 7 Peers):
+- 🌐 **Live Demo**: [Open Demo](https://infowhiz.hstn.me/Pages/index)`,
+        testimonials: `🌟 **Peer Testimonials & Endorsements** (100% 10/10 Rating across 6 Peers):
 
 - **Charles**: *"Highly skilled back-end developer, reliable teammate... always delivers quality work on time."*
 - **John**: *"Super smooth transaction, mabilis ang service, very transparent. Highly recommended!"*
 - **Nuñez**: *"Very efficient that makes me strive to be efficient as well."*
 - **Engr. Jay**: *"Contributes majority of the ideas."*
 Reb consistently earns 10/10 marks for velocity, clear communication, and high-impact delivery.`,
-        portping: `⚡ **PortPing** (Cloud Keep-Alive Sentinel):
+        portping: `⚡ **Automated Cloud Database Keep-Alive System**:
 
 An automated keep-alive system ensuring 24/7 cloud database availability:
 - 📡 **Automation**: Scheduled **GitHub Actions** cron running a **Node.js** ping client against PostgreSQL/Supabase REST endpoints.
 - 🛡️ **Zero Downtime**: Prevents Supabase cloud projects from auto-pausing during idle periods.
-- 🔗 **Repo**: [rebienalddev.github.io/PortPing](https://rebienalddev.github.io/PortPing/)`,
+- 🔗 **Repository**: [View Source](https://rebienalddev.github.io/PortPing/)`,
         portfolio: `🎨 **Rebienald's Portfolio Architecture**:
 
 - ⚡ **Zero Framework Bloat**: Pure **Vanilla JS ES6+** and **CSS3 Design Tokens** with 60 FPS Canvas 2D graphics.
@@ -281,7 +348,10 @@ An automated keep-alive system ensuring 24/7 cloud database availability:
     };
     function getSmartLocalAnswer(query) {
         if (!query) return null;
-        const q = query.toLowerCase();
+        const q = query.toLowerCase().trim();
+        if (/^(hi|hello|hey|kamusta|musta|good day|greetings)[!., ]*$/i.test(q)) {
+            return "Hello! \uD83D\uDC4B I am the official AI Portfolio Ambassador for **Carpio Rebienald Khei (Reb)**, a full-stack developer and IT student at Cavite State University.\n\nFeel free to ask about Reb's flagship projects, technical skills, or 6 peer testimonials!";
+        }
         if (
             q.includes("best") ||
             q.includes("top project") ||
@@ -335,7 +405,6 @@ An automated keep-alive system ensuring 24/7 cloud database availability:
             q.includes("charles") ||
             q.includes("john") ||
             q.includes("nuñez") ||
-            q.includes("samantha") ||
             q.includes("nicole") ||
             q.includes("eldrain")
         ) {
@@ -352,12 +421,12 @@ An automated keep-alive system ensuring 24/7 cloud database availability:
         if (combined.includes("infowhiz") || combined.includes("cheesewiz") || combined.includes("codedefuse")) {
             chips = [
                 {
-                    label: "🎮 InfoWhiz Games",
-                    query: "Tell me about the interactive games in InfoWhiz.",
+                    label: "🎮 Learning Platform Games",
+                    query: "Tell me about the interactive games in AI Integrated Gamified Programming Learning Platform.",
                 },
                 {
-                    label: "🤖 SamAI RAG Project",
-                    query: "How does SamAI work and what is its RAG pipeline?",
+                    label: "🤖 AI Document Tutoring RAG Project",
+                    query: "How does AI Document Tutoring & Quiz Platform work and what is its RAG pipeline?",
                 },
                 {
                     label: "📬 Contact Rebienald",
@@ -368,11 +437,11 @@ An automated keep-alive system ensuring 24/7 cloud database availability:
             chips = [
                 {
                     label: "⚡ Multi-LLM Failover",
-                    query: "How does SamAI handle key rotation and rate limits?",
+                    query: "How does AI Document Tutoring & Quiz Platform handle key rotation and rate limits?",
                 },
                 {
-                    label: "🏆 InfoWhiz Awards",
-                    query: "What awards did InfoWhiz win at STI College?",
+                    label: "🏆 Platform Awards",
+                    query: "What awards did AI Integrated Gamified Programming Learning Platform win at STI College?",
                 },
                 {
                     label: "💼 Tech Skills Matrix",
@@ -382,8 +451,8 @@ An automated keep-alive system ensuring 24/7 cloud database availability:
         } else if (combined.includes("portping") || combined.includes("sentinel") || combined.includes("supabase")) {
             chips = [
                 {
-                    label: "📜 PrintPortal System",
-                    query: "How does PrintPortal calculate prices and detect color?",
+                    label: "📜 Campus Printing System",
+                    query: "How does Campus Printing & Queue Management System calculate prices and detect color?",
                 },
                 {
                     label: "🌟 Peer Testimonials",
@@ -401,12 +470,12 @@ An automated keep-alive system ensuring 24/7 cloud database availability:
         ) {
             chips = [
                 {
-                    label: "📷 TechnoPhotobooth",
-                    query: "What is TechnoBytes Photobooth?",
+                    label: "📷 Digital Photobooth",
+                    query: "What is Web-Based Digital Photobooth and Photo Customization System?",
                 },
                 {
-                    label: "☕ Cup Of Story",
-                    query: "Tell me about the Cup Of Story web app.",
+                    label: "☕ Ordering System",
+                    query: "Tell me about the Web-Based Ordering and Management System web app.",
                 },
                 {
                     label: "📬 Contact Info",
@@ -423,15 +492,15 @@ An automated keep-alive system ensuring 24/7 cloud database availability:
             chips = [
                 {
                     label: "☕ 3-Tier Workflow",
-                    query: "How does the customer, barista, and owner workflow work in Cup Of Story?",
+                    query: "How does the customer, barista, and owner workflow work in Web-Based Ordering and Management System?",
                 },
                 {
                     label: "🧾 Receipt Engine",
-                    query: "How does Cup Of Story generate client receipts with HTML2Canvas?",
+                    query: "How does Web-Based Ordering and Management System generate client receipts with HTML2Canvas?",
                 },
                 {
                     label: "🌐 Live Web App",
-                    query: "What is the live URL of Cup Of Story and how is its database set up?",
+                    query: "What is the live URL of Web-Based Ordering and Management System and how is its database set up?",
                 },
             ];
         } else {
@@ -496,17 +565,30 @@ An automated keep-alive system ensuring 24/7 cloud database availability:
                 message: query,
                 history: conversationHistory.slice(-8),
             };
-            const response = await fetch(CHAT_BACKEND_URL, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(payload),
-            });
+            let response;
+            for (let attempt = 0; attempt < 2; attempt++) {
+                try {
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 12000);
+                    response = await fetch(CHAT_BACKEND_URL, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(payload),
+                        signal: controller.signal,
+                    });
+                    clearTimeout(timeoutId);
+                    if (response && response.ok) break;
+                } catch (e) {
+                    if (attempt === 1) throw e;
+                    await new Promise((r) => setTimeout(r, 600));
+                }
+            }
             removeTypingIndicator();
             if (response.ok) {
                 const data = await response.json();
-                const botReply = data.response || "No response received.";
+                const botReply = sanitizeOutgoingAndIncomingText(data.response || "No response received.");
                 appendMessage("bot", botReply);
                 conversationHistory.push({
                     role: "assistant",
@@ -517,12 +599,28 @@ An automated keep-alive system ensuring 24/7 cloud database availability:
                 }
                 updateSuggestionChips(query, botReply);
             } else {
-                appendMessage("bot", "Sorry, unable to process your request at the moment. Please try again.");
+                const localFallback = getSmartLocalAnswer(query);
+                if (localFallback) {
+                    const fallbackReply = sanitizeOutgoingAndIncomingText(localFallback);
+                    appendMessage("bot", fallbackReply);
+                    conversationHistory.push({ role: "assistant", content: fallbackReply });
+                    updateSuggestionChips(query, fallbackReply);
+                } else {
+                    appendMessage("bot", "I am having a brief moment connecting to the AI engine. Feel free to ask about Rebienald's projects, skills, or contact info!");
+                }
             }
         } catch (err) {
             console.error("Chat API error:", err);
             removeTypingIndicator();
-            appendMessage("bot", "Connection issue contacting AI server. Please check your connection.");
+            const localFallback = getSmartLocalAnswer(query);
+            if (localFallback) {
+                const fallbackReply = sanitizeOutgoingAndIncomingText(localFallback);
+                appendMessage("bot", fallbackReply);
+                conversationHistory.push({ role: "assistant", content: fallbackReply });
+                updateSuggestionChips(query, fallbackReply);
+            } else {
+                appendMessage("bot", "I am having a brief moment connecting to the AI engine. Feel free to ask about Rebienald's projects, skills, or contact info!");
+            }
         } finally {
             if (sendBtn) sendBtn.disabled = false;
             if (input) {

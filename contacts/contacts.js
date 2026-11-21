@@ -225,3 +225,22 @@ document.addEventListener("keydown", (e) => {
         }
     }
 });
+
+(function initMuteToggle() {
+    const muteBtn = document.getElementById("muteToggleBtn");
+    if (!muteBtn) return;
+    const isMuted = () => localStorage.getItem("portfolio_sound_muted") === "true";
+    const updateUI = () => {
+        const muted = isMuted();
+        const icon = muteBtn.querySelector("i");
+        muteBtn.classList.toggle("muted", muted);
+        if (icon) icon.className = muted ? "fas fa-volume-xmark" : "fas fa-volume-high";
+        muteBtn.setAttribute("title", muted ? "Sound: MUTED (Click to unmute)" : "Sound: ON (Click to mute)");
+        muteBtn.setAttribute("aria-label", muted ? "Sound is muted" : "Toggle Sound Effects");
+    };
+    muteBtn.addEventListener("click", () => {
+        localStorage.setItem("portfolio_sound_muted", isMuted() ? "false" : "true");
+        updateUI();
+    });
+    updateUI();
+})();

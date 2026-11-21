@@ -104,6 +104,14 @@
                 </li>
             </ul>
             <div class="hamburger" onclick="toggleMobileMenu()"><i class="fas fa-bars"></i></div>
+            <button
+                id="muteToggleBtn"
+                class="nav-mute-btn"
+                title="Sound: ON (Click to mute)"
+                aria-label="Toggle Sound Effects"
+            >
+                <i class="fas fa-volume-high"></i>
+            </button>
         </nav>
 
         <div class="mobile-menu" id="mobileMenu">
@@ -275,12 +283,11 @@
         <section id="testimonials" class="testimonials-section">
             <div class="container">
                 <div class="section-header reveal" style="margin-bottom: 1rem">
-                    <span class="section-eyebrow">WHAT TEAMMATES & COLLABORATORS SAY</span>
                     <h2 class="text-gradient">Peer Testimonials</h2>
                 </div>
 
-                <div class="testimonial-deck-viewport reveal">
-                    <div class="testimonial-deck-stack" id="testimonialDeck">
+                <div class="testimonials-grid reveal">
+                    <div class="testimonials-grid-group">
                         <div class="testimonial-deck-card" data-index="0">
                             <div class="testi-card-header">
                                 <div class="testi-avatar">C</div>
@@ -293,11 +300,10 @@
                                 </div>
                             </div>
                             <div class="testi-card-body">
-                                <i class="fas fa-quote-left testi-quote-icon"></i>
                                 <p>
-                                    “Reb is a highly skilled back-end developer, a reliable teammate, and a great
+                                    Reb is a highly skilled back-end developer, a reliable teammate, and a great
                                     friend. He communicates clearly, takes initiative on projects like our Discord bot
-                                    and website, and always delivers quality work on time.”
+                                    and website, and always delivers quality work on time.
                                 </p>
                             </div>
                         </div>
@@ -314,10 +320,9 @@
                                 </div>
                             </div>
                             <div class="testi-card-body">
-                                <i class="fas fa-quote-left testi-quote-icon"></i>
                                 <p>
-                                    “Super smooth ng transaction and very easy to talk to. Maayos and mabilis yung
-                                    service, and very transparent from start to finish. Highly recommended!”
+                                    Super smooth ng transaction and very easy to talk to. Maayos and mabilis yung
+                                    service, and very transparent from start to finish. Highly recommended!
                                 </p>
                             </div>
                         </div>
@@ -334,8 +339,7 @@
                                 </div>
                             </div>
                             <div class="testi-card-body">
-                                <i class="fas fa-quote-left testi-quote-icon"></i>
-                                <p>“Very efficient that makes me strive to be efficient as well.”</p>
+                                <p>Very efficient that makes me strive to be efficient as well.</p>
                             </div>
                         </div>
 
@@ -351,19 +355,11 @@
                                 </div>
                             </div>
                             <div class="testi-card-body">
-                                <i class="fas fa-quote-left testi-quote-icon"></i>
-                                <p>“Contributes majority of the ideas”</p>
+                                <p>Contributes majority of the ideas</p>
                             </div>
                         </div>
 
-                        
-                            <div class="testi-card-body">
-                                <i class="fas fa-quote-left testi-quote-icon"></i>
-                                <p>“Responsible and hardworking.”</p>
-                            </div>
-                        </div>
-
-                        <div class="testimonial-deck-card" data-index="5">
+                        <div class="testimonial-deck-card" data-index="4">
                             <div class="testi-card-header">
                                 <div class="testi-avatar">N</div>
                                 <div class="testi-user-info">
@@ -375,12 +371,11 @@
                                 </div>
                             </div>
                             <div class="testi-card-body">
-                                <i class="fas fa-quote-left testi-quote-icon"></i>
-                                <p>“Very productive.”</p>
+                                <p>Very productive.</p>
                             </div>
                         </div>
 
-                        <div class="testimonial-deck-card" data-index="6">
+                        <div class="testimonial-deck-card" data-index="5">
                             <div class="testi-card-header">
                                 <div class="testi-avatar">E</div>
                                 <div class="testi-user-info">
@@ -392,11 +387,19 @@
                                 </div>
                             </div>
                             <div class="testi-card-body">
-                                <i class="fas fa-quote-left testi-quote-icon"></i>
-                                <p>“Fantastic.”</p>
+                                <p>Fantastic.</p>
                             </div>
                         </div>
                     </div>
+                    <p class="testimonials-note">
+                        These are testimonials from some of the people I have had the opportunity to work with. With my
+                        experience in the technical field, including serving as the Technical Head of STI College
+                        Bacoor, former Grade 12 Representative of TechnoBytes, Computer Systems Servicing in Grade 10,
+                        and a member of the Technical Committee in Grade 11, I have gained valuable experience in
+                        website development, mobile application development, Discord bot development, and programming
+                        using various languages. Through these experiences, I can confidently say that I am a reliable,
+                        capable, and dedicated person to work with.
+                    </p>
                 </div>
             </div>
         </section>
@@ -565,7 +568,7 @@
                                 </h3>
                                 <p>
                                     Developed in July 2026. Rebienald's flagship, most challenging, and best AI project.
-                                    A Hello Kitty-themed study companion utilizing RAG architecture to parse PDF
+                                    A AI study companion utilizing RAG architecture to parse PDF
                                     handouts, generate automated quizzes, and deliver interactive tutoring.
                                 </p>
                             </div>
@@ -1199,7 +1202,7 @@
                                     <div class="tree-branches-list">
                                         <div class="tree-branch-row">
                                             <div class="tree-item-body">
-                                                <span class="branch-name">BSIT-1E Representative</span>
+                                                <span class="branch-name">BSIT-1E Class Representative</span>
                                                 <span class="branch-sub"
                                                     >2026 • Student Leadership & Section Representative</span
                                                 >
@@ -1477,27 +1480,7 @@
             >
                 <i class="fas fa-lock"></i>
             </button>
-            <button
-                id="muteToggleBtn"
-                class="floating-btn mute-toggle-btn"
-                title="Sound: ON (Click to mute)"
-                aria-label="Toggle Sound Effects"
-            >
-                <i class="fas fa-volume-high"></i>
-            </button>
         </div>
-
-        <footer>
-            <div
-                class="container"
-                style="display: flex; justify-content: center; align-items: center; text-align: center"
-            >
-                <p>
-                    "For I know the plans I have for you," declares the LORD, "plans to prosper you and not to harm you,
-                    plans to give you hope and a future." <span class="verse-ref">— Jeremiah 29:11</span>
-                </p>
-            </div>
-        </footer>
 
         <script src="index/script.js?v=20260907-1" defer></script>
 

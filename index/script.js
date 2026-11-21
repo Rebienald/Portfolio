@@ -336,7 +336,7 @@ function playCardShuffleSound() {
 
 document.addEventListener("DOMContentLoaded", () => {
     const interactiveSelector =
-        "a, button, .hamburger, .close-menu, .mobile-menu a, .skill-logo-btn, .tech-float-card, .project-card, .cert-card, .glass-card, .testimonial-deck-card, .sphere-card-node, [data-tech]";
+        "a, button, .hamburger, .close-menu, .mobile-menu a, .skill-logo-btn, .tech-float-card, .project-card, .cert-card, .glass-card, .testimonial-deck-card-legacy, .sphere-card-node, [data-tech]";
     let currentHoveredContainer = null;
     document.addEventListener("mouseover", (e) => {
         const container = e.target.closest(interactiveSelector);
@@ -1228,7 +1228,7 @@ const PROJECT_MODAL_DATA = {
             },
         ],
         subtitle:
-            "A full-stack, heading-aware RAG learning assistant engineered by Rebienald Carpio. Features dual-LLM failover (Gemini + Groq LLaMA-3), 4-tier PDF extraction with Tesseract OCR fallback, zero-latency SQLite caching, and a cheerful Hello Kitty study companion dashboard.",
+            "A full-stack, heading-aware RAG learning assistant engineered by Rebienald Carpio. Features dual-LLM failover (Gemini + Groq LLaMA-3), 4-tier PDF extraction with Tesseract OCR fallback, zero-latency SQLite caching, and a responsive study companion dashboard.",
         heroImage: "projectimages/samai.png",
         heroTags: [
             {
@@ -1241,7 +1241,7 @@ const PROJECT_MODAL_DATA = {
             },
             {
                 icon: "fas fa-heart",
-                text: "Hello Kitty Student UX & Companion Theme",
+                text: "Student UX & Interactive Companion Theme",
             },
         ],
         apis: [
@@ -1354,7 +1354,7 @@ const PROJECT_MODAL_DATA = {
             },
             {
                 icon: "fas fa-heart",
-                title: "Hello Kitty Companion Theme & Student UX",
+                title: "Interactive Companion Theme & Student UX",
                 desc: "Cheerful, motivating user interface with study timers, animated motivational quotes (<code>quotes.json</code>), responsive audio feedback, and streamlined handout library management.",
             },
             {
@@ -2663,7 +2663,7 @@ document.addEventListener("DOMContentLoaded", () => {
         },
     ];
     function applyDeckTransforms() {
-        const cards = document.querySelectorAll(".testimonial-deck-card");
+        const cards = document.querySelectorAll(".testimonial-deck-card-legacy");
         if (!cards.length) return;
         const isMobile = window.innerWidth <= 768;
         const transforms = isMobile ? cardTransformsMobile : cardTransformsDesktop;
@@ -2682,7 +2682,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (typeof playCardShuffleSound === "function") {
             playCardShuffleSound();
         }
-        const cards = document.querySelectorAll(".testimonial-deck-card");
+        const cards = document.querySelectorAll(".testimonial-deck-card-legacy");
         const topCardIndex = currentDeckOrder[0];
         const topCard = cards[topCardIndex];
         const isMobile = window.innerWidth <= 768;
@@ -2710,7 +2710,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
     document.addEventListener("DOMContentLoaded", () => {
         applyDeckTransforms();
-        const cards = document.querySelectorAll(".testimonial-deck-card");
+        const cards = document.querySelectorAll(".testimonial-deck-card-legacy");
         cards.forEach((card, idx) => {
             card.addEventListener("click", () => {
                 if (typeof playCardShuffleSound === "function") {
