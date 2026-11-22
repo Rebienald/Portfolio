@@ -2477,35 +2477,73 @@ const sections = document.querySelectorAll("section[id]");
 
 const navLinks = document.querySelectorAll(".nav-links a");
 
+const mobileNavLinks = document.querySelectorAll(".mobile-menu a");
+
+function getNavOffset() {
+    const nav = document.querySelector("nav");
+    if (!nav) return 0;
+    const isHorizontalNav = window.matchMedia("(max-width: 768px)").matches;
+    return isHorizontalNav ? nav.offsetHeight + 16 : 0;
+}
+
+function setActiveNav(hash) {
+    navLinks.forEach((link) => {
+        link.classList.toggle("active", link.getAttribute("href") === hash);
+    });
+    mobileNavLinks.forEach((link) => {
+        const href = link.getAttribute("href") || "";
+        const target = href.includes("#") ? "#" + href.split("#")[1] : "";
+        link.classList.toggle("active", target === hash);
+    });
+}
+
+function getScrollspyLine() {
+    const navOffset = getNavOffset();
+    const extra = Math.min(Math.max(window.innerHeight * 0.35, 120), 320);
+    return navOffset + extra;
+}
+
 function activateNavOnScroll() {
     const scrollY = window.scrollY || window.pageYOffset;
+    const activationLine = scrollY + getScrollspyLine();
+    let currentHash = null;
     sections.forEach((section) => {
-        const sectionHeight = section.offsetHeight;
-        const sectionTop = section.offsetTop - 160;
         const sectionId = section.getAttribute("id");
-        const navItem = document.querySelector(".nav-links a[href*=" + sectionId + "]");
-        if (navItem) {
-            if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
-                navLinks.forEach((link) => link.classList.remove("active"));
-                navItem.classList.add("active");
-            }
+        const navItem = document.querySelector('.nav-links a[href="#' + sectionId + '"]');
+        if (!navItem) return;
+        if (section.offsetTop <= activationLine) {
+            currentHash = "#" + sectionId;
         }
     });
-    if (scrollY < 200) {
-        navLinks.forEach((link) => link.classList.remove("active"));
+    if (currentHash) {
+        setActiveNav(currentHash);
     }
 }
 
-window.addEventListener("scroll", activateNavOnScroll, {
-    passive: true,
-});
+let navScrollTicking = false;
+
+window.addEventListener(
+    "scroll",
+    () => {
+        if (navScrollTicking) return;
+        navScrollTicking = true;
+        requestAnimationFrame(() => {
+            activateNavOnScroll();
+            navScrollTicking = false;
+        });
+    },
+    {
+        passive: true,
+    }
+);
 
 window.addEventListener("load", activateNavOnScroll);
 
+window.addEventListener("resize", activateNavOnScroll);
+
 navLinks.forEach((link) => {
     link.addEventListener("click", function () {
-        navLinks.forEach((l) => l.classList.remove("active"));
-        this.classList.add("active");
+        setActiveNav(this.getAttribute("href"));
     });
 });
 
